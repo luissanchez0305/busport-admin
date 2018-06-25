@@ -1,0 +1,19 @@
+- crear ambiente de trabajo
+	- crear base de datos
+	- llenado de datos de prueba
+	- crear procedimientos de manejo de datos (orm)
+	- crear web responsive en esfera
+- busqueda de conductor
+	- autocomplete en busqueda de conductor por nombre
+	- autocomplete en busquead de conductor por cedula
+	- despliegue de informacion basica del condutor
+- despliegue de historial de conductor
+- despliegue de reportes
+
+BASE DE DATOS
+- users
+- user_types
+- drivers
+- log_itemms
+- log_item_types
+-
