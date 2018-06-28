@@ -22,3 +22,13 @@ function retrieveJsonPostData() {
     // this returns null if not valid json
     return json_decode($rawData);
 }
+
+function RandomString()
+{
+    $characters = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
+    $randstring = '';
+    for ($i = 0; $i < 7; $i++) {
+        $randstring .= $characters[rand(0, strlen($characters))];
+    }
+    return $randstring;
+}
