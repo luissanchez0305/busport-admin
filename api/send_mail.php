@@ -1,12 +1,9 @@
 <?php
-
 include "helper.php";
 include('mail/php-mailjet-v3-simple.class.php');
 
-$post = retrieveJsonPostData($_POST);
-if(isset($post->e)) {
-    
-    $to      = $post->e;
+if(isset($_POST['e'])) {
+    $to      = $_POST['e'];
     $pwd     = RandomString();
 	
     $user = R::findOne( 'users', 'email = ?', [ $to ] );
@@ -26,12 +23,13 @@ if(isset($post->e)) {
         $response = array();
     	
         if ($mj->_response_code == 200) {
-            echo json_encode(array("status" => "ok"));
+            header("location:/index.html?recover=1");
         } else {
-            echo json_encode(array("status" => "fail", "msg" =>  $mj->_response_code));
+            header("location:/index.html?recover=0&msg=".$mj->_response_code);
         }
         die;
     }
-    echo json_encode(array("status" => "nouser", "msg" =>  'El correo no existe'));
+    header("location:/pages-recoverpw.html?recover=2");
 }
+echo json_encode(array("status" => "void", "msg" =>  'Nada'));
 ?> 
