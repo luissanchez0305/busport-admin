@@ -113,6 +113,10 @@ code {
   color: #0097a7;
 }
 
+.hidden{
+  display:none;
+}
+
 .container-alt {
   margin-left: auto;
   margin-right: auto;
