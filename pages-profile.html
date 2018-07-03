@@ -12,9 +12,6 @@
         <!-- App Icons -->
         <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-        <!--Morris Chart CSS -->
-        <link rel="stylesheet" href="assets/plugins/morris/morris.css">
-
         <!-- App css -->
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
@@ -24,10 +21,6 @@
 
 
     <body>
-
-        <!-- Loader -->
-        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
-
         <!-- Navigation Bar-->
         <header id="topnav">
             <div class="topbar-main">
@@ -52,23 +45,23 @@
                     <div class="menu-extras topbar-custom">
 
                         <!-- Search input -->
-                        <div class="search-wrap" id="search-wrap">
+                        <!--<div class="search-wrap" id="search-wrap">
                             <div class="search-bar">
                                 <input class="search-input" type="search" placeholder="Search" />
                                 <a href="#" class="close-search toggle-search" data-target="#search-wrap">
                                     <i class="mdi mdi-close-circle"></i>
                                 </a>
                             </div>
-                        </div>
+                        </div>-->
 
                         <ul class="list-inline float-right mb-0">
                             <!-- Search -->
-                            <li class="list-inline-item dropdown notification-list">
+                            <!--<li class="list-inline-item dropdown notification-list">
                                 <a class="nav-link waves-effect toggle-search" href="#"  data-target="#search-wrap">
                                     <i class="mdi mdi-magnify noti-icon"></i>
                                 </a>
                             </li>
-                            <!-- Messages-->
+                            <!-- Messages->
                             <li class="list-inline-item dropdown notification-list">
                                 <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
                                    aria-haspopup="false" aria-expanded="false">
@@ -76,37 +69,37 @@
                                     <span class="badge badge-danger noti-icon-badge">3</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
-                                    <!-- item-->
+                                    <!-- item->
                                     <div class="dropdown-item noti-title">
                                         <h5><span class="badge badge-danger float-right">745</span>Messages</h5>
                                     </div>
 
-                                    <!-- item-->
+                                    <!-- item->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <div class="notify-icon"><img src="assets/images/users/avatar-2.jpg" alt="user-img" class="img-fluid rounded-circle" /> </div>
                                         <p class="notify-details"><b>Charles M. Jones</b><small class="text-muted">Dummy text of the printing and typesetting industry.</small></p>
                                     </a>
 
-                                    <!-- item-->
+                                    <!-- item->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <div class="notify-icon"><img src="assets/images/users/avatar-3.jpg" alt="user-img" class="img-fluid rounded-circle" /> </div>
                                         <p class="notify-details"><b>Thomas J. Mimms</b><small class="text-muted">You have 87 unread messages</small></p>
                                     </a>
 
-                                    <!-- item-->
+                                    <!-- item->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <div class="notify-icon"><img src="assets/images/users/avatar-4.jpg" alt="user-img" class="img-fluid rounded-circle" /> </div>
                                         <p class="notify-details"><b>Luis M. Konrad</b><small class="text-muted">It is a long established fact that a reader will</small></p>
                                     </a>
 
-                                    <!-- All-->
+                                    <!-- All->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         View All
                                     </a>
 
                                 </div>
                             </li>
-                            <!-- notification-->
+                            <!-- notification->
                             <li class="list-inline-item dropdown notification-list">
                                 <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
                                    aria-haspopup="false" aria-expanded="false">
@@ -114,30 +107,30 @@
                                     <span class="badge badge-danger noti-icon-badge">3</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
-                                    <!-- item-->
+                                    <!-- item->
                                     <div class="dropdown-item noti-title">
                                         <h5>Notification (3)</h5>
                                     </div>
 
-                                    <!-- item-->
+                                    <!-- item->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item active">
                                         <div class="notify-icon bg-success"><i class="mdi mdi-cart-outline"></i></div>
                                         <p class="notify-details"><b>Your order is placed</b><small class="text-muted">Dummy text of the printing and typesetting industry.</small></p>
                                     </a>
 
-                                    <!-- item-->
+                                    <!-- item->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>
                                         <p class="notify-details"><b>New Message received</b><small class="text-muted">You have 87 unread messages</small></p>
                                     </a>
 
-                                    <!-- item-->
+                                    <!-- item->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         <div class="notify-icon bg-info"><i class="mdi mdi-martini"></i></div>
                                         <p class="notify-details"><b>Your item is shipped</b><small class="text-muted">It is a long established fact that a reader will</small></p>
                                     </a>
 
-                                    <!-- All-->
+                                    <!-- All->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
                                         View All
                                     </a>
@@ -151,16 +144,17 @@
                                     <img src="assets/images/users/avatar-1.jpg" alt="user" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                                    <a class="dropdown-item" href="#"><i class="dripicons-user text-muted"></i> Profile</a>
-                                    <a class="dropdown-item" href="#"><i class="dripicons-wallet text-muted"></i> My Wallet</a>
+                                    <a class="dropdown-item" href="pages-dashboard.html"><i class="dripicons-user text-muted"></i> Home</a>
+                                    <a class="dropdown-item" href="pages-profile.html"><i class="dripicons-user text-muted"></i> Profile</a>
+                                    <!--<a class="dropdown-item" href="#"><i class="dripicons-wallet text-muted"></i> My Wallet</a>
                                     <a class="dropdown-item" href="#"><span class="badge badge-success pull-right m-t-5">5</span><i class="dripicons-gear text-muted"></i> Settings</a>
-                                    <a class="dropdown-item" href="#"><i class="dripicons-lock text-muted"></i> Lock screen</a>
+                                    <a class="dropdown-item" href="#"><i class="dripicons-lock text-muted"></i> Lock screen</a>-->
                                     <div class="dropdown-divider"></div>
                                     <a id="logout" class="dropdown-item" href="#"><i class="dripicons-exit text-muted"></i> Logout</a>
                                 </div>
                             </li>
-                            <li class="menu-item list-inline-item">
-                                <!-- Mobile menu toggle-->
+                            <!--<li class="menu-item list-inline-item">
+                                <!-- Mobile menu toggle->
                                 <a class="navbar-toggle nav-link">
                                     <div class="lines">
                                         <span></span>
@@ -168,8 +162,8 @@
                                         <span></span>
                                     </div>
                                 </a>
-                                <!-- End mobile menu toggle-->
-                            </li>
+                                <!-- End mobile menu toggle->
+                            </li>-->
 
                         </ul>
                     </div>
@@ -182,10 +176,10 @@
             <!-- end topbar-main -->
 
             <!-- MENU Start -->
-            <div class="navbar-custom">
+            <!--<div class="navbar-custom">
                 <div class="container-fluid">
                     <div id="navigation">
-                        <!-- Navigation Menu-->
+                        <!-- Navigation Menu->
                         <ul class="navigation-menu">
 
                             <li class="has-submenu">
@@ -326,251 +320,95 @@
                             </li>
 
                         </ul>
-                        <!-- End navigation menu -->
-                    </div> <!-- end #navigation -->
-                </div> <!-- end container -->
+                        <!-- End navigation menu ->
+                    </div> <!-- end #navigation ->
+                </div> <!-- end container ->
             </div> <!-- end navbar-custom -->
         </header>
         <!-- End Navigation Bar-->
+        <!-- Begin page -->
+        <div class="wrapper-page">
 
+            <div class="card">
+                <div class="card-body">
 
-        <div class="wrapper">
-            <div class="container-fluid">
+                    <h3 class="text-center mt-0 m-b-15">
+                        <a href="index.html" class="logo logo-admin"><img src="assets/images/logo-dark.png" height="30" alt="logo"></a>
+                    </h3>
 
-                <!-- Page-Title -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="page-title-box">
-                            <div class="btn-group pull-right">
-                                <ol class="breadcrumb hide-phone p-0 m-0">
-                                    <li class="breadcrumb-item"><a href="#">Upcube</a></li>
-                                    <li class="breadcrumb-item active">Dashboard</li>
-                                </ol>
-                            </div>
-                            <h4 class="page-title">Dashboard</h4>
-                        </div>
-                    </div>
-                </div>
-                <!-- end page title end breadcrumb -->
+                    <h4 class="text-muted text-center font-18"><b>Register</b></h4>
 
-
-                <div class="row">
-                    <div class="col-md-6 col-xl-3">
-                        <div class="mini-stat clearfix bg-white">
-                            <span class="mini-stat-icon bg-light"><i class="mdi mdi-cart-outline text-danger"></i></span>
-                            <div class="mini-stat-info text-right text-muted">
-                                <span class="counter text-danger">15852</span>
-                                Total Sales
-                            </div>
-                            <p class="mb-0 m-t-20 text-muted">Total income: $22506 <span class="pull-right"><i class="fa fa-caret-up m-r-5"></i>10.25%</span></p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xl-3">
-                        <div class="mini-stat clearfix bg-success">
-                            <span class="mini-stat-icon bg-light"><i class="mdi mdi-currency-usd text-success"></i></span>
-                            <div class="mini-stat-info text-right text-white">
-                                <span class="counter text-white">956</span>
-                                New Orders
-                            </div>
-                            <p class="mb-0 m-t-20 text-light">Total income: $22506 <span class="pull-right"><i class="fa fa-caret-up m-r-5"></i>10.25%</span></p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xl-3">
-                        <div class="mini-stat clearfix bg-white">
-                            <span class="mini-stat-icon bg-light"><i class="mdi mdi-cube-outline text-warning"></i></span>
-                            <div class="mini-stat-info text-right text-muted">
-                                <span class="counter text-warning">5210</span>
-                                New Users
-                            </div>
-                            <p class="mb-0 m-t-20 text-muted">Total income: $22506 <span class="pull-right"><i class="fa fa-caret-up m-r-5"></i>10.25%</span></p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xl-3">
-                        <div class="mini-stat clearfix bg-info">
-                            <span class="mini-stat-icon bg-light"><i class="mdi mdi-currency-btc text-info"></i></span>
-                            <div class="mini-stat-info text-right text-light">
-                                <span class="counter text-white">20544</span>
-                                Unique Visitors
-                            </div>
-                            <p class="mb-0 m-t-20 text-light">Total income: $22506 <span class="pull-right"><i class="fa fa-caret-up m-r-5"></i>10.25%</span></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title">Email Sent</h4>
-
-                                <ul class="list-inline widget-chart m-t-20 text-center">
-                                    <li>
-                                        <h4 class=""><b>3652</b></h4>
-                                        <p class="text-muted m-b-0">Marketplace</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>5421</b></h4>
-                                        <p class="text-muted m-b-0">Last week</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>9652</b></h4>
-                                        <p class="text-muted m-b-0">Last Month</p>
-                                    </li>
-                                </ul>
-
-                                <div id="morris-area-example" style="height: 300px"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title">Revenue</h4>
-
-                                <ul class="list-inline widget-chart m-t-20 text-center">
-                                    <li>
-                                        <h4 class=""><b>5248</b></h4>
-                                        <p class="text-muted m-b-0">Marketplace</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>321</b></h4>
-                                        <p class="text-muted m-b-0">Last week</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>964</b></h4>
-                                        <p class="text-muted m-b-0">Last Month</p>
-                                    </li>
-                                </ul>
-
-                                <div id="morris-bar-example" style="height: 300px"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xl-8">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 m-b-15 header-title">Recent Candidates</h4>
-
-                                <div class="table-responsive">
-                                    <table class="table table-hover mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Status</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td><span class="badge badge-info">Active</span></td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td><span class="badge badge-info">Active</span></td>
-                                            <td>63</td>
-                                            <td>2011/07/25</td>
-                                            <td>$170,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td><span class="badge badge-info">Active</span></td>
-                                            <td>66</td>
-                                            <td>2009/01/12</td>
-                                            <td>$86,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cedric Kelly</td>
-                                            <td>Senior Javascript Developer</td>
-                                            <td><span class="badge badge-default">Deactive</span></td>
-                                            <td>22</td>
-                                            <td>2012/03/29</td>
-                                            <td>$433,060</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td><span class="badge badge-info">Active</span></td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td><span class="badge badge-info">Active</span></td>
-                                            <td>61</td>
-                                            <td>2012/12/02</td>
-                                            <td>$372,000</td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
+                    <div class="p-3">
+                        <form class="form-horizontal m-t-20" action="/api/profile.php" method="post">
+                            <input type="hidden" id="userId" name="userId" />
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <input class="form-control" type="email" required="" placeholder="Email" id="email" name="email">
                                 </div>
-
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-xl-4">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title">Monthly Earnings</h4>
-
-                                <ul class="list-inline widget-chart m-t-20 text-center">
-                                    <li>
-                                        <h4 class=""><b>3654</b></h4>
-                                        <p class="text-muted m-b-0">Marketplace</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>954</b></h4>
-                                        <p class="text-muted m-b-0">Last week</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>8462</b></h4>
-                                        <p class="text-muted m-b-0">Last Month</p>
-                                    </li>
-                                </ul>
-
-                                <div id="morris-donut-example" style="height: 265px"></div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <input class="form-control" type="text" required="" placeholder="Username" id="username" name="username">
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <input class="form-control" type="password" placeholder="Password" id="password">
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" id="change_pwd" class="btn btn-info btn-block waves-effect waves-light">Cambio de password</button>
+                                </div>
+                                <div class="col-12" id="change_pwd_text">
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <input class="form-control" type="text" required="" placeholder="Nombre" id="first_name" name="first_name">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <input class="form-control" type="text" required="" placeholder="Apellido" id="last_name" name="last_name">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <input class="form-control" type="text" required="" placeholder="Telefono" id="phone" name="phone">
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group row">
+                                <div class="col-12">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label font-weight-normal" for="customCheck1">I accept <a href="#" class="text-muted">Terms and Conditions</a></label>
+                                    </div>
+                                </div>
+                            </div>-->
+
+                            <div class="form-group text-center row m-t-20">
+                                <div class="col-12">
+                                    <button class="btn btn-info btn-block waves-effect waves-light" type="submit">Guardar</button>
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group m-t-10 mb-0 row">
+                                <div class="col-12 m-t-20 text-center">
+                                    <a href="pages-login.html" class="text-muted">Already have account?</a>
+                                </div>
+                            </div>-->
+                        </form>
                     </div>
 
-                </div>
-                <!-- end row -->
-
-            </div> <!-- end container -->
-        </div>
-        <!-- end wrapper -->
-
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        © 2018 Upcube - Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign.
-                    </div>
                 </div>
             </div>
-        </footer>
-        <!-- End Footer -->
+        </div>
 
 
         <!-- jQuery  -->
@@ -583,15 +421,10 @@
         <script src="assets/js/jquery.nicescroll.js"></script>
         <script src="assets/js/jquery.scrollTo.min.js"></script>
 
-        <!--Morris Chart-->
-        <script src="assets/plugins/morris/morris.min.js"></script>
-        <script src="assets/plugins/raphael/raphael-min.js"></script>
-
-        <script src="assets/pages/dashborad.js"></script>
-
         <!-- App js -->
         <script src="assets/js/app.js"></script>
         <script src="assets/js/helper.js"></script>
+        <script src="assets/js/profile.js"></script>
 
     </body>
 </html>
