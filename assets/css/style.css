@@ -2932,13 +2932,13 @@ body {
 .search-wrap {
   background-color: #f5f5f5;
   color: #0a1832;
-  z-index: 9997;
+  z-index: 1;
   position: absolute;
-  top: 0;
+  top: 120px;
   display: flex;
   right: 0;
   left: 2.5%;
-  max-width: 95%;
+  width: 20%;
   height: 60px;
   padding: 0 15px;
   transform: translate3d(0, -100%, 0);

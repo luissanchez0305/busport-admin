@@ -1,6 +1,11 @@
 $(document).ready(function(){
     $('#userId').val(localStorage.getItem('current_userid'));
     $.post('/api/profile.php', { userId: localStorage.getItem('current_userid') }, function(data){
+        $('#status').fadeOut();
+        $('#preloader').delay(350).fadeOut('slow');
+        $('body').delay(350).css({
+            'overflow': 'visible'
+        });
         if(data.status == 'ok'){
             $('#email').val(data.email);
             $('#username').val(data.username);

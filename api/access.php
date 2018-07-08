@@ -9,7 +9,7 @@ if(isset($_POST['u']) && isset($_POST['p']) && $_POST['u'].length && $_POST['p']
 
     $user = R::findOne( 'users', ' (username = ? OR email = ?) AND password = ? ', [ $username, $username, $password ] );
     if($user) {
-        header("location:/dashboard.html?on=" . $user->id);
+        header("location:/pages-dashboard.html?on=" . $user->id);
         //echo json_encode(array('user'=>$user, 'status'=>'ok'));
         die;
     }

@@ -19,7 +19,7 @@ if(isset($_POST['userId'])) {
         R::store( $user );
 
         // retornar success o fail
-        header("location:/dashboard.html?profile=saved");
+        header("location:/pages-dashboard.html?profile=saved");
     }
     // cambiar password
     else if($user && isset($_POST['p'])){

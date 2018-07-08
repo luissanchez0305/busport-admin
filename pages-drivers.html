@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>Upcube - Responsive Flat Admin Dashboard</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesdesign" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+
+    <body>
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+
+        <!-- Navigation Bar-->
+        <header id="topnav">
+            <div class="topbar-main">
+                <div class="container-fluid">
+
+                    <!-- Logo container-->
+                    <div class="logo">
+                        <!-- Text Logo -->
+                        <!--<a href="index.html" class="logo">-->
+                        <!--Upcube-->
+                        <!--</a>-->
+                        <!-- Image Logo -->
+                        <a href="pages-dashboard.html" class="logo">
+                            <img src="assets/images/logo-sm.png" alt="" height="22" class="logo-small">
+                            <img src="assets/images/logo.png" alt="" height="24" class="logo-large">
+                        </a>
+
+                    </div>
+                    <!-- End Logo container-->
+
+
+                    <div class="menu-extras topbar-custom">
+
+                        <ul class="list-inline float-right mb-0">
+                            <!-- User-->
+                            <li class="list-inline-item dropdown notification-list">
+                                <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                    <img src="assets/images/users/avatar-1.jpg" alt="user" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                    <a class="dropdown-item" href="pages-dashboard.html"><i class="dripicons-user text-muted"></i> Home</a>
+                                    <a class="dropdown-item" href="pages-profile.html"><i class="dripicons-user text-muted"></i> Profile</a>
+                                    <!--<a class="dropdown-item" href="#"><i class="dripicons-wallet text-muted"></i> My Wallet</a>
+                                    <a class="dropdown-item" href="#"><span class="badge badge-success pull-right m-t-5">5</span><i class="dripicons-gear text-muted"></i> Settings</a>
+                                    <a class="dropdown-item" href="#"><i class="dripicons-lock text-muted"></i> Lock screen</a>-->
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout" class="dropdown-item" href="#"><i class="dripicons-exit text-muted"></i> Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- end menu-extras -->
+
+                    <div class="clearfix"></div>
+
+                </div> <!-- end container -->
+            </div>
+            <!-- end topbar-main -->
+        </header>
+        <!-- End Navigation Bar-->
+        <!-- Begin page -->
+        <div class="wrapper">
+            <!-- Search input -->
+            <div class="search-wrap" id="search-wrap">
+                <div class="search-bar">
+                    <input class="search-input" type="search" placeholder="Search" />
+                    <a class="nav-link waves-effect toggle-search" href="#"  data-target="#search-wrap">
+                        <i class="mdi mdi-magnify noti-icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+                            <div class="table-rep-plugin">
+                                <div class="table-responsive b-0" data-pattern="priority-columns">
+                                    <table id="tech-companies-1" class="table  table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th data-priority="1">Nombre</th>
+                                            <th data-priority="3">Cedula</th>
+                                            <th data-priority="1">Tipo de sangre</th>
+                                            <th data-priority="3">Contacto</th>
+                                            <th data-priority="3">Esta laborando?</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="drivers">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+
+        </div>
+
+
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/popper.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/modernizr.min.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+        <script src="assets/js/helper.js"></script>
+        <script src="assets/js/profile.js"></script>
+        <script src="assets/js/drivers.js"></script>
+
+    </body>
+</html>

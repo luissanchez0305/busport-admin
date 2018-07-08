@@ -27,7 +27,7 @@
             }
         });
     },
-    MainApp.prototype.initLoader = function () {
+    /*MainApp.prototype.initLoader = function () {
         $(window).load(function () {
             $('#status').fadeOut();
             $('#preloader').delay(350).fadeOut('slow');
@@ -35,7 +35,7 @@
                 'overflow': 'visible'
             });
         });
-    },
+    },*/
     MainApp.prototype.initScrollbar = function () {
         $('.slimscroll-noti').slimScroll({
             height: '230px',
@@ -63,16 +63,17 @@
         $('.toggle-search').on('click', function () {
             var targetId = $(this).data('target');
             var $searchBar;
-            if (targetId) {
+            // hacer el autocomplete de los conductores
+            /*if (targetId) {
                 $searchBar = $(targetId);
                 $searchBar.toggleClass('open');
-            }
+            }*/
         });
     },
 
     MainApp.prototype.init = function () {
         this.initNavbar();
-        this.initLoader();
+        //this.initLoader();
         this.initScrollbar();
         this.initMenuItem();
         this.initComponents();
