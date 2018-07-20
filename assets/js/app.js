@@ -27,15 +27,16 @@
             }
         });
     },
-    /*MainApp.prototype.initLoader = function () {
-        $(window).load(function () {
-            $('#status').fadeOut();
-            $('#preloader').delay(350).fadeOut('slow');
-            $('body').delay(350).css({
-                'overflow': 'visible'
-            });
+    MainApp.prototype.initLoader = function () {
+        if($('#busport').length == 0)
+            $(window).load(function () {
+                $('#status').fadeOut();
+                $('#preloader').delay(350).fadeOut('slow');
+                $('body').delay(350).css({
+                    'overflow': 'visible'
+                });
         });
-    },*/
+    },
     MainApp.prototype.initScrollbar = function () {
         $('.slimscroll-noti').slimScroll({
             height: '230px',
@@ -73,7 +74,7 @@
 
     MainApp.prototype.init = function () {
         this.initNavbar();
-        //this.initLoader();
+        this.initLoader();
         this.initScrollbar();
         this.initMenuItem();
         this.initComponents();

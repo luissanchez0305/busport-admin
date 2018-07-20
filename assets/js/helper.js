@@ -13,7 +13,7 @@ $(document).ready(function(){
             alert('Algo salio mal :(');
     }
     // si esta logueado y esta entrando a la pagin de login, llevarlo al dashboard
-    else if((location.pathname == '/' || location.pathname == '/index.html') && (typeof current_userid !== 'undefined' && current_userid != "null")){
+    else if((location.pathname == '/' || location.pathname == '/index.html') && (typeof current_userid !== 'undefined' && (current_userid != null && current_userid != "null"))){
         var user = localStorage.getItem('current_userid');
         location.href = 'pages-dashboard.html?on=' + user;
     }
@@ -22,7 +22,7 @@ $(document).ready(function(){
         $('#forgot-password-text').removeClass('hidden');
     }
     // si no esta logueado y no es la pagina de login, llevarlo a login
-    else if(location.pathname != '/' && (current_userid == "null" || typeof current_userid == 'undefined')){
+    else if(location.pathname != '/' && (current_userid == "null" || current_userid == null || typeof current_userid == 'undefined')){
         if(location.pathname == '/pages-recoverpw.html'){
             if(getUrlVars()['recover'] && getUrlVars()['recover'] == "2" && getUrlVars()['email']){
                 $('#email-not-found-text').removeClass('hidden');

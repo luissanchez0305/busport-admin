@@ -9,9 +9,13 @@
         <meta content="Themesdesign" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <!-- App Icons -->
         <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- Plugins css -->
+        <link href="assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+        <link href="assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+        <link href="assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
 
         <!-- App css -->
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -22,6 +26,7 @@
 
 
     <body>
+
         <!-- Loader -->
         <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
 
@@ -74,82 +79,7 @@
                 </div> <!-- end container -->
             </div>
             <!-- end topbar-main -->
-
-            <!-- MENU Start -->
-            <div class="navbar-custom">
-                <div class="container-fluid">
-                    <div id="navigation">
-                        <!-- Navigation Menu-->
-                        <ul class="navigation-menu">
-
-                            <li class="has-submenu">
-                                <a href="pages-drivers.html"><i class="ti-home"></i>Conductores</a>
-                            </li>
-                        </ul>
-                        <!-- End navigation menu -->
-                    </div> <!-- end #navigation -->
-                </div> <!-- end container -->
-            </div> <!-- end navbar-custom -->
         </header>
         <!-- End Navigation Bar-->
-        <!-- Begin page -->
-        <div class="wrapper">
-            <!-- Search input -->
-            <div class="search-wrap" id="search-wrap">
-                <div class="search-bar">
-                    <input class="search-input" id="search-drivers" type="search" placeholder="Search" />
-                    <a class="nav-link waves-effect toggle-search" href="#" id="search-drivers-button" data-target="#search-wrap">
-                        <i class="mdi mdi-magnify noti-icon"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card m-b-30">
-                        <div class="card-body">
-                            <div class="table-rep-plugin">
-                                <div class="table-responsive b-0" data-pattern="priority-columns">
-                                    <table id="tech-companies-1" class="table  table-striped">
-                                        <thead>
-                                        <tr>
-                                            <th data-priority="1">Nombre</th>
-                                            <th data-priority="3">Cedula</th>
-                                            <th data-priority="1">Tipo de sangre</th>
-                                            <th data-priority="3">Contacto</th>
-                                            <th data-priority="3">Esta laborando?</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="drivers">
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div> <!-- end col -->
-            </div> <!-- end row -->
-
-        </div>
-
-
-        <!-- jQuery  -->
-        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script src="assets/js/popper.min.js"></script>
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/modernizr.min.js"></script>
-        <script src="assets/js/waves.js"></script>
-        <script src="assets/js/jquery.slimscroll.js"></script>
-        <script src="assets/js/jquery.nicescroll.js"></script>
-        <script src="assets/js/jquery.scrollTo.min.js"></script>
-
-        <!-- App js -->
-        <script src="assets/js/app.js"></script>
-        <script src="assets/js/helper.js"></script>
-        <script src="assets/js/drivers.js"></script>
-
-        <input type="hidden" id="busport" value="1" />
     </body>
 </html>
