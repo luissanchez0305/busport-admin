@@ -6,8 +6,7 @@ if(isset($_GET["type"])){
         case 'driver':
             # Regresar un solo driver
             $driver  = R::findOne( 'drivers', ' id = ? ', [ $_GET['id'] ] );
-            $driversArray[] = array('driver'=>$driver);
-            echo json_encode($driversArray);
+            echo json_encode($driver);
             break;
         case 'drivers':
             # Regresar los drivers segun autocomplete por nombre

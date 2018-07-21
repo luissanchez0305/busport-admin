@@ -100,147 +100,162 @@
 
         <div class="wrapper">
             <div class="container-fluid">
-
+                <!-- Page-Title -->
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-
-                                <h4 class="mt-0 header-title">Colorpicker</h4>
-                                <p class="text-muted m-b-30 font-14">Fancy and customizable colorpicker
-                                    plugin for Twitter Bootstrap.</p>
-
-                                <form action="#">
-                                    <div class="form-group">
-                                        <label>Default</label>
-                                        <input type="text" class="colorpicker-default form-control" value="#8fff00">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>RGBA</label>
-                                        <input type="text" class="colorpicker-rgba form-control" value="rgb(0,194,255,0.78)" data-color-format="rgba">
-                                    </div>
-                                    <div class="form-group m-b-0">
-                                        <label>As Component</label>
-                                        <div data-color-format="rgb" data-color="rgb(255, 146, 180)" class="colorpicker-default input-group">
-                                            <input type="text" readonly="readonly" value="" class="form-control">
-                                            <div class="input-group-append add-on">
-                                                <button class="btn btn-white" type="button">
-                                                    <i style="background-color: rgb(124, 66, 84);margin-top: 2px;"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div>
-
-                        <div class="card m-b-30">
-                            <div class="card-body">
-
-                                <h4 class="mt-0 header-title">Bootstrap MaxLength</h4>
-                                <p class="text-muted m-b-30 font-14">This plugin integrates by default with
-                                    Twitter bootstrap using badges to display the maximum lenght of the
-                                    field where the user is inserting text. </p>
-
-                                <h6 class="text-muted"><b>Default usage</b></h6>
-                                <p class="text-muted m-b-15 font-13">
-                                    The badge will show up by default when the remaining chars are 10 or less:
-                                </p>
-                                <input type="text" class="form-control" maxlength="25" name="defaultconfig" id="defaultconfig" />
-
-                                <div class="m-t-20">
-                                    <h6 class="text-muted"><b>Threshold value</b></h6>
-                                    <p class="text-muted m-b-15 font-13">
-                                        Do you want the badge to show up when there are 20 chars or less? Use the <code>threshold</code> option:
-                                    </p>
-                                    <input type="text" maxlength="25" name="thresholdconfig" class="form-control" id="thresholdconfig" />
-                                </div>
-
-                                <div class="m-t-20">
-                                    <h6 class="text-muted"><b>All the options</b></h6>
-                                    <p class="text-muted m-b-15 font-13">
-                                        Please note: if the <code>alwaysShow</code> option is enabled, the <code>threshold</code> option is ignored.
-                                    </p>
-                                    <input type="text" class="form-control" maxlength="25" name="alloptions" id="alloptions" />
-                                </div>
-
-                                <div class="m-t-20">
-                                    <h6 class="text-muted"><b>Position</b></h6>
-                                    <p class="text-muted m-b-15 font-13">
-                                        All you need to do is specify the <code>placement</code> option, with one of those strings. If none
-                                        is specified, the positioning will be defauted to 'bottom'.
-                                    </p>
-                                    <input type="text" class="form-control" maxlength="25" name="placement" id="placement" />
-                                </div>
-
-                                <div class="m-t-20">
-                                    <h6 class="text-muted"><b>textareas</b></h6>
-                                    <p class="text-muted m-b-15 font-13">
-                                        Bootstrap maxlength supports textarea as well as inputs. Even on old IE.
-                                    </p>
-                                    <textarea id="textarea" class="form-control" maxlength="225" rows="3" placeholder="This textarea has a limit of 225 chars."></textarea>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div> <!-- end col -->
-
-                    <div class="col-lg-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-
-                                <h4 class="mt-0 header-title">Datepicker</h4>
-                                <p class="text-muted m-b-30 font-14">Examples of twitter bootstrap datepicker.</p>
-
-                                <form action="#">
-                                    <div class="form-group">
-                                        <label>Default Functionality</label>
-                                        <div>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="datepicker">
-                                                <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
-                                            </div><!-- input-group -->
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Auto Close</label>
-                                        <div>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose">
-                                                <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
-                                            </div><!-- input-group -->
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Multiple Date</label>
-                                        <div>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="datepicker-multiple-date">
-                                                <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
-                                            </div><!-- input-group -->
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Date Range</label>
-                                        <div>
-                                            <div class="input-daterange input-group" id="date-range">
-                                                <input type="text" class="form-control" name="start" placeholder="Start Date" />
-                                                <input type="text" class="form-control" name="end" placeholder="End Date" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <h2 class="page-title">{{Nombre del conductor}}</h2>
                         </div>
                     </div>
+                </div>
 
-                </div> <!-- end row -->
+                <form action="#">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+
+                                    <h4 class="mt-0 header-title">Información Básica</h4>
+                                    <div class="form-group">
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Primer nombre</label>
+                                            <input type="text" class="form-control" id="firstName" name="firstName">
+                                        </div>
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Apellido</label>
+                                            <input type="text" class="form-control" id="lastName" name="lastName">
+                                        </div>
+                                        <div style="float:left;width:25%; padding-bottom: 20px;">
+                                            <label>Sobre nombre</label>
+                                            <input type="text" class="form-control" id="nickName" name="nickName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div style="float:left;width:100%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Cédula</label>
+                                            <input type="text" class="form-control" id="personalId" name="personalId" style="width:35%;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div style="float:left;width:35%;padding-right: 10px;">
+                                            <label># de control</label>
+                                            <input type="text" class="form-control" id="licenceNumber" name="licenceNumber">
+                                        </div>
+                                        <div style="float:left;width:35%;padding-right: 10px;">
+                                            <label>Expiración de licencia</label>
+                                            <div>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="expirationDate" name="expirationDate">
+                                                    <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
+                                                </div><!-- input-group -->
+                                            </div>
+                                        </div>
+                                        <label>Puntos de licencia</label>
+                                        <div style="float:left;width:15%;">
+                                            <input type="text" class="form-control" id="personalId" name="personalId">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card m-b-30">
+                                <div class="card-body">
+                                    <h4 class="mt-0 header-title">Información Laboral</h4>
+                                    <div class="form-group">
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Fecha de Inicio</label>
+                                            <div>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" name="startDate">
+                                                    <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
+                                                </div><!-- input-group -->
+                                            </div>
+                                        </div>
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Fecha de Inicio</label>
+                                            <div>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="finishDate" name="finishDate">
+                                                    <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
+                                                </div><!-- input-group -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div style="float:left;width:100%;padding-right: 10px; padding-bottom: 5px;">
+                                            <label>Tallas de uniforme</label>
+                                        </div>
+                                        <div style="float:left;width:25%;padding-right: 10px;">
+                                            <label>Pantalon</label>
+                                            <input type="text" class="form-control" id="sizePants" name="sizePants">
+                                        </div>
+                                        <div style="float:left;width:25%;padding-right: 10px;">
+                                            <label>Camisa</label>
+                                            <input type="text" class="form-control" id="sizeShirt" name="sizeShirt">
+                                        </div>
+                                        <div style="float:left;width:25%;padding-right: 10px;">
+                                            <label>Zapatos</label>
+                                            <input type="text" class="form-control" id="sizeShoes" name="sizeShoes">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-6">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+                                    <h4 class="mt-0 header-title">Información de Contacto</h4>
+                                    <div class="form-group">
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Teléfono</label>
+                                            <input type="text" class="form-control" id="phone" name="phone">
+                                        </div>
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>email</label>
+                                            <input type="email" class="form-control" id="email" name="email">
+                                        </div>
+                                        <div style="float:left;width:100%; padding-bottom: 20px;">
+                                            <label>Direccion</label>
+                                            <textarea   class="form-control" id="address" name="address" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div style="float:left;width:100%;padding-right: 10px; padding-bottom: 5px;">
+                                            <label>En caso de emergencia contactar a</label>
+                                        </div>
+                                        <div style="float:left;width:30%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Nombre</label>
+                                            <input type="text" class="form-control" id="contactName" name="contactName">
+                                        </div>
+                                        <div style="float:left;width:30%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Parentesco</label>
+                                            <input type="text" class="form-control" id="contactRelation" name="contactRelation">
+                                        </div>
+                                        <div style="float:left;width:30%; padding-bottom: 20px;">
+                                            <label>Teléfono</label>
+                                            <input type="textarea" class="form-control" id="contactPhone" name="contactPhone">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary waves-effect waves-light">
+                                                Submit
+                                            </button>
+                                            <button type="reset" class="btn btn-secondary waves-effect m-l-5">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+
+                    </div> <!-- end row -->
+                </form>
 
             </div> <!-- end container -->
         </div>
@@ -267,10 +282,13 @@
         <!-- App js -->
         <script src="assets/js/app.js"></script>
         <script src="assets/js/helper.js"></script>
-        <script src="assets/js/drivers.js"></script>
+        <script src="assets/js/driver.js"></script>
 
         <!-- Plugins Init js -->
         <script src="assets/pages/form-advanced.js"></script>
+        <script type="text/javascript">
+            $('#expirationDate, #startDate, #finishDate').datepicker();
+        </script>
         <input type="hidden" id="busport" value="1" />
     </body>
 </html>
