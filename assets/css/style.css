@@ -249,6 +249,11 @@ code {
   -moz-animation: pulse 6.9s infinite, borderPulse 6.9s infinite;
 }
 
+.search-wrap{
+  position: relative !important;
+  top: 60px !important;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -2927,6 +2932,22 @@ body {
 
 #topnav .navigation-menu > li > a:hover, #topnav .navigation-menu > li > a:focus {
   background-color: transparent;
+}
+
+.driver{
+  cursor: pointer;
+}
+
+.show-all{
+  top: 20px;
+  color: #0f9cf3;
+  cursor: pointer;
+}
+
+.save-success{
+  text-align: center;
+  color: #0f9cf3;
+  max-width: 100%;
 }
 
 .search-wrap {

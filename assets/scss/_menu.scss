@@ -241,8 +241,8 @@ body {
   background-color: $light5;
   color: $dark;
   z-index: 9997;
-  position: absolute;
-  top: 120;
+  position: relative;
+  top: 60px;
   display: flex;
   right: 0;
   left: 2.5%;

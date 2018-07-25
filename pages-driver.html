@@ -89,6 +89,13 @@
 
                             <li class="has-submenu">
                                 <a href="pages-drivers.html"><i class="ti-home"></i>Conductores</a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                            <li><a href="/pages-driver.html?id=new">Agregar nuevo</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                         <!-- End navigation menu -->
@@ -109,7 +116,9 @@
                     </div>
                 </div>
 
-                <form action="#">
+                <form action="/api/drivers.php" method="get">
+                    <input type="hidden" id="type" name="type" value="save">
+                    <input type="hidden" id="driverId" name="driverId" value="id">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card m-b-30">
@@ -119,11 +128,11 @@
                                     <div class="form-group">
                                         <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>Primer nombre</label>
-                                            <input type="text" class="form-control" id="firstName" name="firstName">
+                                            <input type="text" class="form-control" id="firstName" name="firstName" required data-parsley-error-message="Valor invalido">
                                         </div>
                                         <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>Apellido</label>
-                                            <input type="text" class="form-control" id="lastName" name="lastName">
+                                            <input type="text" class="form-control" id="lastName" name="lastName" required data-parsley-error-message="Valor invalido">
                                         </div>
                                         <div style="float:left;width:25%; padding-bottom: 20px;">
                                             <label>Sobre nombre</label>
@@ -131,28 +140,44 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div style="float:left;width:100%;padding-right: 10px; padding-bottom: 20px;">
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>Cédula</label>
-                                            <input type="text" class="form-control" id="personalId" name="personalId" style="width:35%;">
+                                            <input type="text" class="form-control" id="personalId" name="personalId" required data-parsley-error-message="Valor invalido">
+                                        </div>
+                                        <div style="float:left;width:60%; padding-bottom: 20px;">
+                                            <label>Tipo de sangre</label>
+                                            <div>
+                                                <select class="form-control" id="bloodType" name="bloodType" style="width:20%;" required data-parsley-error-message="Escoge una opcion">
+                                                    <option></option>
+                                                    <option value="A+">A+</option>
+                                                    <option value="B+">B+</option>
+                                                    <option value="AB+">AB+</option>
+                                                    <option value="O+">O+</option>
+                                                    <option value="A-">A-</option>
+                                                    <option value="B-">B-</option>
+                                                    <option value="AB-">AB-</option>
+                                                    <option value="O-">O-</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div style="float:left;width:35%;padding-right: 10px;">
                                             <label># de control</label>
-                                            <input type="text" class="form-control" id="licenceNumber" name="licenceNumber">
+                                            <input type="text" class="form-control" id="licenceNumber" name="licenceNumber" required data-parsley-error-message="Valor invalido">
                                         </div>
                                         <div style="float:left;width:35%;padding-right: 10px;">
                                             <label>Expiración de licencia</label>
                                             <div>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="expirationDate" name="expirationDate">
+                                                    <input type="text" class="form-control" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" id="expirationDate" name="expirationDate" required data-parsley-errors-messages-disabled>
                                                     <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
                                                 </div><!-- input-group -->
                                             </div>
                                         </div>
                                         <label>Puntos de licencia</label>
                                         <div style="float:left;width:15%;">
-                                            <input type="text" class="form-control" id="personalId" name="personalId">
+                                            <input type="text" class="form-control" id="licensePoints" name="licensePoints">
                                         </div>
                                     </div>
                                 </div>
@@ -166,16 +191,16 @@
                                             <label>Fecha de Inicio</label>
                                             <div>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" name="startDate">
+                                                    <input type="text" class="form-control" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" id="startDate" name="startDate" required data-parsley-errors-messages-disabled>
                                                     <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
                                                 </div><!-- input-group -->
                                             </div>
                                         </div>
                                         <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
-                                            <label>Fecha de Inicio</label>
+                                            <label>Fecha de Terminación</label>
                                             <div>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="finishDate" name="finishDate">
+                                                    <input type="text" class="form-control" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" id="finishDate" name="finishDate">
                                                     <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
                                                 </div><!-- input-group -->
                                             </div>
@@ -191,7 +216,14 @@
                                         </div>
                                         <div style="float:left;width:25%;padding-right: 10px;">
                                             <label>Camisa</label>
-                                            <input type="text" class="form-control" id="sizeShirt" name="sizeShirt">
+                                            <div>
+                                                <select class="form-control" id="sizeShirt" name="sizeShirt">
+                                                    <option></option>
+                                                    <option value="s">Pequeña (S)</option>
+                                                    <option value="m">Mediana (M)</option>
+                                                    <option value="l">Grande (L)</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div style="float:left;width:25%;padding-right: 10px;">
                                             <label>Zapatos</label>
@@ -210,15 +242,15 @@
                                     <div class="form-group">
                                         <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>Teléfono</label>
-                                            <input type="text" class="form-control" id="phone" name="phone">
+                                            <input type="text" class="form-control" id="phone" name="phone" required data-parsley-error-message="Valor invalido">
                                         </div>
                                         <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>email</label>
-                                            <input type="email" class="form-control" id="email" name="email">
+                                            <input type="email" class="form-control" id="email" name="email" required data-parsley-error-message="Valor invalido">
                                         </div>
                                         <div style="float:left;width:100%; padding-bottom: 20px;">
                                             <label>Direccion</label>
-                                            <textarea   class="form-control" id="address" name="address" rows="5"></textarea>
+                                            <textarea   class="form-control" id="address" name="address" rows="5" required data-parsley-error-message="Valor invalido"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -244,10 +276,10 @@
                                     <div class="form-group">
                                         <div>
                                             <button type="submit" class="btn btn-primary waves-effect waves-light">
-                                                Submit
+                                                Guardar
                                             </button>
-                                            <button type="reset" class="btn btn-secondary waves-effect m-l-5">
-                                                Cancel
+                                            <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="location.href='/pages-drivers.html'">
+                                                Cancelar
                                             </button>
                                         </div>
                                     </div>
@@ -273,6 +305,9 @@
         <script src="assets/js/jquery.nicescroll.js"></script>
         <script src="assets/js/jquery.scrollTo.min.js"></script>
 
+        <!-- Parsley js -->
+        <script type="text/javascript" src="assets/plugins/parsleyjs/parsley.min.js"></script>
+
         <!-- Plugins js -->
         <script src="assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
         <script src="assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
@@ -286,9 +321,6 @@
 
         <!-- Plugins Init js -->
         <script src="assets/pages/form-advanced.js"></script>
-        <script type="text/javascript">
-            $('#expirationDate, #startDate, #finishDate').datepicker();
-        </script>
         <input type="hidden" id="busport" value="1" />
     </body>
 </html>
