@@ -16,6 +16,11 @@
         <link href="assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
         <link href="assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
         <link href="assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+        <!-- DataTables -->
+        <link href="assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <!-- Responsive datatable examples -->
+        <link href="assets/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
         <!-- App css -->
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -288,8 +293,31 @@
 
                     </div> <!-- end row -->
                 </form>
-
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <h3>Historial</h3>
+                            <a href="#">Agregar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table id="datatable-buttons" class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Creado por</th>
+                            <th>Descripcion</th>
+                            <th>Fecha</th>
+                        </tr>
+                        </thead>
+                        <tbody id="datatable-items">
+                        </tbody>
+                    </table>
+                </div> <!-- end row -->
             </div> <!-- end container -->
+
         </div>
         <!-- end wrapper -->
 
@@ -304,6 +332,22 @@
         <script src="assets/js/jquery.slimscroll.js"></script>
         <script src="assets/js/jquery.nicescroll.js"></script>
         <script src="assets/js/jquery.scrollTo.min.js"></script>
+
+        <!-- Required datatable js -->
+        <script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="assets/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <!-- Buttons examples -->
+        <script src="assets/plugins/datatables/dataTables.buttons.min.js"></script>
+        <script src="assets/plugins/datatables/buttons.bootstrap4.min.js"></script>
+        <script src="assets/plugins/datatables/jszip.min.js"></script>
+        <script src="assets/plugins/datatables/pdfmake.min.js"></script>
+        <script src="assets/plugins/datatables/vfs_fonts.js"></script>
+        <script src="assets/plugins/datatables/buttons.html5.min.js"></script>
+        <script src="assets/plugins/datatables/buttons.print.min.js"></script>
+        <script src="assets/plugins/datatables/buttons.colVis.min.js"></script>
+        <!-- Responsive examples -->
+        <script src="assets/plugins/datatables/dataTables.responsive.min.js"></script>
+        <script src="assets/plugins/datatables/responsive.bootstrap4.min.js"></script>
 
         <!-- Parsley js -->
         <script type="text/javascript" src="assets/plugins/parsleyjs/parsley.min.js"></script>

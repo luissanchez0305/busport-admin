@@ -5,9 +5,13 @@ if(isset($_GET["type"])){
     $type = $_GET["type"];
     switch ($type) {
         case 'driver':
+            $driver_id = $_GET['id'];
             # Regresar un solo driver
-            $driver  = R::findOne( 'drivers', ' id = ? ', [ $_GET['id'] ] );
-            echo json_encode($driver);
+            $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
+            $logs =  R::getAll( 'SELECT u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
+                [':driver' => $driver_id]
+            );
+            echo json_encode(array('driver'=>$driver, 'items'=>$logs));
             break;
         case 'drivers':
             # Regresar los drivers segun autocomplete por nombre
