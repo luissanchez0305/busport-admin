@@ -1,11 +1,12 @@
 $(document).ready(function(){
+    var dt;
     $('form').parsley();
     $('#expirationDate, #startDate, #finishDate').datepicker({ dateFormat: 'yyyy-mm-dd' });
     $('#expirationDate, #startDate, #finishDate').datepicker( "option", "dateFormat", 'yyyy-mm-dd' );
     if(getUrlVars()['id'] != 'new'){
         $.get('/api/drivers.php', {type:'driver', id:getUrlVars()['id']}, function(data){
             $('.page-title').html('Conductor - ' + data.driver.name + ' ' + data.driver.lastname);
-            $('#driverId').val(data.driver.id);
+            $('.driver-id').val(data.driver.id);
             $('#firstName').val(data.driver.name);
             $('#lastName').val(data.driver.lastname);
             $('#nickName').val(data.driver.nickname);
@@ -26,21 +27,55 @@ $(document).ready(function(){
             $('#contactRelation').val(data.driver.emergency_relation);
             $('#contactPhone').val(data.driver.emergency_phone);
 
-            for(var i = 0; i < data.items.length; i++){
-                var item = data.items[i];
-                $('#datatable-items').append('<tr><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' + item.created_date +
-                    '</td></tr>');
+            for(var j = 0; j < data.logTypes.length; j++){
+                var logType = data.logTypes[j];
+                $('#log-item-type').append('<option value='+logType.id+'>'+logType.type_name+'</option>');
             }
 
-            //Buttons examples
-            $('#datatable-buttons').DataTable({
-                lengthChange: false,
-                searching: false
-            });
+            dt = loadLogsTable(data.items);
         });
     }
     else{
         $('.page-title').html('Nuevo Conductor');
         $('#type').val('new');
+        $('.log-section').addClass('hidden');
     }
+    $('body').on('click', '#addLogButton', function(){
+        var $logSection = $('.new-log-section');
+        if($logSection.hasClass('hidden'))
+            $logSection.removeClass('hidden');
+        else
+            $logSection.addClass('hidden');
+    });
+    $('body').on('click', '#add-new-log-button', function(){
+        $.get('/api/drivers.php', $('#add-new-log-form').serialize()+'&user='+localStorage.getItem('current_userid'),function(result){
+            dt.row.add( [
+                result[0].type_name,
+                result[0].name + ' ' + result[0].last_name,
+                result[0].description,
+                result[0].created_date
+            ] ).draw();
+
+            $('.new-log-section').addClass('hidden');
+        });
+    });
 });
+
+function loadLogsTable(data){
+    $('#datatable-items').html('');
+
+    for(var i = 0; i < data.length; i++){
+        var item = data[i];
+        $('#datatable-items').append('<tr><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' + item.created_date +
+            '</td></tr>');
+    }
+
+    //Buttons examples
+    var dataTable = $('#datatable-buttons').DataTable({
+        lengthChange: false,
+        searching: false,
+        order:[[ 3, "desc" ]]
+    });
+
+    return dataTable;
+}

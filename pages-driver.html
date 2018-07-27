@@ -123,7 +123,7 @@
 
                 <form action="/api/drivers.php" method="get">
                     <input type="hidden" id="type" name="type" value="save">
-                    <input type="hidden" id="driverId" name="driverId" value="id">
+                    <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card m-b-30">
@@ -255,7 +255,7 @@
                                         </div>
                                         <div style="float:left;width:100%; padding-bottom: 20px;">
                                             <label>Direccion</label>
-                                            <textarea   class="form-control" id="address" name="address" rows="5" required data-parsley-error-message="Valor invalido"></textarea>
+                                            <textarea  class="form-control" id="address" name="address" rows="5" required data-parsley-error-message="Valor invalido"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -293,16 +293,40 @@
 
                     </div> <!-- end row -->
                 </form>
-                <!-- Page-Title -->
-                <div class="row">
+                <!-- Log-Section -->
+                <div class="row log-section">
                     <div class="col-sm-12">
-                        <div class="page-title-box">
+                        <div class="page-title-box log-items">
                             <h3>Historial</h3>
-                            <a href="#">Agregar</a>
+                            <a id="addLogButton">Agregar</a>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <!-- New-Log-Section -->
+                <div class="row new-log-section hidden">
+                    <div class="container-fluid">
+                        <form id="add-new-log-form">
+                            <input type="hidden" value="add-log" id="type" name="type"/>
+                            <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id"/>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label>Tipo</label>
+                                    <select class="form-control" id="log-item-type" name="log-item-type" required data-parsley-error-message="Escoge una opcion">
+                                        <option></option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>Descripción</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" required data-parsley-error-message="Valor invalido"></textarea>
+                                </div>
+                                <div class="col-lg-4">
+                                    <button type="button" id="add-new-log-button" class="btn btn-primary waves-effect waves-light">Agregar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row log-section">
                     <table id="datatable-buttons" class="table table-bordered">
                         <thead>
                         <tr>

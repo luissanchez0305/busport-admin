@@ -8,10 +8,12 @@ if(isset($_GET["type"])){
             $driver_id = $_GET['id'];
             # Regresar un solo driver
             $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
-            $logs =  R::getAll( 'SELECT u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
+            $logs = R::getAll( 'SELECT u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
                 [':driver' => $driver_id]
             );
-            echo json_encode(array('driver'=>$driver, 'items'=>$logs));
+
+            $logTypes = R::getAll( 'SELECT id, type_name FROM log_item_types' );
+            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes));
             break;
         case 'drivers':
             # Regresar los drivers segun autocomplete por nombre
@@ -26,7 +28,7 @@ if(isset($_GET["type"])){
         case 'save':
         case 'new':
             if($type == 'new'){
-                $driver = R::dispense( 'drivers' );
+                $driver = R::xdispense( 'drivers' );
             }
             else{
                 $driver = R::findOne( 'drivers', ' id = ? ', [ $_GET['driverId'] ] );
@@ -51,11 +53,27 @@ if(isset($_GET["type"])){
             $driver->emergency_relation = $_GET['contactRelation'];
             $driver->emergency_phone = $_GET['contactPhone'];
 
-            R::store( $driver );
+            $id = R::store( $driver );
             if($type == 'new')
-                header("location:/pages-drivers.html?on=new");
+                header("location:/pages-driver.html?id=".$id."&on=new");
             else
-                header("location:/pages-drivers.html?on=edit");
+                header("location:/pages-driver.html?".$driver->id."&on=edit");
+            break;
+        case 'add-log':
+            $driver_id = $_GET["driverId"];
+            $log_item = R::xdispense( 'log_items' );
+            $log_item->log_item_type = $_GET["log-item-type"];
+            $log_item->creator_id = $_GET["user"];
+            $log_item->driver_id = $driver_id;
+            $log_item->description = $_GET["description"];
+            $log_item->created_date = date("Y-m-d h:i:s");
+
+            $log_id = R::store($log_item);
+            $log = R::getAll( 'SELECT u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.id = :log ORDER BY li.created_date',
+                [':log' => $log_id]
+            );
+
+            echo json_encode($log);
             break;
         default:
             # Regresar todos los drivers

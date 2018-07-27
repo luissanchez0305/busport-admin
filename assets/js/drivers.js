@@ -13,10 +13,10 @@ $(document).ready(function(){
 
     $('body').on('click','.driver',function(){
       $this = $(this);
-      $.get('/api/drivers.php', { type: 'driver', id: $this.attr('data-value') }, function(data){
+      /*$.get('/api/drivers.php', { type: 'driver', id: $this.attr('data-value') }, function(data){
         location.href='pages-driver.html?id='+data.id;
-      });
-
+      });*/
+      location.href='pages-driver.html?id='+$this.attr('data-value');
     });
 
     showAllDrivers();
