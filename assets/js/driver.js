@@ -31,6 +31,10 @@ $(document).ready(function(){
                 var logType = data.logTypes[j];
                 $('#log-item-type').append('<option value='+logType.id+'>'+logType.type_name+'</option>');
             }
+            for(var k = 0; k < data.fileTypes.length; k++){
+                var fileType = data.fileTypes[k];
+                $('#file-item-type').append('<option value='+fileType.id+'>'+fileType.name+'</option>');
+            }
 
             dt = loadLogsTable(data.items);
         });
@@ -40,7 +44,18 @@ $(document).ready(function(){
         $('#type').val('new');
         $('.log-section').addClass('hidden');
     }
+    $('body').on('click', '#addFileButton', function(){
+        $('#file-item-type option:eq(0)').prop('selected', true);
+        $('#file-name').val('');
+        var $fileSection = $('.new-file-section');
+        if($fileSection.hasClass('hidden'))
+            $fileSection.removeClass('hidden');
+        else
+            $fileSection.addClass('hidden');
+    });
     $('body').on('click', '#addLogButton', function(){
+        $('#log-item-type option:eq(0)').prop('selected', true);
+        $('#description').val('');
         var $logSection = $('.new-log-section');
         if($logSection.hasClass('hidden'))
             $logSection.removeClass('hidden');

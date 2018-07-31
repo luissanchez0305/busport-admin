@@ -277,21 +277,58 @@
                                     </div>
                                 </div>
                             </div>
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <div>
-                                            <button type="submit" class="btn btn-primary waves-effect waves-light">
-                                                Guardar
-                                            </button>
-                                            <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="location.href='/pages-drivers.html'">
-                                                Cancelar
-                                            </button>
-                                        </div>
+                            <div class="card m-b-30">
+                                <div class="card-body file-items">
+                                    <h4 class="mt-0 header-title">Documentos e imagenes</h4>
+                                    <a id="addFileButton">Agregar</a>
+
+                                    <!-- New-Log-Section -->
+                                    <div class="container-fluid new-file-section hidden">
+                                        <form id="add-new-log-form">
+                                            <input type="hidden" value="add-file" id="type" name="type"/>
+                                            <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id"/>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label>Tipo</label>
+                                                    <select class="form-control" id="file-item-type" name="file-item-type" required data-parsley-error-message="Escoge una opcion">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Imagen</label>
+                                                    <input type="file" name="file-name" id="file-name" />
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <button type="button" id="add-new-log-button" class="btn btn-primary waves-effect waves-light">Agregar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <tbody id="datatable-files">
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
+                            </div>
                         </div>
 
                     </div> <!-- end row -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light">
+                                        Guardar
+                                    </button>
+                                    <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="location.href='/pages-drivers.html'">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
                 </form>
                 <!-- Log-Section -->
                 <div class="row log-section">

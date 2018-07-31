@@ -2950,10 +2950,10 @@ body {
   max-width: 100%;
 }
 
-.log-items h3 {
+.log-items h3, .file-items h4 {
     display: contents;
 }
-.log-items a {
+.log-items a, .file-items a {
     margin: 0 0 0 10px;
     cursor: pointer;
     color: #007bff !important;
