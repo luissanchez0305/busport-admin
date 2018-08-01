@@ -7,8 +7,9 @@ $(document).ready(function(){
         localStorage.setItem('isTransition','0');
         if(getUrlVars()['off'])
             $('#wrong-password-text').removeClass('hidden');
-        else if(getUrlVars()['on'])
+        else if(getUrlVars()['on']){
             localStorage.setItem('current_userid', getUrlVars()['on']);
+        }
         else
             alert('Algo salio mal :(');
     }

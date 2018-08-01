@@ -1334,6 +1334,10 @@ code {
   border-color: #0a1832;
 }
 
+.btn input[type="radio"]{
+    visibility: hidden;
+}
+
 /* ==============
   Card
 ===================*/

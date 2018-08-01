@@ -6,15 +6,19 @@ if(isset($_GET["type"])){
     switch ($type) {
         case 'driver':
             $driver_id = $_GET['id'];
+            $online_id = $_GET['online'];
+            
             # Regresar un solo driver
             $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
-            $logs = R::getAll( 'SELECT u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
+            $online =  R::findOne( 'users', ' id = ? ', [ $driver_id ] );
+            $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, CASE WHEN li.status THEN 1 ELSE 0 END as status
+                FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
                 [':driver' => $driver_id]
             );
 
             $logTypes = R::getAll( 'SELECT id, type_name FROM log_item_types' );
             $fileTypes = R::getAll( 'SELECT id, name FROM file_types' );
-            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'fileTypes'=>$fileTypes));
+            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'fileTypes'=>$fileTypes, 'isAdmin'=>($online->user_type_id==1?true:false)));
             break;
         case 'drivers':
             # Regresar los drivers segun autocomplete por nombre

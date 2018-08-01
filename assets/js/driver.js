@@ -4,7 +4,7 @@ $(document).ready(function(){
     $('#expirationDate, #startDate, #finishDate').datepicker({ dateFormat: 'yyyy-mm-dd' });
     $('#expirationDate, #startDate, #finishDate').datepicker( "option", "dateFormat", 'yyyy-mm-dd' );
     if(getUrlVars()['id'] != 'new'){
-        $.get('/api/drivers.php', {type:'driver', id:getUrlVars()['id']}, function(data){
+        $.get('/api/drivers.php', {type:'driver', id:getUrlVars()['id'], online:localStorage.getItem('current_userid')}, function(data){
             $('.page-title').html('Conductor - ' + data.driver.name + ' ' + data.driver.lastname);
             $('.driver-id').val(data.driver.id);
             $('#firstName').val(data.driver.name);
@@ -36,7 +36,7 @@ $(document).ready(function(){
                 $('#file-item-type').append('<option value='+fileType.id+'>'+fileType.name+'</option>');
             }
 
-            dt = loadLogsTable(data.items);
+            dt = loadLogsTable(data.items,data.isAdmin);
         });
     }
     else{
@@ -76,13 +76,14 @@ $(document).ready(function(){
     });
 });
 
-function loadLogsTable(data){
+function loadLogsTable(data,isAdmin){
     $('#datatable-items').html('');
-
+    console.log(isAdmin);
     for(var i = 0; i < data.length; i++){
         var item = data[i];
         $('#datatable-items').append('<tr><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' + item.created_date +
-            '</td></tr>');
+            '</td>'+'<td data-toggle="buttons"><label class="btn btn-light '+(item.status == '1' ? 'active' : '')+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'>Si</label>' +
+            '<label class="btn btn-light '+(item.status == '1' ? '' : 'active')+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>No</label></td>'+'</tr>');
     }
 
     //Buttons examples
