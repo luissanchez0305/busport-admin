@@ -2973,12 +2973,12 @@ body {
     position: absolute;
 }
 
-#datatable-buttons th{
+#datatable-buttons th, #datatable-files th{
   font-weight: bold;
   background-color: #e0d8d8;
 }
 
-#datatable-buttons tr.even{
+#datatable-buttons tr.even, #datatable-files tr.even{
   background-color: white;
 }
 

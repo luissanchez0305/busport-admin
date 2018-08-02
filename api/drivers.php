@@ -7,18 +7,19 @@ if(isset($_GET["type"])){
         case 'driver':
             $driver_id = $_GET['id'];
             $online_id = $_GET['online'];
-            
+
             # Regresar un solo driver
             $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
-            $online =  R::findOne( 'users', ' id = ? ', [ $driver_id ] );
+            $online =  R::findOne( 'users', ' id = ? ', [ $online_id ] );
             $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, CASE WHEN li.status THEN 1 ELSE 0 END as status
                 FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
                 [':driver' => $driver_id]
             );
+            $files = R::getAll( 'SELECT df.id, ft.name as type_name, df.file_name FROM driver_files df JOIN file_types ft ON ft.id = df.file_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
 
             $logTypes = R::getAll( 'SELECT id, type_name FROM log_item_types' );
             $fileTypes = R::getAll( 'SELECT id, name FROM file_types' );
-            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'fileTypes'=>$fileTypes, 'isAdmin'=>($online->user_type_id==1?true:false)));
+            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'files'=>$files, 'fileTypes'=>$fileTypes, 'isAdmin'=>($online->user_type_id==1?true:false)));
             break;
         case 'drivers':
             # Regresar los drivers segun autocomplete por nombre
@@ -78,6 +79,23 @@ if(isset($_GET["type"])){
                 [':log' => $log_id]
             );
             echo json_encode($log);
+            break;
+        case 'add-file':
+            $file = R::xdispense( 'driver_files' );
+            $file->driver_id = $_GET['driver_id'];
+            $file->file_type_id = $_GET['file_item_type'];
+            $file->user_id = $_GET['user_id'];
+            $file->file_name = $_GET['file_name'];
+            $_id = R::store($file);
+            echo json_encode(array('status'=>'success'));
+            break;
+        case 'item':
+            $item_id = $_GET["id"];
+            $action = $_GET["action"];
+            $item = R::findOne( 'log_items', ' id = ? ', [ $item_id ] );
+
+            $item->status = $action == 'off' ? 0 : 1;
+            $id = R::store( $item );
             break;
         default:
             # Regresar todos los drivers

@@ -284,8 +284,7 @@
 
                                     <!-- New-Log-Section -->
                                     <div class="container-fluid new-file-section hidden">
-                                        <form id="add-new-log-form">
-                                            <input type="hidden" value="add-file" id="type" name="type"/>
+                                        <form id="add-new-file-form">
                                             <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id"/>
                                             <div class="row">
                                                 <div class="col-lg-4">
@@ -299,14 +298,20 @@
                                                     <input type="file" name="file-name" id="file-name" />
                                                 </div>
                                                 <div class="col-lg-4">
-                                                    <button type="button" id="add-new-log-button" class="btn btn-primary waves-effect waves-light">Agregar</button>
+                                                    <button type="button" id="add-new-file-button" class="btn btn-primary waves-effect waves-light">Guardar</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="table-responsive">
-                                        <table class="table table-hover mb-0">
-                                            <tbody id="datatable-files">
+                                        <table class="table table-hover mb-0" id="datatable-files">
+                                            <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Archivo</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="datatable-file-items">
                                             </tbody>
                                         </table>
                                     </div>
