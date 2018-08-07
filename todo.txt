@@ -1,14 +1,19 @@
-- crear ambiente de trabajo
-	- crear base de datos
-	- llenado de datos de prueba
-	- crear procedimientos de manejo de datos (orm)
-	- crear web responsive en esfera
-- busqueda de conductor
-	- autocomplete en busqueda de conductor por nombre
-	- autocomplete en busquead de conductor por cedula
-	- despliegue de informacion basica del condutor
-- despliegue de historial de conductor
-- despliegue de reportes
+x crear ambiente de trabajo
+	x crear base de datos
+	x llenado de datos de prueba
+	x crear procedimientos de manejo de datos (orm)
+	x crear web responsive en esfera
+x busqueda de conductor
+	x autocomplete en busqueda de conductor por nombre
+	x autocomplete en busquead de conductor por cedula
+	x despliegue de informacion basica del condutor
+x despliegue de historial de conductor
+x despliegue de reportes
+    x Resumen de accidentes: grafica lineal accidentes vs tiempo
+    x Resumen de infracciones: grafica lineal infracciones vs tiempo
+    - tabla: puntajes acumulados - conductores y puntaje
+    - tabla: conductores, tiempo laborado
+    - tabla: reincidencia de manejo: conductores, rencidencias en cada infraccion
 
 BASE DE DATOS
 - users

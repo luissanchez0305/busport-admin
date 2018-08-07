@@ -273,46 +273,92 @@
                 </div>-->
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="card m-b-30">
                             <div class="card-body">
                                 <h4 class="mt-0 header-title">Escoge</h4>
-
-                                <ul class="list-inline widget-chart m-t-30 text-center">
-                                    <li>
-                                        <h4 class=""><b>Tipo de gráfica</b></h4>
-                                        <p class="text-muted m-b-0">
-                                            <select id="graph-type" class="form-control">
-                                                <option></option>
-                                            </select>
-                                        </p>
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-pills nav-justified" role="tablist">
+                                    <li class="nav-item waves-effect waves-light">
+                                        <a class="nav-link active" data-toggle="tab" href="#graph-container" role="tab">Graficas</a>
                                     </li>
-                                    <li>
-                                        <h4 class=""><b>Mes de inicio</b></h4>
-                                        <p class="text-muted m-b-0">
-                                            <select id="initial-month" class="form-control">
-                                                <option></option>
-                                            </select>
-                                        </p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>Mes final</b></h4>
-                                        <p class="text-muted m-b-0">
-                                            <select id="final-month" class="form-control">
-                                                <option></option>
-                                            </select>
-                                        </p>
-                                    </li>
-                                    <li>
-                                        <p class="text-muted m-b-0">
-                                            <button type="button" class="btn btn-primary waves-effect waves-light" id="generate-graph">
-                                                Generar
-                                            </button>
-                                        </p>
+                                    <li class="nav-item waves-effect waves-light">
+                                        <a class="nav-link" data-toggle="tab" href="#table-container" role="tab">Tablas</a>
                                     </li>
                                 </ul>
-
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane active p-3" id="graph-container" role="tabpanel">
+                                        <ul class="list-inline widget-chart m-t-30 text-center">
+                                            <li>
+                                                <h4 class=""><b>Tipo de gráfica</b></h4>
+                                                <p class="text-muted m-b-0">
+                                                    <select id="graph-type" class="form-control">
+                                                        <option></option>
+                                                    </select>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <h4 class=""><b>Mes de inicio</b></h4>
+                                                <p class="text-muted m-b-0">
+                                                    <select id="initial-month" class="form-control">
+                                                        <option></option>
+                                                    </select>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <h4 class=""><b>Mes final</b></h4>
+                                                <p class="text-muted m-b-0">
+                                                    <select id="final-month" class="form-control">
+                                                        <option></option>
+                                                    </select>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p class="text-muted m-b-0">
+                                                    <button type="button" class="btn btn-primary waves-effect waves-light" id="generate-graph">
+                                                        Generar
+                                                    </button>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane p-3" id="table-container" role="tabpanel">
+                                        <ul class="list-inline widget-chart m-t-30 text-center">
+                                            <!--<li>
+                                                <h4 class=""><b>Tipo</b></h4>
+                                                <p class="text-muted m-b-0">
+                                                    <select id="graph-type" class="form-control">
+                                                        <option></option>
+                                                    </select>
+                                                </p>
+                                            </li>-->
+                                            <li>
+                                                <h4 class=""><b>Campos</b></h4>
+                                                <p class="text-muted m-b-0">
+                                                    <ul class="list-inline widget-chart m-t-30 table-reports text-center" id="infraction-checkboxes">
+                                                    </ul>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p class="text-muted m-b-0">
+                                                    <button type="button" class="btn btn-primary waves-effect waves-light" id="generate-table">
+                                                        Generar
+                                                    </button>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div id="report-line" style="height: 300px"></div>
+                                <table id="datatable-logs" class="table table-bordered">
+                                    <thead>
+                                    <tr id="datatable-logs-header">
+                                    </tr>
+                                    </thead>
+                                    <tbody id="datatable-items">
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -459,7 +505,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        © 2018 BusPort - <i class="mdi mdi-heart text-danger"></i> by EsferaSoluciones.
+                        © 2018 BusPort Admin - <i class="mdi mdi-lead-pencil text-success"></i> by <a target="_blank" href="https://www.esferasoluciones.com">EsferaSoluciones</a>
                     </div>
                 </div>
             </div>
@@ -480,6 +526,9 @@
         <!--Morris Chart-->
         <script src="assets/plugins/morris/morris.min.js"></script>
         <script src="assets/plugins/raphael/raphael-min.js"></script>
+
+        <!-- Parsley js -->
+        <script type="text/javascript" src="assets/plugins/parsleyjs/parsley.min.js"></script>
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>

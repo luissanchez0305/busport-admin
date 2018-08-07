@@ -4,6 +4,18 @@ include "helper.php";
 if(isset($_GET["type"])){
     $type = $_GET["type"];
     switch ($type) {
+        case 'table':
+            $infractions = $_GET['infractions'];
+            if($infractions){
+                $logs = R::getAll( "SELECT d.name, lit.type_name, COUNT(*) as number, SUM(lit.points) AS total
+                FROM log_items li
+                JOIN log_item_types lit ON lit.id = li.log_item_type
+                JOIN drivers d ON d.id = li.driver_id
+                WHERE li.log_item_type IN (:infractions)
+                GROUP BY lit.type_name, d.name", [':infractions' => $infractions] );
+                echo json_encode(array('logs'=>$logs));
+            }
+            break;
         case 'line':
             $init_date = $_GET['init_date'];
             $final_date = $_GET['final_date'];

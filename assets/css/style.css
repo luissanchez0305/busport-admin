@@ -124,6 +124,15 @@ code {
   padding-right: 15px;
 }
 
+#table-container li{
+    width: 100%;
+    vertical-align: top;
+}
+
+.table-reports li.item{
+    width: 50% !important;
+}
+
 .footer {
   background-color: #f9f9f9;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
@@ -3380,6 +3389,14 @@ body {
 }
 
 @media (max-width: 620px) {
+
+  #table-container li{
+      width: 100% !important;
+  }
+
+  .table-reports li{
+      width: 100% !important;
+  }
   .logo-large {
     display: none;
   }
