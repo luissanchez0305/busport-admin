@@ -52,13 +52,13 @@
         $('body').on('click','#generate-table',function () {
             /* declare an checkbox array */
             var chkArray = [];
-            $infractions_checks = $(".custom-control-input.infraction:checked");
-            datatable_headers;
+            var $infractions_checks = $(".custom-control-input.infraction:checked");
+            var datatable_headers;
             /* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
             $infractions_checks.each(function() {
                 $this = $(this);
                 chkArray.push($this.val());
-                datatable_headers += '<th>'+$this.html+'</th>';
+                datatable_headers += '<th>'+$this.next().html()+'</th>';
             });
 
             /* we join the array separated by the comma */
@@ -67,7 +67,7 @@
             var working_points = $(".custom-control-input.working-points:checked").val();
             $.get('/api/reports.php', { type:'table', infractions: infractions_selected, working_time: working_time_selected }, function(data){
                 if(data.logs.length > 0){
-                    $header = $('#datatable-logs-header')
+                    var $header = $('#datatable-logs-header')
                     $header.append('<th>Conductor</th>').append(datatable_headers);
 
                     for(var i = 0; i < data.logs.length; i++){
