@@ -7,12 +7,14 @@ if(isset($_GET["type"])){
         case 'table':
             $infractions = $_GET['infractions'];
             if($infractions){
-                $logs = R::getAll( "SELECT d.name, lit.type_name, COUNT(*) as number, SUM(lit.points) AS total
+                $query = "SELECT d.name, lit.type_name, COUNT(*) as number, SUM(lit.points) AS total
                 FROM log_items li
                 JOIN log_item_types lit ON lit.id = li.log_item_type
                 JOIN drivers d ON d.id = li.driver_id
-                WHERE li.log_item_type IN (:infractions)
-                GROUP BY lit.type_name, d.name", [':infractions' => $infractions] );
+                WHERE li.log_item_type IN ($infractions)
+                GROUP BY d.name, lit.type_name
+                ORDER BY d.name, lit.type_name";
+                $logs = R::getAll( $query );
                 echo json_encode(array('logs'=>$logs));
             }
             break;
@@ -31,7 +33,7 @@ if(isset($_GET["type"])){
             break;
         default:
             $months = R::getAll( "SELECT DATE_FORMAT(created_date,'%Y-%m') AS date FROM log_items GROUP BY DATE_FORMAT(created_date,'%Y-%m') ORDER BY created_date");
-            $types  = R::getAll( "SELECT id, type_name FROM log_item_types" );
+            $types  = R::getAll( "SELECT id, type_name FROM log_item_types ORDER BY type_name" );
             echo json_encode(array('months'=>$months, 'types'=>$types));
             break;
     }

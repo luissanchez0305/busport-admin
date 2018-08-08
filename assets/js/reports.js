@@ -4,7 +4,7 @@
 
     var Dashboard = function () {
     };
-
+    
     //creates line chart
     Dashboard.prototype.createLineChart = function (element, pointSize, lineWidth, data, xkey, ykeys, labels, lineColors) {
         Morris.Area({
@@ -23,8 +23,14 @@
             behaveLikeLine: true
         });
     },
+    Dashboard.prototype.isColumnAlreadyOn = function(columns,column){
+      for(var i = 0; i < columns.length; i++){
+          if(columns[i] == column)
+            return true;
+      }
+    },
     Dashboard.prototype.init = function () {
-        var $this = this;
+        var $dashboard = this;
         $.get('/api/reports.php', { type:'all' },function(data){
             //poner fecha minima
             for(var i = 0; i < data.types.length; i++){
@@ -51,15 +57,20 @@
         });
         $('body').on('click','#generate-table',function () {
             /* declare an checkbox array */
-            var chkArray = [];
+            var chkArray = [], infractionNames = [];
             var $infractions_checks = $(".custom-control-input.infraction:checked");
             var datatable_headers;
             /* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
             $infractions_checks.each(function() {
-                $this = $(this);
+                var $this = $(this);
                 chkArray.push($this.val());
+                infractionNames.push($this.next().html());
                 datatable_headers += '<th>'+$this.next().html()+'</th>';
             });
+            var $header = $('#datatable-logs-header')
+            var $items = $('#datatable-items');
+            $header.html('');
+            $items.html('');
 
             /* we join the array separated by the comma */
             var infractions_selected = chkArray.join(',');
@@ -67,15 +78,55 @@
             var working_points = $(".custom-control-input.working-points:checked").val();
             $.get('/api/reports.php', { type:'table', infractions: infractions_selected, working_time: working_time_selected }, function(data){
                 if(data.logs.length > 0){
-                    var $header = $('#datatable-logs-header')
+                    $header.html('');
+                    $items.html('');
                     $header.append('<th>Conductor</th>').append(datatable_headers);
-
+                    var current_driver;
+                    var tr = '<tr>';
+                    var td = [];
                     for(var i = 0; i < data.logs.length; i++){
                         var log_item = data.logs[i];
-                        $('#datatable-file-items').append('<tr><td>'+log_item.type_name+'</td><td>'+log_item.number+'</td></tr>');
+                        if(current_driver != log_item.name){
+                            if(tr.indexOf('td value') > -1){
+                                if(td.length < infractionNames.length){
+                                    for(var k = 0; k < infractionNames.length - td.length; k++)
+                                        tr += '<td value>0</td>';
+                                }
+                                $items.append(tr+'</tr>');
+                                tr = '<tr>';
+                                td = [];
+                            }
+                            current_driver = log_item.name;
+                            tr += '<td>' + current_driver + '</td>';
+                        }
+                        
+                        for(var j = 0; j < infractionNames.length; j++){
+                            if(data.logs[i].type_name == infractionNames[j]){
+                                td.push(data.logs[i].type_name);
+                                tr += '<td value>' + log_item.number + '</td>';
+                                break;
+                            }
+                            else if(td.length < infractionNames.length - 1 && !$dashboard.isColumnAlreadyOn(td, infractionNames[j])){
+                                td.push(infractionNames[j]);
+                                tr += '<td value>0</td>';
+                            }
+                        }
                     }
-
+                    if(td.length < infractionNames.length){
+                        for(var k = 0; k < infractionNames.length - td.length; k++)
+                            tr += '<td value>0</td>';
+                    }
+                    $items.append(tr+'</tr>');
                 }
+                else {
+                    $items.html('No hay registros');
+                }
+                
+                var dataTable = $('#datatable-logs').DataTable({
+                    lengthChange: false,
+                    searching: false,
+                    order:[[ 3, "desc" ]]
+                });
             });
         });
         $('body').on('click','#generate-graph',function () {
@@ -92,7 +143,7 @@
                         var item = data.log_counts[i];
                         $graphData.push({y: item.date, a: item.number})
                     };
-                    $this.createLineChart(graphContainer, 0, 0, $graphData, 'y', ['a'], [$type.text()], ['#0097a7']);
+                    $dashboard.createLineChart(graphContainer, 0, 0, $graphData, 'y', ['a'], [$type.text()], ['#0097a7']);
                 }
                 else{
                     $('#' + graphContainer).html('No hay informacion que mostrar');
