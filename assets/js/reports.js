@@ -4,7 +4,7 @@
 
     var Dashboard = function () {
     };
-    
+
     //creates line chart
     Dashboard.prototype.createLineChart = function (element, pointSize, lineWidth, data, xkey, ykeys, labels, lineColors) {
         Morris.Area({
@@ -41,7 +41,7 @@
                 '<label class="custom-control-label" for="customCheck'+i+'">'+type.type_name+'</label></p></li>');
             }
             $('#infraction-checkboxes').append('<li class="item"><p class="text-muted m-b-0"><input type="checkbox" value="0"" class="custom-control-input working-time"' +
-            'id="customCheck'+(i+1)+'" data-parsley-multiple="groups" data-parsley-mincheck="2">'+
+            'id="customCheck'+(i+1)+'" data-parsley-multiple="groups" data-parsley-mincheck="2" disabled="disabled">'+
             '<label class="custom-control-label" for="customCheck'+(i+1)+'">Tiempo de trabajo</label></p></li>')
             .append('<li class="item"><p class="text-muted m-b-0"><input type="checkbox" value="-1"" class="custom-control-input working-points"' +
             'id="customCheck'+(i+2)+'" data-parsley-multiple="groups" data-parsley-mincheck="2" disabled="disabled">'+
@@ -99,7 +99,7 @@
                             current_driver = log_item.name;
                             tr += '<td>' + current_driver + '</td>';
                         }
-                        
+
                         for(var j = 0; j < infractionNames.length; j++){
                             if(data.logs[i].type_name == infractionNames[j]){
                                 td.push(data.logs[i].type_name);
@@ -121,7 +121,7 @@
                 else {
                     $items.html('No hay registros');
                 }
-                
+
                 var dataTable = $('#datatable-logs').DataTable({
                     lengthChange: false,
                     searching: false,

@@ -113,7 +113,7 @@ code {
   color: #0097a7;
 }
 
-.hidden{
+.hidden, .breadcrumb{
   display:none;
 }
 
