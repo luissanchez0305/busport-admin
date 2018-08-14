@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>Upcube - Responsive Flat Admin Dashboard</title>
+        <title>Busport Admin</title>
         <meta content="Admin Dashboard" name="description" />
         <meta content="Themesdesign" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -17,6 +17,15 @@
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+        <style>
+            .ui-autocomplete{
+                z-index: 100000000000000000;
+            }
+            .search-wrap {
+                width: 60%;
+                margin: 0px 0px 20px 0px;
+            }
+        </style>
 
     </head>
 
@@ -87,6 +96,7 @@
                                 <ul class="submenu megamenu">
                                     <li>
                                         <ul>
+                                            <li><a id="add-infraction" class="link" data-toggle="modal" data-target="#myModal">Agregar infracción</a></li>
                                             <li><a href="/pages-driver.html?id=new">Agregar nuevo</a></li>
                                             <li><a href="/pages-driver-reports.html?id=new">Reportes</a></li>
                                         </ul>
@@ -105,7 +115,7 @@
             <!-- Search input -->
             <div class="search-wrap" id="search-wrap">
                 <div class="search-bar">
-                    <input class="search-input" id="search-drivers" type="search" placeholder="Search" />
+                    <input class="search-input" id="search-drivers" type="search" placeholder="Buscar" />
                     <a class="nav-link waves-effect toggle-search" href="#" id="search-drivers-button" data-target="#search-wrap">
                         <i class="mdi mdi-magnify noti-icon"></i>
                     </a>
@@ -149,8 +159,51 @@
                     </div>
                 </div> <!-- end col -->
             </div> <!-- end row -->
+            <!-- sample modal content -->
+            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title mt-0" id="myModalLabel">Agregar infracción</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="add-new-log-form">
+                                <input type="hidden" value="add-log" id="type" name="type"/>
+                                <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id"/>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="search-wrap" id="search-wrap">
+                                            <div class="search-bar">
+                                                <input class="search-input" id="search-drivers" type="search" placeholder="Buscar" />
+                                                <a class="nav-link waves-effect toggle-search" href="#" id="search-drivers-button" data-target="#search-wrap">
+                                                    <i class="mdi mdi-magnify noti-icon"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>Tipo</label>
+                                        <select class="form-control" id="log-item-type" name="log-item-type" required data-parsley-error-message="Escoge una opcion">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>Descripción</label>
+                                        <textarea class="form-control" id="description" name="description" rows="3" required data-parsley-error-message="Valor invalido"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="infraction-result-text"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" id="close-modal">Close</button>
+                            <button type="button" class="btn btn-primary waves-effect waves-light" id="create-infraction">Save changes</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
-
 
         <!-- jQuery  -->
         <script src="//code.jquery.com/jquery-1.12.4.js"></script>

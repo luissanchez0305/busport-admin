@@ -30,6 +30,13 @@
       }
     },
     Dashboard.prototype.init = function () {
+        $.get('/api/common.php', {type:'log-item-types'}, function(data){
+            for(var j = 0; j < data.length; j++){
+                var logType = data[j];
+                $('#log-item-type').append('<option value='+logType.id+'>'+logType.type_name+'</option>');
+            }
+        });
+
         var $dashboard = this;
         $.get('/api/reports.php', { type:'all' },function(data){
             //poner fecha minima

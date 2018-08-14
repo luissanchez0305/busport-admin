@@ -1,4 +1,12 @@
 $(document).ready(function(){
+
+    $.get('/api/common.php', {type:'log-item-types'}, function(data){
+        for(var j = 0; j < data.length; j++){
+            var logType = data[j];
+            $('#log-item-type').append('<option value='+logType.id+'>'+logType.type_name+'</option>');
+        }
+    });
+
     if(getUrlVars()['on'] == 'new'){
       console.log('new');
       $('#SavedSuccess').html('El conductor ha sido agregado con exito');
@@ -24,61 +32,6 @@ $(document).ready(function(){
     $('#showAllDrivers').click(function(){
       showAllDrivers();
     });
-
-    $('body').on('click','#search-drivers-button', function(){
-        $.ajax({
-          url: "/api/drivers.php",
-          dataType: "json",
-          data: {
-            term: $( "#search-drivers" ).val(),
-            type: 'drivers'
-          },
-          success: function( data ) {
-            $('#drivers').html('');
-            displayTableResult(data);
-          }
-        });
-    })
-    $( "#search-drivers" ).keypress(function(key){
-      if(key.keyCode == 13){
-        $('#showAllDrivers').removeClass('hidden');
-        $this = $(this);
-        $this.blur();
-        $.get('/api/drivers.php', { type: 'drivers', term: $this.val() }, function(data){
-            $('#drivers').html('');
-            displayTableResult(data);
-        });
-      }
-    });
-    $( "#search-drivers" ).autocomplete({
-      source: function( request, response ) {
-        $.ajax({
-          url: "/api/drivers.php",
-          dataType: "json",
-          data: {
-            term: request.term,
-            type: 'drivers'
-          },
-          success: function( data ) {
-            response($.map(data, function (item) {
-                            return {
-                                id: item.driver.id,
-                                value: item.driver.name
-                            }
-                        })
-            );
-          }
-        });
-      },
-      minLength: 2,
-      select: function( event, ui ) {
-        $('#showAllDrivers').removeClass('hidden');
-        $.get('/api/drivers.php', { type: 'driver', id: ui.item.id }, function(data){
-            $('#drivers').html('');
-            displayTableResult(data);
-        });
-      }
-    });
 });
 
 function showAllDrivers(){
@@ -95,8 +48,8 @@ function showAllDrivers(){
 }
 
 function displayTableResult(array){
-    if(array.id){
-        $('#drivers').append('<tr class="driver" data-value="'+array.id+'"><th><span class="co-name">' + array.name + ' ' + array.lastname + '</span></th><td>' + array.personal_id + '</td><td>' + array.blood_type + '</td><td>' + array.contact_phone+ '</td><td>' + (array.finish_date ? 'No' : 'Si') + '</td></tr>');
+    if(array.driver){
+        $('#drivers').append('<tr class="driver" data-value="'+array.driver.id+'"><th><span class="co-name">' + array.driver.name + ' ' + array.driver.lastname + '</span></th><td>' + array.driver.personal_id + '</td><td>' + array.driver.blood_type + '</td><td>' + array.driver.contact_phone+ '</td><td>' + (array.driver.finish_date ? 'No' : 'Si') + '</td></tr>');
     }
     else {
       $.each(array, function (i,item){

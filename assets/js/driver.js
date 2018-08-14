@@ -41,7 +41,7 @@ $(document).ready(function(){
 
             for(var i = 0; i < data.files.length; i++){
                 var item = data.files[i];
-                $('#datatable-file-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td>'+item.file_name+'</td></tr>');
+                $('#datatable-file-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td><a class="link file">'+item.file_name+'</a></td></tr>');
             }
             files_dt = $('#datatable-files').DataTable({
                 lengthChange: false,
@@ -57,6 +57,12 @@ $(document).ready(function(){
         $('#type').val('new');
         $('.log-section').addClass('hidden');
     }
+    $('body').on('click','.file',function(){
+        var url = 'http://busport.esferasoluciones.com/api/files/' + $(this).html();
+
+        $('#myModal img').attr('src',url);
+        $('.files button').click();
+    });
     $('body').on('click', '#addFileButton', function(){
         $('#file-item-type option:eq(0)').prop('selected', true);
         $('#file-name').val('');

@@ -114,7 +114,7 @@ code {
 }
 
 .hidden, .breadcrumb{
-  display:none;
+  display:none !important;
 }
 
 .container-alt {
@@ -156,6 +156,14 @@ code {
   left: 0;
   right: 0;
   top: 0;
+}
+
+.link{
+  cursor: pointer;
+}
+
+#myModal .nav-link{
+  display: none;
 }
 
 /* Social */
@@ -262,7 +270,9 @@ code {
   position: relative !important;
   top: 60px !important;
 }
-
+#topnav .navigation-menu > li.last-elements .submenu{
+  left: 5px !important;
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);

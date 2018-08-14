@@ -36,7 +36,75 @@ $(document).ready(function(){
     else if(getUrlVars()['profile'] && getUrlVars()['profile'] == 'saved'){
         alert('Su perfil ha sido guardado con exito');
     }
+    $('#create-infraction').click(function(){
+        $.get('/api/drivers.php', $('#add-new-log-form').serialize()+'&user='+localStorage.getItem('current_userid'),function(result){
+            $('#infraction-result-text').html('Infraccion creada');
+            setTimeout(function(){ $('.modal-content #close-modal').click() }, 5000);
+        });
+    });
 
+    $('body').on('click','#search-drivers-button', function(){
+        $.ajax({
+          url: "/api/drivers.php",
+          dataType: "json",
+          data: {
+            term: $( "#search-drivers" ).val(),
+            type: 'drivers'
+          },
+          success: function( data ) {
+            $('#drivers').html('');
+            displayTableResult(data);
+          }
+        });
+    });
+
+    $( "#search-drivers" ).keypress(function(key){
+      if(key.keyCode == 13){
+        $('#showAllDrivers').removeClass('hidden');
+        $this = $(this);
+        $this.blur();
+        $.get('/api/drivers.php', { type: 'drivers', term: $this.val() }, function(data){
+            $('#drivers').html('');
+            displayTableResult(data);
+        });
+      }
+    });
+
+    $( "#myModal #search-drivers" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "/api/drivers.php",
+          dataType: "json",
+          data: {
+            term: request.term,
+            type: 'drivers'
+          },
+          success: function( data ) {
+
+            response($.map(data, function (item) {
+                            return {
+                                id: item.driver.id,
+                                value: item.driver.name
+                            }
+                        })
+            );
+          }
+        });
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        $('#showAllDrivers').removeClass('hidden');
+        $.get('/api/drivers.php', { type: 'driver', id: ui.item.id, online: localStorage.getItem('current_userid') }, function(data){
+            if(location.href.indexOf('pages-drivers') > -1 && !$('#myModal').hasClass('show')){
+                $('#drivers').html('');
+                displayTableResult(data);
+            }
+            else{
+                $('#myModal #driverId').val(data.driver.id);
+            }
+        });
+      }
+    });
 
 });
 $('body').on('click','#login',function(){
