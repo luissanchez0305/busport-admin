@@ -213,7 +213,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div style="float:left;width:100%;padding-right: 10px; padding-bottom: 5px;">
+                                        <div style="float:left;width:100%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>Tallas de uniforme</label>
                                         </div>
                                         <div style="float:left;width:25%;padding-right: 10px;">
@@ -231,9 +231,36 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div style="float:left;width:25%;padding-right: 10px;">
+                                        <div style="float:left;width:25%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>Zapatos</label>
                                             <input type="text" class="form-control" id="sizeShoes" name="sizeShoes">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div style="float:left;width:100%;padding-right: 10px; padding-bottom: 5px;">
+                                            <label>Bonificación</label>
+                                        </div>
+                                        <div style="float:left;width:33%;padding-right: 10px;">
+                                            <label>Base</label>
+                                            <input type="text" class="form-control" id="baseBonus" name="baseBonus">
+                                        </div>
+                                        <div style="float:left;width:33%;padding-right: 10px;">
+                                            <label>Mensual</label>
+                                            <input type="text" class="form-control" id="monthBonus" name="monthBonus">
+                                        </div>
+                                        <div style="float:left;width:33%;padding-right: 10px;">
+                                            <label>Especial</label>
+                                            <input type="text" class="form-control" id="specialBonus" name="specialBonus">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="float:left;width:100%;padding: 20px 10px 5px 0;">
+                                            <label>Total de infracciones este mes</label>
+                                            <label style="font-weight: normal; padding: 0px 0px 0px 10px;" id="infractionsAmount"></label>
+                                        </div>
+                                        <div style="float:left;width:100%;padding: 5px 10px 5px 0;">
+                                            <label>Total de bono que recibirá este mes</label>
+                                            <label style="font-weight: normal; padding: 0px 0px 0px 10px;" id="bonusAmount"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -290,7 +317,7 @@
                                             <div class="row">
                                                 <div class="col-lg-4">
                                                     <label>Tipo</label>
-                                                    <select class="form-control" id="file-item-type" name="file-item-type" required data-parsley-error-message="Escoge una opcion">
+                                                    <select class="form-control" id="file-item-type" name="file-item-type" data-parsley-check-file-type>
                                                         <option></option>
                                                     </select>
                                                 </div>
@@ -320,9 +347,6 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div> <!-- end row -->
-                    <div class="row">
                         <div class="col-lg-12">
                             <div class="card-body">
                                 <div class="form-group">
@@ -335,6 +359,8 @@
                                 </div>
                             </div>
                         </div><!-- end col -->
+                    </div> <!-- end row -->
+                    <div class="row">
                     </div><!-- end row -->
                 </form>
                 <!-- Log-Section -->
@@ -377,6 +403,7 @@
                             <th>Tipo</th>
                             <th>Creado por</th>
                             <th>Descripcion</th>
+                            <th>Monto</th>
                             <th>Fecha</th>
                             <th>&nbsp;</th>
                         </tr>

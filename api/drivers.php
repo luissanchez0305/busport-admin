@@ -11,13 +11,13 @@ if(isset($_GET["type"])){
             # Regresar un solo driver
             $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
             $online =  R::findOne( 'users', ' id = ? ', [ $online_id ] );
-            $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, CASE WHEN li.status THEN 1 ELSE 0 END as status
+            $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, lit.points, CASE WHEN li.status THEN 1 ELSE 0 END as status
                 FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
                 [':driver' => $driver_id]
             );
             $files = R::getAll( 'SELECT df.id, ft.name as type_name, df.file_name FROM driver_files df JOIN file_types ft ON ft.id = df.file_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
 
-            $logTypes = R::getAll( 'SELECT id, type_name FROM log_item_types' );
+            $logTypes = R::getAll( 'SELECT id, type_name, points FROM log_item_types WHERE user_type_id = 3 ORDER BY type_name' );
             $fileTypes = R::getAll( 'SELECT id, name FROM file_types' );
             echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'files'=>$files, 'fileTypes'=>$fileTypes, 'isAdmin'=>($online->user_type_id==1?true:false)));
             break;
@@ -58,12 +58,15 @@ if(isset($_GET["type"])){
             $driver->emergency_name = $_GET['contactName'];
             $driver->emergency_relation = $_GET['contactRelation'];
             $driver->emergency_phone = $_GET['contactPhone'];
+            $driver->base_bonus = $_GET['baseBonus'];
+            $driver->month_bonus = $_GET['monthBonus'];
+            $driver->special_bonus = $_GET['specialBonus'];
 
             $id = R::store( $driver );
             if($type == 'new')
                 header("location:/pages-driver.html?id=".$id."&on=new");
             else
-                header("location:/pages-driver.html?".$driver->id."&on=edit");
+                header("location:/pages-driver.html?id=".$driver->id."&on=edit");
             break;
         case 'add-log':
             $driver_id = $_GET["driverId"];
@@ -73,9 +76,10 @@ if(isset($_GET["type"])){
             $log_item->driver_id = $driver_id;
             $log_item->description = $_GET["description"];
             $log_item->created_date = date("Y-m-d H:i:s");
+            $log_item->status = true;
 
             $log_id = R::store($log_item);
-            $log = R::getAll( 'SELECT u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.id = :log ORDER BY li.created_date',
+            $log = R::getAll( 'SELECT u.name, u.last_name, li.id, li.description, li.created_date, lit.type_name, lit.points, CASE WHEN li.status THEN 1 ELSE 0 END as status FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.id = :log ORDER BY li.created_date',
                 [':log' => $log_id]
             );
             echo json_encode($log);
@@ -96,6 +100,7 @@ if(isset($_GET["type"])){
 
             $item->status = $action == 'off' ? 0 : 1;
             $id = R::store( $item );
+            echo json_encode(array('status'=>'success'));
             break;
         default:
             # Regresar todos los drivers

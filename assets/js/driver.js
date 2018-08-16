@@ -1,5 +1,6 @@
+var logs_dt;
 $(document).ready(function(){
-    var logs_dt,files_dt;
+    var files_dt;
     $('form').parsley();
     $('#expirationDate, #startDate, #finishDate').datepicker({ dateFormat: 'yyyy-mm-dd' });
     $('#expirationDate, #startDate, #finishDate').datepicker( "option", "dateFormat", 'yyyy-mm-dd' );
@@ -26,19 +27,23 @@ $(document).ready(function(){
             $('#contactName').val(data.driver.emergency_name);
             $('#contactRelation').val(data.driver.emergency_relation);
             $('#contactPhone').val(data.driver.emergency_phone);
+            $('#baseBonus').val(data.driver.base_bonus);
+            $('#monthBonus').val(data.driver.month_bonus);
+            $('#specialBonus').val(data.driver.special_bonus);
 
             for(var j = 0; j < data.logTypes.length; j++){
                 var logType = data.logTypes[j];
-                $('#log-item-type').append('<option value='+logType.id+'>'+logType.type_name+'</option>');
+                $('#log-item-type').append('<option value="'+logType.id+'" data-points="'+logType.points+'">'+logType.type_name+'</option>');
             }
             for(var k = 0; k < data.fileTypes.length; k++){
                 var fileType = data.fileTypes[k];
                 $('#file-item-type').append('<option value='+fileType.id+'>'+fileType.name+'</option>');
             }
 
-            logs_dt = loadLogsTable(data.items,data.isAdmin);
-            $('#datatable-file-items').html('');
+            $('#datatable-items').html('');
+            logs_dt = loadLogsTable(data.items, data.isAdmin, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
 
+            $('#datatable-file-items').html('');
             for(var i = 0; i < data.files.length; i++){
                 var item = data.files[i];
                 $('#datatable-file-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td><a class="link file">'+item.file_name+'</a></td></tr>');
@@ -82,23 +87,26 @@ $(document).ready(function(){
             $logSection.addClass('hidden');
     });
     $('body').on('click', '#add-new-log-button', function(){
+        var $this = $(this);
         $.get('/api/drivers.php', $('#add-new-log-form').serialize()+'&user='+localStorage.getItem('current_userid'),function(result){
+            $('#infractionsAmount').html('$' + (parseInt($('#infractionsAmount').html().substring(1)) + parseInt($('#log-item-type option:selected').attr('data-points'))));
+            $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) - parseInt($('#log-item-type option:selected').attr('data-points'))));
+            rowId = result[0].id;
             logs_dt.row.add( [
                 result[0].type_name,
                 result[0].name + ' ' + result[0].last_name,
                 result[0].description,
-                result[0].created_date
+                '$' + result[0].points,
+                result[0].created_date,
+                loadSwitchStatusLabels(result[0], true, 'manual')
             ] ).draw();
 
             $('.new-log-section').addClass('hidden');
         });
     });
-    $('body').on('click', '.btn.activestatus', function(){
-        $this = $(this);
-        $.get('/api/drivers.php', {type:'item', id:$this.parents('tr').attr('data-id'), action:$this.attr('data-status') }, function(){
-            if($('#datatable-items').attr('isAdmin') == 'false')
-                $this.parents('tr').remove();
-        });
+    $('body').on('click', '.btn.activestatus', function(e){
+        e.preventDefault();
+        switchLogStatus(this);
     });
     $('body').on('click', '#add-new-file-button', function(){
         var file_data = $('.new-file-section #file-name').prop('files')[0];
@@ -137,26 +145,75 @@ $(document).ready(function(){
             }
          });
     });
+    window.Parsley.addValidator('checkFileType', {
+        validateString: function(value) {
+        return value.length > 0 && !$('.new-file-section').hasClass('hidden');
+        },
+        messages: {
+            en: 'Escoge una opcion'
+        }
+    });
 });
 
-function loadLogsTable(data,isAdmin){
-    $('#datatable-items').html('');
-
+var rowId;
+function loadLogsTable(data,isAdmin,monthBonus){
+    var currentMonthObj = new Date();
+    var month = currentMonthObj.getUTCMonth() + 1; //months from 1-12
+    var year = currentMonthObj.getUTCFullYear();
+    var currentMonth = year + '-' + (month<12 ? '0' + month : month);
+    var infractionsAmount = 0;
     for(var i = 0; i < data.length; i++){
         var item = data[i];
+        if(currentMonth == item.created_date.substring(0,7) && item.status == '1'){
+            infractionsAmount += parseInt(item.points);
+            monthBonus = monthBonus - item.points;
+        }
         if(isAdmin || item.status == '1')
-            $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'"><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' + item.created_date +
+            $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'"><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>$' + item.points + '</td><td>' + item.created_date +
                 '</td>'+'<td data-toggle="buttons">' +
-                '<label data-status="on" class="btn activestatus btn-light '+(item.status == '1' ? 'active' : '')+ (!isAdmin ? ' hidden ':'')+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'>Si</label>' +
-                '<label data-status="off" class="btn activestatus btn-light '+(item.status == '1' ? '' : 'active')+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>' + (isAdmin ? 'No' : 'Borrar') + '</label></td>'+'</tr>');
+                loadSwitchStatusLabels(item,isAdmin,'') + '</td>'+'</tr>');
     }
-
+    $('#infractionsAmount').html('$' + infractionsAmount);
+    $('#bonusAmount').html('$' + monthBonus);
     //Buttons examples
     var dataTable = $('#datatable-buttons').DataTable({
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-id', rowId);
+        },
         lengthChange: false,
         searching: false,
         order:[[ 3, "desc" ]]
     });
 
     return dataTable;
+}
+
+function switchLogStatus(obj){
+    $this = $(obj);
+
+    if($this.attr('data-status') != ($this.attr('data-current-value') == '1' ? 'on' : 'off')){
+        var $label = $('.'+$this.find('input').attr('name'));
+        if($this.hasClass('manual')){
+            $($label[0]).toggleClass('active');
+            $($label[1]).toggleClass('active');
+        }
+        $.get('/api/drivers.php', {type:'item', id:$this.parents('tr').attr('data-id'), action:$this.attr('data-status') }, function(){
+            $label.attr('data-current-value', $this.attr('data-status') == 'on' ? '1' : '0');
+            if($('#datatable-items').attr('isAdmin') == 'false')
+                $this.parents('tr').remove();
+            if($this.attr('data-status') == 'on'){
+                $('#infractionsAmount').html('$' + (parseInt($('#infractionsAmount').html().substring(1)) + parseInt($this.attr('data-points'))));
+                $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) - parseInt($this.attr('data-points'))));
+            }
+            else{
+                $('#infractionsAmount').html('$' + (parseInt($('#infractionsAmount').html().substring(1)) - parseInt($this.attr('data-points'))));
+                $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) + parseInt($this.attr('data-points'))));
+            }
+        });
+    }
+}
+
+function loadSwitchStatusLabels(item, isAdmin, manual){
+    return '<label data-current-value="'+item.status+'" data-status="on" class="btn activestatus btn-light activestatus_'+item.id+' '+manual+' '+(item.status == '1' ? 'active' : '')+ (!isAdmin ? ' hidden ':'')+'" data-points="'+item.points+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'>Si</label>' +
+        '<label data-current-value="'+item.status+'" data-status="off" class="btn activestatus btn-light activestatus_'+item.id + ' ' + manual + ' ' +(item.status == '1' ? '' : 'active')+'" data-points="'+item.points+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>' + (isAdmin ? 'No' : 'Borrar') + '</label>';
 }

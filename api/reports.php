@@ -7,13 +7,16 @@ if(isset($_GET["type"])){
         case 'table':
             $infractions = $_GET['infractions'];
             if($infractions){
-                $query = "SELECT d.name, lit.type_name, COUNT(*) as number, SUM(lit.points) AS total
+                $query = "SELECT d.name, lit.type_name, d.base_bonus, d.month_bonus, d.special_bonus, COUNT(*) as number, SUM(lit.points) AS total
                 FROM log_items li
                 JOIN log_item_types lit ON lit.id = li.log_item_type
                 JOIN drivers d ON d.id = li.driver_id
-                WHERE li.log_item_type IN ($infractions)
-                GROUP BY d.name, lit.type_name
+                WHERE li.log_item_type IN ($infractions) AND li.created_date >= ':start_date' AND li.created_date <= ':end_date' :where_driver
+                GROUP BY d.name, lit.type_name, d.base_bonus, d.month_bonus, d.special_bonus
                 ORDER BY d.name, lit.type_name";
+                $query = str_replace(':end_date', $_GET['month'] . '-31', str_replace(':start_date', $_GET['month'] . '-01', $query));
+                if($_GET['driver'] != '-1')
+                    $query = str_replace(':where_driver', 'AND li.driver_id = ' . $_GET['driver'], $query);
                 $logs = R::getAll( $query );
                 echo json_encode(array('logs'=>$logs));
             }
@@ -33,7 +36,7 @@ if(isset($_GET["type"])){
             break;
         default:
             $months = R::getAll( "SELECT DATE_FORMAT(created_date,'%Y-%m') AS date FROM log_items GROUP BY DATE_FORMAT(created_date,'%Y-%m') ORDER BY created_date");
-            $types  = R::getAll( "SELECT id, type_name FROM log_item_types ORDER BY type_name" );
+            $types  = R::getAll( "SELECT id, type_name, points FROM log_item_types WHERE user_type_id = 3 ORDER BY type_name" );
             echo json_encode(array('months'=>$months, 'types'=>$types));
             break;
     }

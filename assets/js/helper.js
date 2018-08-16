@@ -1,4 +1,3 @@
-console.log(location.pathname);
 $(document).ready(function(){
     var isTransition = localStorage.getItem('isTransition');
     var current_userid = localStorage.getItem('current_userid');

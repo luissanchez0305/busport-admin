@@ -5,6 +5,8 @@
     var Dashboard = function () {
     };
 
+    var dataTable;
+
     //creates line chart
     Dashboard.prototype.createLineChart = function (element, pointSize, lineWidth, data, xkey, ykeys, labels, lineColors) {
         Morris.Area({
@@ -43,16 +45,13 @@
             for(var i = 0; i < data.types.length; i++){
                 var type = data.types[i];
                 $('#graph-type').append('<option value="'+type.id+'"">'+type.type_name+'</option>');
-                $('#infraction-checkboxes').append('<li class="item"><p class="text-muted m-b-0"><input type="checkbox" value="'+type.id+'"" class="custom-control-input infraction"' +
+                $('#infraction-checkboxes').append('<li class="item"><p class="text-muted m-b-0"><input type="checkbox" value="'+type.id+'" data-points="'+type.points+'" class="custom-control-input infraction"' +
                 'id="customCheck'+i+'" data-parsley-multiple="groups" data-parsley-mincheck="2">'+
                 '<label class="custom-control-label" for="customCheck'+i+'">'+type.type_name+'</label></p></li>');
             }
             $('#infraction-checkboxes').append('<li class="item"><p class="text-muted m-b-0"><input type="checkbox" value="0"" class="custom-control-input working-time"' +
             'id="customCheck'+(i+1)+'" data-parsley-multiple="groups" data-parsley-mincheck="2" disabled="disabled">'+
             '<label class="custom-control-label" for="customCheck'+(i+1)+'">Tiempo de trabajo</label></p></li>')
-            .append('<li class="item"><p class="text-muted m-b-0"><input type="checkbox" value="-1"" class="custom-control-input working-points"' +
-            'id="customCheck'+(i+2)+'" data-parsley-multiple="groups" data-parsley-mincheck="2" disabled="disabled">'+
-            '<label class="custom-control-label" for="customCheck'+(i+2)+'">Puntaje</label></p></li>')
             .append('<li class="item">&nbsp;</li>');
 
             $('#infraction-checkboxes').parsley();
@@ -72,8 +71,13 @@
                 var $this = $(this);
                 chkArray.push($this.val());
                 infractionNames.push($this.next().html());
-                datatable_headers += '<th>'+$this.next().html()+'</th>';
+                datatable_headers += '<th>'+$this.next().html() + ' ($' + $this.attr('data-points') + ')' + '</th>';
             });
+            datatable_headers += '<th>Total infracciones</th>';
+            datatable_headers += '<th>Bono mensual</th>';
+            datatable_headers += '<th>Bono Especial</th>';
+            datatable_headers += '<th>Bono Total</th>';
+
             var $header = $('#datatable-logs-header')
             var $items = $('#datatable-items');
             $header.html('');
@@ -83,7 +87,11 @@
             var infractions_selected = chkArray.join(',');
             var working_time_selected = $(".custom-control-input.working-time:checked").val();
             var working_points = $(".custom-control-input.working-points:checked").val();
-            $.get('/api/reports.php', { type:'table', infractions: infractions_selected, working_time: working_time_selected }, function(data){
+            $.get('/api/reports.php', { type:'table', infractions: infractions_selected, working_time: working_time_selected, month:$('#year-month').val(), driver:$('#driverId-report').val() }, function(data){
+                /*if(dataTable){
+                    $('#datatable-logs').DataTable().destroy();
+                    $('#datatable-logs').DataTable().clear();
+                }*/
                 if(data.logs.length > 0){
                     $header.html('');
                     $items.html('');
@@ -91,6 +99,9 @@
                     var current_driver;
                     var tr = '<tr>';
                     var td = [];
+                    var infractionsTotal = 0;
+                    var monthBonus = 0;
+                    var specialBonus = 0;
                     for(var i = 0; i < data.logs.length; i++){
                         var log_item = data.logs[i];
                         if(current_driver != log_item.name){
@@ -99,16 +110,25 @@
                                     for(var k = 0; k < infractionNames.length - td.length; k++)
                                         tr += '<td value>0</td>';
                                 }
+                                tr += '<td value>$' + infractionsTotal + '</td>';
+                                tr += '<td value>$' + monthBonus + '</td>';
+                                tr += '<td value>$' + specialBonus + '</td>';
+                                tr += '<td value>$' + (monthBonus + specialBonus - infractionsTotal) + '</td>';
                                 $items.append(tr+'</tr>');
+                                infractionsTotal = 0;
                                 tr = '<tr>';
                                 td = [];
                             }
+
                             current_driver = log_item.name;
                             tr += '<td>' + current_driver + '</td>';
+                            monthBonus = parseInt(log_item.month_bonus);
+                            specialBonus = parseInt(log_item.special_bonus);
                         }
 
                         for(var j = 0; j < infractionNames.length; j++){
                             if(data.logs[i].type_name == infractionNames[j]){
+                                infractionsTotal += parseInt(data.logs[i].total);
                                 td.push(data.logs[i].type_name);
                                 tr += '<td value>' + log_item.number + '</td>';
                                 break;
@@ -123,17 +143,22 @@
                         for(var k = 0; k < infractionNames.length - td.length; k++)
                             tr += '<td value>0</td>';
                     }
+
+                    tr += '<td value>$'+infractionsTotal+'</td>';
+                    tr += '<td value>$' + monthBonus + '</td>';
+                    tr += '<td value>$' + specialBonus + '</td>';
+                    tr += '<td value>$' + (monthBonus + specialBonus - infractionsTotal) + '</td>';
                     $items.append(tr+'</tr>');
+
+                    dataTable = $('#datatable-logs').DataTable({
+                        lengthChange: false,
+                        searching: false,
+                        order:[[ 3, "desc" ]]
+                    });
                 }
                 else {
                     $items.html('No hay registros');
                 }
-
-                var dataTable = $('#datatable-logs').DataTable({
-                    lengthChange: false,
-                    searching: false,
-                    order:[[ 3, "desc" ]]
-                });
             });
         });
         $('body').on('click','#generate-graph',function () {
@@ -157,6 +182,49 @@
                 }
             });
 
+        });
+        $('#year-month').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm",
+            showButtonPanel: true,
+            defaultDate: new Date(),
+            onChangeMonthYear: function (year, month, inst) {
+                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month - 1, 1)));
+            },
+            onClose: function(dateText, inst) {
+                var month = $(".ui-datepicker-month :selected").val();
+                var year = $(".ui-datepicker-year :selected").val();
+                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
+            }
+        });
+
+        $( "#search-drivers-report" ).autocomplete({
+          source: function( request, response ) {
+            $.ajax({
+              url: "/api/drivers.php",
+              dataType: "json",
+              data: {
+                term: request.term,
+                type: 'drivers'
+              },
+              success: function( data ) {
+
+                response($.map(data, function (item) {
+                                return {
+                                    id: item.driver.id,
+                                    value: item.driver.name
+                                }
+                            })
+                );
+              }
+            });
+          },
+          minLength: 2,
+          select: function( event, ui ) {
+            $('#showAllDrivers').removeClass('hidden');
+            $('#driverId-report').val(ui.item.id);
+          }
         });
     },
     //init
