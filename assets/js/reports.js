@@ -55,11 +55,11 @@
             .append('<li class="item">&nbsp;</li>');
 
             $('#infraction-checkboxes').parsley();
-            for(var i = 0; i < data.months.length; i++){
+            /*for(var i = 0; i < data.months.length; i++){
                 var month = data.months[i];
                 $('#initial-month').append('<option value='+month.date+'>'+month.date+'</option>');
                 $('#final-month').append('<option value='+month.date+'>'+month.date+'</option>');
-            }
+            }*/
         });
         $('body').on('click','#generate-table',function () {
             /* declare an checkbox array */
@@ -162,8 +162,8 @@
             });
         });
         $('body').on('click','#generate-graph',function () {
-            var $initial = $('#initial-month option:selected').val();
-            var $final = $('#final-month option:selected').val();
+            var $initial = $('#initial-month').val();
+            var $final = $('#final-month').val();
             var $type = $('#graph-type option:selected');
             $.get('/api/reports.php', { type:'line', init_date: $initial, final_date: $final, log_type: $type.val() }, function(data){
                 //creating line chart
@@ -183,7 +183,7 @@
             });
 
         });
-        $('#year-month').datepicker({
+        $('#year-month, #initial-month, #final-month').datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: "yy-mm",
