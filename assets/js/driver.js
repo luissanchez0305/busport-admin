@@ -22,18 +22,22 @@ $(document).ready(function(){
             $('#sizeShirt option[value="' + data.driver.size_shirt + '"]').prop('selected',true);
             $('#sizeShoes').val(data.driver.size_shoes);
             $('#phone').val(data.driver.contact_phone);
+            $('#bp-phone').val(data.driver.busport_phone);
             $('#email').val(data.driver.email);
             $('#address').val(data.driver.address);
             $('#contactName').val(data.driver.emergency_name);
             $('#contactRelation').val(data.driver.emergency_relation);
             $('#contactPhone').val(data.driver.emergency_phone);
+            $('#contactName2').val(data.driver.emergency_name2);
+            $('#contactRelation2').val(data.driver.emergency_relation2);
+            $('#contactPhone2').val(data.driver.emergency_phone2);
             $('#baseBonus').val(data.driver.base_bonus);
             $('#monthBonus').val(data.driver.month_bonus);
             $('#specialBonus').val(data.driver.special_bonus);
 
             for(var j = 0; j < data.logTypes.length; j++){
                 var logType = data.logTypes[j];
-                $('#log-item-type').append('<option value="'+logType.id+'" data-points="'+logType.points+'">'+logType.type_name+'</option>');
+                $('#log-item-type').append('<option value="'+logType.id+'" data-points="'+logType.points+'" data-substract="'+logType.substract_points+'">'+logType.type_name+'</option>');
             }
             for(var k = 0; k < data.fileTypes.length; k++){
                 var fileType = data.fileTypes[k];
@@ -79,6 +83,7 @@ $(document).ready(function(){
     });
     $('body').on('click', '#addLogButton', function(){
         $('#log-item-type option:eq(0)').prop('selected', true);
+        $('#log-item-points').val('0');
         $('#description').val('');
         var $logSection = $('.new-log-section');
         if($logSection.hasClass('hidden'))
@@ -90,19 +95,28 @@ $(document).ready(function(){
         var $this = $(this);
         $.get('/api/drivers.php', $('#add-new-log-form').serialize()+'&user='+localStorage.getItem('current_userid'),function(result){
             $('#infractionsAmount').html('$' + (parseInt($('#infractionsAmount').html().substring(1)) + parseInt($('#log-item-type option:selected').attr('data-points'))));
-            $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) - parseInt($('#log-item-type option:selected').attr('data-points'))));
+            if($('#log-item-type option:selected').attr('data-substract') == '1'){
+                $('#specialPerformanceBonus').html('$' + (parseInt($('#specialPerformanceBonus').html().substring(1)) + parseInt($('#log-item-points').val())));
+            }
+            $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) - parseInt($('#log-item-type option:selected').attr('data-points')) + parseInt($('#log-item-points').val())));
             rowId = result[0].id;
             logs_dt.row.add( [
                 result[0].type_name,
                 result[0].name + ' ' + result[0].last_name,
                 result[0].description,
-                '$' + result[0].points,
+                (result[0].custom_points > 0 ? '$' : '-$') + (result[0].custom_points > 0 ? result[0].custom_points : result[0].log_type_points),
                 result[0].created_date,
                 loadSwitchStatusLabels(result[0], true, 'manual')
             ] ).draw();
 
             $('.new-log-section').addClass('hidden');
         });
+    });
+    $('body').on('change', '#log-item-type', function(e){
+        if($(this).find('option:selected').attr('data-substract') == '1')
+            $('#custom-points').removeClass('hidden');
+        else
+            $('#custom-points').addClass('hidden');
     });
     $('body').on('click', '.btn.activestatus', function(e){
         e.preventDefault();
@@ -162,18 +176,21 @@ function loadLogsTable(data,isAdmin,monthBonus){
     var year = currentMonthObj.getUTCFullYear();
     var currentMonth = year + '-' + (month<12 ? '0' + month : month);
     var infractionsAmount = 0;
+    var customPoints = 0;
     for(var i = 0; i < data.length; i++){
         var item = data[i];
         if(currentMonth == item.created_date.substring(0,7) && item.status == '1'){
-            infractionsAmount += parseInt(item.points);
-            monthBonus = monthBonus - item.points;
+            infractionsAmount += parseInt(item.log_type_points);
+            customPoints += parseInt(item.custom_points);
+            monthBonus = parseInt(monthBonus) - parseInt(item.log_type_points) + parseInt(item.custom_points);
         }
         if(isAdmin || item.status == '1')
-            $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'"><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>$' + item.points + '</td><td>' + item.created_date +
+            $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'"><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' + (item.custom_points > 0 ? '$' : '-$') + (item.custom_points > 0 ? item.custom_points : item.log_type_points) + '</td><td>' + item.created_date +
                 '</td>'+'<td data-toggle="buttons">' +
                 loadSwitchStatusLabels(item,isAdmin,'') + '</td>'+'</tr>');
     }
     $('#infractionsAmount').html('$' + infractionsAmount);
+    $('#specialPerformanceBonus').html('$' + customPoints);
     $('#bonusAmount').html('$' + monthBonus);
     //Buttons examples
     var dataTable = $('#datatable-buttons').DataTable({
@@ -182,7 +199,7 @@ function loadLogsTable(data,isAdmin,monthBonus){
         },
         lengthChange: false,
         searching: false,
-        order:[[ 3, "desc" ]]
+        order:[[ 4, "desc" ]]
     });
 
     return dataTable;
@@ -203,17 +220,19 @@ function switchLogStatus(obj){
                 $this.parents('tr').remove();
             if($this.attr('data-status') == 'on'){
                 $('#infractionsAmount').html('$' + (parseInt($('#infractionsAmount').html().substring(1)) + parseInt($this.attr('data-points'))));
-                $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) - parseInt($this.attr('data-points'))));
+                $('#specialPerformanceBonus').html('$' + (parseInt($('#specialPerformanceBonus').html().substring(1)) + parseInt($this.attr('data-custom-points'))));
+                $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) - parseInt($this.attr('data-points')) + parseInt($this.attr('data-custom-points'))));
             }
             else{
                 $('#infractionsAmount').html('$' + (parseInt($('#infractionsAmount').html().substring(1)) - parseInt($this.attr('data-points'))));
-                $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) + parseInt($this.attr('data-points'))));
+                $('#specialPerformanceBonus').html('$' + (parseInt($('#specialPerformanceBonus').html().substring(1)) - parseInt($this.attr('data-custom-points'))));
+                $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) + parseInt($this.attr('data-points')) - parseInt($this.attr('data-custom-points'))));
             }
         });
     }
 }
 
 function loadSwitchStatusLabels(item, isAdmin, manual){
-    return '<label data-current-value="'+item.status+'" data-status="on" class="btn activestatus btn-light activestatus_'+item.id+' '+manual+' '+(item.status == '1' ? 'active' : '')+ (!isAdmin ? ' hidden ':'')+'" data-points="'+item.points+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'>Si</label>' +
-        '<label data-current-value="'+item.status+'" data-status="off" class="btn activestatus btn-light activestatus_'+item.id + ' ' + manual + ' ' +(item.status == '1' ? '' : 'active')+'" data-points="'+item.points+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>' + (isAdmin ? 'No' : 'Borrar') + '</label>';
+    return '<label data-current-value="'+item.status+'" data-status="on" class="btn activestatus btn-light activestatus_'+item.id+' '+manual+' '+(item.status == '1' ? 'active' : '')+ (!isAdmin ? ' hidden ':'')+'" data-custom-points="'+item.custom_points+'" data-points="'+item.log_type_points+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'>Si</label>' +
+        '<label data-current-value="'+item.status+'" data-status="off" class="btn activestatus btn-light activestatus_'+item.id + ' ' + manual + ' ' +(item.status == '1' ? '' : 'active')+'" data-custom-points="'+item.custom_points+'" data-points="'+item.log_type_points+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>' + (isAdmin ? 'No' : 'Borrar') + '</label>';
 }

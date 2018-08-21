@@ -249,12 +249,16 @@
                                             <input type="text" class="form-control" id="monthBonus" name="monthBonus">
                                         </div>
                                         <div style="float:left;width:33%;padding-right: 10px;">
-                                            <label>Especial</label>
+                                            <label>Especial Fijo</label>
                                             <input type="text" class="form-control" id="specialBonus" name="specialBonus">
                                         </div>
                                     </div>
                                     <div>
-                                        <div style="float:left;width:100%;padding: 20px 10px 5px 0;">
+                                        <div style="float:left;width:100%;padding: 20px 10px 5px 0px;">
+                                            <label>Total de bonos por desempeño</label>
+                                            <label style="font-weight: normal; padding: 0px 0px 0px 10px;" id="specialPerformanceBonus"></label>
+                                        </div>
+                                        <div style="float:left;width:100%;padding: 5px 10px 5px 0px;">
                                             <label>Total de infracciones este mes</label>
                                             <label style="font-weight: normal; padding: 0px 0px 0px 10px;" id="infractionsAmount"></label>
                                         </div>
@@ -273,9 +277,13 @@
                                 <div class="card-body">
                                     <h4 class="mt-0 header-title">Información de Contacto</h4>
                                     <div class="form-group">
-                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
-                                            <label>Teléfono</label>
+                                        <div style="float:left;width:22%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Tel. personal</label>
                                             <input type="text" class="form-control" id="phone" name="phone" required data-parsley-error-message="Valor invalido">
+                                        </div>
+                                        <div style="float:left;width:22%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Tel. Busport</label>
+                                            <input type="text" class="form-control" id="bp-phone" name="bp-phone" required data-parsley-error-message="Valor invalido">
                                         </div>
                                         <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
                                             <label>email</label>
@@ -301,6 +309,18 @@
                                         <div style="float:left;width:30%; padding-bottom: 20px;">
                                             <label>Teléfono</label>
                                             <input type="textarea" class="form-control" id="contactPhone" name="contactPhone">
+                                        </div>
+                                        <div style="float:left;width:30%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Nombre</label>
+                                            <input type="text" class="form-control" id="contactName2" name="contactName2">
+                                        </div>
+                                        <div style="float:left;width:30%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label>Parentesco</label>
+                                            <input type="text" class="form-control" id="contactRelation2" name="contactRelation2">
+                                        </div>
+                                        <div style="float:left;width:30%; padding-bottom: 20px;">
+                                            <label>Teléfono</label>
+                                            <input type="textarea" class="form-control" id="contactPhone2" name="contactPhone2">
                                         </div>
                                     </div>
                                 </div>
@@ -384,10 +404,14 @@
                                     <select class="form-control" id="log-item-type" name="log-item-type" required data-parsley-error-message="Escoge una opcion">
                                         <option></option>
                                     </select>
+                                    <div class="hidden" id="custom-points" style="padding: 10px 0px 0px 0px;">
+                                        <label>Puntos</label>
+                                        <input class="form-control" type="text" value="" id="log-item-points" name="log-item-points" required />
+                                    </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <label>Descripción</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3" required data-parsley-error-message="Valor invalido"></textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="6" required data-parsley-error-message="Valor invalido"></textarea>
                                 </div>
                                 <div class="col-lg-4">
                                     <button type="button" id="add-new-log-button" class="btn btn-primary waves-effect waves-light">Agregar</button>
