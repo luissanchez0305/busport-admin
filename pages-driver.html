@@ -117,7 +117,20 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="page-title-box">
-                            <h2 class="page-title">{{Nombre del conductor}}</h2>
+                            <div style="float:left;">
+                                <h2 class="page-title">{{Nombre del conductor}}</h2>
+                            </div>
+                            <div style="float:left; padding: 0px 0px 0px 10px;" id="active-driver">
+                                <label data-current-value="" data-status="on" class="btn activedriver btn-light activestatus_driver">
+                                    <input type="radio" name="activestatus_driver" id="option1" autocomplete="off">Activado
+                                </label>
+                                <label data-current-value="" data-status="off" class="btn activedriver btn-light activestatus_driver">
+                                    <input type="radio" name="activestatus_driver" id="option2" autocomplete="off">Desactivado
+                                </label>
+                            </div>
+                            <div style="float:left; padding: 0px 0px 0px 10px;" id="active-driver-message" class="hidden">
+
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -21,6 +21,12 @@ if(isset($_GET["type"])){
             $fileTypes = R::getAll( 'SELECT id, name FROM file_types' );
             echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'files'=>$files, 'fileTypes'=>$fileTypes, 'isAdmin'=>($online->user_type_id==1?true:false)));
             break;
+        case 'status':
+                $driver = R::findOne( 'drivers', ' id = ? ', [ $_GET['id'] ] );
+                $driver->is_active = $_GET['action'] == 'on' ? 1 : 0;
+                $id = R::store( $driver );
+                echo json_encode(array('status'=>'success'));
+            break;
         case 'drivers':
             # Regresar los drivers segun autocomplete por nombre
             $query = $_GET['term'];

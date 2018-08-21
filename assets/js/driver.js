@@ -35,6 +35,13 @@ $(document).ready(function(){
             $('#monthBonus').val(data.driver.month_bonus);
             $('#specialBonus').val(data.driver.special_bonus);
 
+            if(data.driver.is_active == 1){
+                $('#active-driver .btn.activedriver[data-status="on"]').attr('data-current-value','on').addClass('active').find('input[type="radio"]').prop('checked', true);
+            }
+            else{
+                $('#active-driver .btn.activedriver[data-status="off"]').attr('data-current-value','off').addClass('active').find('input[type="radio"]').prop('checked', true);
+            }
+
             for(var j = 0; j < data.logTypes.length; j++){
                 var logType = data.logTypes[j];
                 $('#log-item-type').append('<option value="'+logType.id+'" data-points="'+logType.points+'" data-substract="'+logType.substract_points+'">'+logType.type_name+'</option>');
@@ -121,6 +128,18 @@ $(document).ready(function(){
     $('body').on('click', '.btn.activestatus', function(e){
         e.preventDefault();
         switchLogStatus(this);
+    });
+    $('body').on('click', '.btn.activedriver', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var $label = $('.'+$this.find('input').attr('name'));
+        $($label[0]).toggleClass('active');
+        $($label[1]).toggleClass('active');
+
+        $.get('/api/drivers.php', {type:'status', id:$('#driverId').val(), action:$this.attr('data-status') }, function(){
+            $('#active-driver-message').removeClass('hidden').html('El conductor ha sido ' + ($this.attr('data-status') == 'on' ? 'activado' : 'desactivado'));
+            setTimeout(function(){ $('#active-driver-message').addClass('hidden') }, 5000);
+        });
     });
     $('body').on('click', '#add-new-file-button', function(){
         var file_data = $('.new-file-section #file-name').prop('files')[0];
