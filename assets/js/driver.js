@@ -163,7 +163,7 @@ $(document).ready(  function(){
                 driver_id: $('.driver-id').val(),
                 certification_type: $('#certification-type').val(),
                 user_id: localStorage.getItem('current_userid'),
-                certification_description: $('#certification-description').val(),
+                certification_description: $('#certification-description-text').val(),
                 certification_date: $('#certification-date').val()
             },
             function(response){
@@ -174,7 +174,7 @@ $(document).ready(  function(){
                     var new_row = certifications_dt.row.add([
                         $('#certification-type option:selected').html(),
                         $('#certification-date').val(),
-                        $('#certification-description').val(),
+                        $('#certification-description-text').val(),
                         '<i class="dripicons-cross text-muted delete-certification">'
                     ]);
 
