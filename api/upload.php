@@ -1,12 +1,17 @@
 <?php
 
     if ( 0 < $_FILES['file']['error'] ) {
-        echo 'Error: ' . $_FILES['file']['error'] . '<br>';
+        echo 'error: ' . $_FILES['file']['error'] . '<br>';
     }
     else {
-        $file_name = generateRandomString().'.jpg';
-        move_uploaded_file($_FILES['file']['tmp_name'], dirname(__FILE__).'\\files\\' . $file_name);
-        echo $file_name;
+        $extension = end(explode(".", $_FILES['file']['name']));
+        if($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'pdf'){
+            $file_name = generateRandomString().'.'.$extension;
+            move_uploaded_file($_FILES['file']['tmp_name'], dirname(__FILE__).'\\files\\' . $file_name);
+            echo $file_name;
+        }
+        else
+            echo 'error: file type';
     }
     function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

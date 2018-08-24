@@ -1,9 +1,11 @@
 var logs_dt;
-$(document).ready(function(){
+$(document).ready(  function(){
     var files_dt;
+    var certifications_dt;
+    var files_url = 'http://busport.esferasoluciones.com/api/files/';
     $('form').parsley();
-    $('#expirationDate, #startDate, #finishDate').datepicker({ dateFormat: 'yyyy-mm-dd' });
-    $('#expirationDate, #startDate, #finishDate').datepicker( "option", "dateFormat", 'yyyy-mm-dd' );
+    $('#expirationDate, #startDate, #finishDate, #certification-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
+    $('#expirationDate, #startDate, #finishDate, #certification-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
     if(getUrlVars()['id'] != 'new'){
         $.get('/api/drivers.php', {type:'driver', id:getUrlVars()['id'], online:localStorage.getItem('current_userid')}, function(data){
             $('.page-title').html('Conductor - ' + data.driver.name + ' ' + data.driver.lastname);
@@ -48,16 +50,34 @@ $(document).ready(function(){
             }
             for(var k = 0; k < data.fileTypes.length; k++){
                 var fileType = data.fileTypes[k];
-                $('#file-item-type').append('<option value='+fileType.id+'>'+fileType.name+'</option>');
+                $('#file-item-type').append('<option value='+fileType.id+' data-show-description="'+fileType.show_description+'">'+fileType.name+'</option>');
+            }
+            for(var l = 0; l < data.certificationTypes.length; l++){
+                var certType = data.certificationTypes[l];
+                $('#certification-type').append('<option value='+certType.id+' data-show-description="'+certType.show_description+'">'+certType.name+'</option>');
             }
 
             $('#datatable-items').html('');
             logs_dt = loadLogsTable(data.items, data.isAdmin, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
 
+            $('#datatable-certification-items').html('');
+            for(var i = 0; i < data.certifications.length; i++){
+                var item = data.certifications[i];
+                $('#datatable-certification-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td>'+item.certification_date+'</td><td>'+item.description+'</td><td><i class="dripicons-cross text-muted delete-certification"></td></tr>');
+            }
+
+            certifications_dt = $('#datatable-certifications').DataTable({
+                lengthChange: false,
+                searching: false,
+                "bSort" : false,
+                "bInfo" : false,
+                "bPaginate": false
+            });
+
             $('#datatable-file-items').html('');
             for(var i = 0; i < data.files.length; i++){
                 var item = data.files[i];
-                $('#datatable-file-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td><a class="link file">'+item.file_name+'</a></td></tr>');
+                $('#datatable-file-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td><a class="link '+(checkImageExtension(item.file_name) ? 'file' : '')+'" '+(checkImageExtension(item.file_name) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+item.file_name + '"')+'>'+item.file_name+'</a></td><td>'+item.description+'</td><td><i class="dripicons-cross text-muted delete-file"></td></tr>');
             }
             files_dt = $('#datatable-files').DataTable({
                 lengthChange: false,
@@ -79,14 +99,141 @@ $(document).ready(function(){
         $('#myModal img').attr('src',url);
         $('.files button').click();
     });
+    $('body').on('change', '#certification-type', function(){
+        var $this = $(this);
+        var $description = $('#certification-description');
+        if($this.find('option:selected').attr('data-show-description') == '1')
+            $description.removeClass('hidden')
+        else
+            $description.addClass('hidden');
+    });
+    $('body').on('click', '.delete-certification', function(e){
+        e.preventDefault();
+        var $this_row = $(this).parents('tr');
+        // delete file
+        $.get('/api/drivers.php', { type: 'delete-certification', certificationId: $this_row.attr('data-id') }, function(){
+            certifications_dt.row( $this_row )
+                .remove()
+                .draw();
+        });
+    });
+    $('body').on('change', '#file-item-type', function(){
+        // display description si el tipo de file es show description;
+        var $this = $(this);
+        var $description = $('#file-description');
+        if($this.find('option:selected').attr('data-show-description') == '1')
+            $description.removeClass('hidden')
+        else
+            $description.addClass('hidden');
+    });
+    $('body').on('click', '.delete-file', function(e){
+        e.preventDefault();
+        var $this_row = $(this).parents('tr');
+        // delete file
+        $.get('/api/drivers.php', { type: 'delete-file', fileId: $this_row.attr('data-id') }, function(){
+            files_dt.row( $this_row )
+                .remove()
+                .draw();
+        });
+    });
     $('body').on('click', '#addFileButton', function(){
         $('#file-item-type option:eq(0)').prop('selected', true);
         $('#file-name').val('');
+        $('#file-item-description').val('');
         var $fileSection = $('.new-file-section');
         if($fileSection.hasClass('hidden'))
             $fileSection.removeClass('hidden');
         else
             $fileSection.addClass('hidden');
+    });
+    $('body').on('click', '#addCertificationButton', function(){
+        $('#certification-type option:eq(0)').prop('selected', true);
+        $('#certification-date').val('');
+        $('#certification-description').val('');
+        var $certificationSection = $('.new-certification-section');
+        if($certificationSection.hasClass('hidden'))
+            $certificationSection.removeClass('hidden');
+        else
+            $certificationSection.addClass('hidden');
+    });
+    $('body').on('click', '#add-new-certification-button', function(){
+        $.get('/api/drivers.php',
+            {
+                type: 'add-certification',
+                driver_id: $('.driver-id').val(),
+                certification_type: $('#certification-type').val(),
+                user_id: localStorage.getItem('current_userid'),
+                certification_description: $('#certification-description').val(),
+                certification_date: $('#certification-date').val()
+            },
+            function(response){
+                if(response.status == 'success'){
+                    $('#certification-result').html('Certificacion guardada con exito');
+                    setTimeout(function(){ $('.new-certification-section').addClass('hidden'); $('#certification-result').html(''); }, 5000);
+
+                    var new_row = certifications_dt.row.add([
+                        $('#certification-type option:selected').html(),
+                        $('#certification-date').val(),
+                        $('#certification-description').val(),
+                        '<i class="dripicons-cross text-muted delete-certification">'
+                    ]);
+
+                    $(new_row.node()).attr('data-id', response.id);
+                    new_row.draw();
+                }
+                else{
+                    $('#certification-result').html('Ha ocurrido un error, intente nuevamente');
+                }
+            });
+});
+
+    $('body').on('click', '#add-new-file-button', function(){
+        var file_data = $('.new-file-section #file-name').prop('files')[0];
+        var form_data = new FormData();
+        form_data.append('file', file_data);
+
+        $.ajax({
+            url: '/api/upload.php', // point to server-side PHP script
+            dataType: 'text',  // what to expect back from the PHP script, if anything
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            type: 'post',
+            success: function(php_script_response){
+                if(php_script_response.toLowerCase().indexOf('error') == -1 && php_script_response.toLowerCase().indexOf('warning') == -1)
+                    $.get('/api/drivers.php',
+                        {
+                            type: 'add-file',
+                            file_name: php_script_response,
+                            driver_id: $('.driver-id').val(),
+                            file_item_type: $('#file-item-type').val(),
+                            user_id: localStorage.getItem('current_userid'),
+                            file_description: $('#file-item-description').val()
+                        },
+                        function(response){
+                                var new_row = files_dt.row.add( [
+                                    $('#file-item-type option:selected').text(),
+                                    '<a class="link file"'+(checkImageExtension(php_script_response) ? '' : 'target="_blank"')+'>' + php_script_response + '</a>',
+                                    $('#file-item-description').val(),
+                                    '<i class="dripicons-cross text-muted delete-file">'
+                                ] );
+                                $(new_row.node()).attr('data-id', response.id);
+                                new_row.draw();
+                                $('.new-file-section').addClass('hidden');
+
+                        }
+                    );
+                else{
+                    if(php_script_response.indexOf('file type') > -1)
+                        $('#file-upload-result').html('Tipo de archivo incorrecto');
+                    else
+                        $('#file-upload-result').html('Error al subir archivo');
+
+                    setTimeout(function(){ $('#file-upload-result').html(''); }, 5000);
+                }
+            }
+         });
     });
     $('body').on('click', '#addLogButton', function(){
         $('#log-item-type option:eq(0)').prop('selected', true);
@@ -140,43 +287,6 @@ $(document).ready(function(){
             $('#active-driver-message').removeClass('hidden').html('El conductor ha sido ' + ($this.attr('data-status') == 'on' ? 'activado' : 'desactivado'));
             setTimeout(function(){ $('#active-driver-message').addClass('hidden') }, 5000);
         });
-    });
-    $('body').on('click', '#add-new-file-button', function(){
-        var file_data = $('.new-file-section #file-name').prop('files')[0];
-        var form_data = new FormData();
-        form_data.append('file', file_data);
-
-        $.ajax({
-            url: '/api/upload.php', // point to server-side PHP script
-            dataType: 'text',  // what to expect back from the PHP script, if anything
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: form_data,
-            type: 'post',
-            success: function(php_script_response){
-                if(php_script_response.toLowerCase().indexOf('error') == -1 && php_script_response.toLowerCase().indexOf('warning') == -1)
-                    $.get('/api/drivers.php',
-                        {
-                            type: 'add-file',
-                            file_name: php_script_response,
-                            driver_id: $('.driver-id').val(),
-                            file_item_type: $('#file-item-type').val(),
-                            user_id: localStorage.getItem('current_userid')
-                        },
-                        function(){
-                            files_dt.row.add( [
-                                $('#file-item-type option:selected').text(),
-                                php_script_response
-                            ] ).draw();
-
-                            $('.new-file-section').addClass('hidden');
-                        }
-                    );
-                else
-                    alert('error subiendo archivo: ' + php_script_response);
-            }
-         });
     });
     window.Parsley.addValidator('checkFileType', {
         validateString: function(value) {
@@ -249,6 +359,10 @@ function switchLogStatus(obj){
             }
         });
     }
+}
+
+function checkImageExtension(file){
+    return file.indexOf('pdf') == -1;
 }
 
 function loadSwitchStatusLabels(item, isAdmin, manual){

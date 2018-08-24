@@ -2992,12 +2992,12 @@ body {
     position: absolute;
 }
 
-#datatable-buttons th, #datatable-files th{
+#datatable-buttons th, #datatable-files th, #datatable-certifications th{
   font-weight: bold;
   background-color: #e0d8d8;
 }
 
-#datatable-buttons tr.even, #datatable-files tr.even{
+#datatable-buttons tr.even, #datatable-files tr.even, #datatable-certifications tr.eve{
   background-color: white;
 }
 

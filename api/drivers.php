@@ -15,11 +15,13 @@ if(isset($_GET["type"])){
                 FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
                 [':driver' => $driver_id]
             );
-            $files = R::getAll( 'SELECT df.id, ft.name as type_name, df.file_name FROM driver_files df JOIN file_types ft ON ft.id = df.file_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
+            $certifications = R::getAll( 'SELECT dc.id, ct.name as type_name, dc.certification_date, dc.description FROM driver_certifications dc JOIN certification_types ct ON ct.id = dc.certification_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
+            $files = R::getAll( 'SELECT df.id, ft.name as type_name, df.file_name, df.description FROM driver_files df JOIN file_types ft ON ft.id = df.file_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
 
             $logTypes = R::getAll( 'SELECT id, type_name, points, CASE WHEN substract_points THEN 1 ELSE 0 END as substract_points FROM log_item_types WHERE user_type_id = 3 ORDER BY type_name' );
-            $fileTypes = R::getAll( 'SELECT id, name FROM file_types' );
-            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'files'=>$files, 'fileTypes'=>$fileTypes, 'isAdmin'=>($online->user_type_id==1?true:false)));
+            $fileTypes = R::getAll( 'SELECT id, name, show_description FROM file_types' );
+            $certTypes = R::getAll( 'SELECT id, name, show_description FROM certification_types' );
+            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'certifications' => $certifications, 'files'=>$files, 'fileTypes'=>$fileTypes, 'certificationTypes'=> $certTypes, 'isAdmin'=>($online->user_type_id == 1 ? true : false)));
             break;
         case 'status':
                 $driver = R::findOne( 'drivers', ' id = ? ', [ $_GET['id'] ] );
@@ -95,13 +97,34 @@ if(isset($_GET["type"])){
             );
             echo json_encode($log);
             break;
+        case 'add-certification':
+            $certification = R::xdispense( 'driver_certifications' );
+            $certification->driver_id = $_GET['driver_id'];
+            $certification->user_id = $_GET['user_id'];
+            $certification->certification_type_id = $_GET['certification_type'];
+            $certification->description = $_GET['certification_description'];
+            $certification->certification_date = $_GET['certification_date'];
+            $_id= R::store($certification);
+            echo json_encode(array('status'=>'success', 'id' => $_id));
+            break;
         case 'add-file':
             $file = R::xdispense( 'driver_files' );
             $file->driver_id = $_GET['driver_id'];
             $file->file_type_id = $_GET['file_item_type'];
             $file->user_id = $_GET['user_id'];
             $file->file_name = $_GET['file_name'];
+            $file->description = $_GET['file_description'];
             $_id = R::store($file);
+            echo json_encode(array('status'=>'success', 'id'=>$_id));
+            break;
+        case 'delete-certification':
+            $driver_certification = R::findOne( 'driver_certifications', ' id = ? ', [ $_GET['certificationId'] ] );
+            R::trash( $driver_certification ); //for one driver file
+            echo json_encode(array('status'=>'success'));
+            break;
+        case 'delete-file':
+            $driver_file = R::findOne( 'driver_files', ' id = ? ', [ $_GET['fileId'] ] );
+            R::trash( $driver_file ); //for one driver file
             echo json_encode(array('status'=>'success'));
             break;
         case 'item':
