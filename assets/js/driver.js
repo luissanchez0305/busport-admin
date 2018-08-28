@@ -4,8 +4,8 @@ $(document).ready(  function(){
     var certifications_dt;
     var files_url = 'http://busport.esferasoluciones.com/api/files/';
     $('form').parsley();
-    $('#expirationDate, #startDate, #finishDate, #certification-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
-    $('#expirationDate, #startDate, #finishDate, #certification-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
+    $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
+    $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
     if(getUrlVars()['id'] != 'new'){
         $.get('/api/drivers.php', {type:'driver', id:getUrlVars()['id'], online:localStorage.getItem('current_userid')}, function(data){
             $('.page-title').html('Conductor - ' + data.driver.name + ' ' + data.driver.lastname);
@@ -318,6 +318,14 @@ $(document).ready(  function(){
         e.preventDefault();
         var $this = $(this);
         window.open('/pages-tickets.html?ticket=' + $this.parents('tr').attr('data-id'), '_blank');
+    });
+    $('body').on('click', '.reload-logs-table', function(e){
+        e.preventDefault();
+        $.get('/api/drivers.php', { type: 'driver-dates', id: $('#driverId').val(), online: localStorage.getItem('current_userid'), init_date: $('#initial-log-date').val(), final_date: $('#final-log-date').val() }, function(data){
+            logs_dt.destroy();
+            $('#datatable-items').html('');
+            logs_dt = loadLogsTable(data.items, data.isAdmin, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
+        });
     });
     window.Parsley.addValidator('checkFileType', {
         validateString: function(value) {

@@ -23,6 +23,29 @@ if(isset($_GET["type"])){
             $certTypes = R::getAll( 'SELECT id, name, show_description FROM certification_types WHERE entry_certification = 0' );
             echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'certifications' => $certifications, 'files'=>$files, 'fileTypes'=>$fileTypes, 'certificationTypes'=> $certTypes, 'isAdmin'=>($online->user_type_id == 1 ? true : false)));
             break;
+        case 'driver-dates':
+            $driver_id = $_GET['id'];
+            $online_id = $_GET['online'];
+
+            $date_initial = $_GET['init_date'];
+            $date_final = $_GET['final_date'];
+
+            if($date_initial && $date_final){
+                $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, li.custom_points, lit.points AS log_type_points, CASE WHEN li.status THEN 1 ELSE 0 END as status
+                    FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver AND li.created_date >= :date_initial AND li.created_date <= :date_final ORDER BY li.created_date',
+                    [':driver' => $driver_id, ':date_initial' => $date_initial, ':date_final' => $date_final]
+                );            }
+            else
+            {
+                $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, li.custom_points, lit.points AS log_type_points, CASE WHEN li.status THEN 1 ELSE 0 END as status
+                    FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
+                    [':driver' => $driver_id]
+                );
+            }
+            $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
+            $online =  R::findOne( 'users', ' id = ? ', [ $online_id ] );
+            echo json_encode(array('driver'=>$driver, 'isAdmin'=>($online->user_type_id == 1 ? true : false), 'items'=>$logs));
+            break;
         case 'status':
                 $action = $_GET['action'];
                 $driver = R::findOne( 'drivers', ' id = ? ', [ $_GET['id'] ] );

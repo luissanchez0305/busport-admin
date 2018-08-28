@@ -490,11 +490,32 @@
                 </form>
                 <!-- Log-Section -->
                 <div class="row log-section">
-                    <div class="col-sm-12">
+                    <div class="col-sm-3">
                         <div class="page-title-box log-items">
                             <h3>Historial</h3>
                             <a id="addLogButton">Agregar</a>
                         </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <h4 class=""><b>Fecha inicial</b></h4>
+                        <p class="text-muted m-b-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" id="initial-log-date">
+                                <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="col-sm-3">
+                        <h4 class=""><b>Fecha final</b></h4>
+                        <p class="text-muted m-b-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" id="final-log-date">
+                                <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-secondary waves-effect reload-logs-table" style="position: absolute; bottom: 15px;" href="#" role="button">Cargar historial</button>
                     </div>
                 </div>
                 <!-- New-Log-Section -->
