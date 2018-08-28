@@ -121,6 +121,9 @@
                                 <h2 class="page-title">{{Nombre del conductor}}</h2>
                             </div>
                             <div style="float:left; padding: 0px 0px 0px 10px;" id="active-driver">
+                                <label data-current-value="" data-status="standby" class="btn activedriver btn-light activestatus_driver">
+                                    <input type="radio" name="activestatus_driver" id="option3" autocomplete="off">Posible
+                                </label>
                                 <label data-current-value="" data-status="on" class="btn activedriver btn-light activestatus_driver">
                                     <input type="radio" name="activestatus_driver" id="option1" autocomplete="off">Activado
                                 </label>
@@ -138,6 +141,29 @@
                 <form action="/api/drivers.php" method="get">
                     <input type="hidden" id="type" name="type" value="save">
                     <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+                                    <h4 class="mt-0 header-title">Pruebas de inducción</h4>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="induction" name="induction" value="1" />
+                                            <label class="custom-control-label">Capacitación de inducción</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="test_written" name="test_written" value="1" />
+                                            <label class="custom-control-label">Prueba escrita</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="test_drive" name="test_drive" value="1" />
+                                            <label class="custom-control-label">Prueba de manejo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card m-b-30">

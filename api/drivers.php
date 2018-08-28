@@ -20,14 +20,15 @@ if(isset($_GET["type"])){
 
             $logTypes = R::getAll( 'SELECT id, type_name, points, CASE WHEN substract_points THEN 1 ELSE 0 END as substract_points FROM log_item_types WHERE user_type_id = 3 ORDER BY type_name' );
             $fileTypes = R::getAll( 'SELECT id, name, show_description FROM file_types' );
-            $certTypes = R::getAll( 'SELECT id, name, show_description FROM certification_types' );
+            $certTypes = R::getAll( 'SELECT id, name, show_description FROM certification_types WHERE entry_certification = 0' );
             echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'certifications' => $certifications, 'files'=>$files, 'fileTypes'=>$fileTypes, 'certificationTypes'=> $certTypes, 'isAdmin'=>($online->user_type_id == 1 ? true : false)));
             break;
         case 'status':
+                $action = $_GET['action'];
                 $driver = R::findOne( 'drivers', ' id = ? ', [ $_GET['id'] ] );
-                $driver->is_active = $_GET['action'] == 'on' ? 1 : 0;
+                $driver->active_status = ($action === 'on' ? 1 : ($action == 'standby' ? 2 : 0));
                 $id = R::store( $driver );
-                echo json_encode(array('status'=>'success'));
+                echo json_encode(array('status'=>'success', 'action'=> $action));
             break;
         case 'drivers':
             # Regresar los drivers segun autocomplete por nombre
@@ -73,7 +74,10 @@ if(isset($_GET["type"])){
             $driver->base_bonus = $_GET['baseBonus'];
             $driver->month_bonus = $_GET['monthBonus'];
             $driver->special_bonus = $_GET['specialBonus'];
-
+            $driver->active_status = $_GET['activestatus_driver'];
+            $driver->induction = $_GET['induction'];
+            $driver->test_written = $_GET['test_written'];
+            $driver->test_drive = $_GET['test_drive'];
             $id = R::store( $driver );
             if($type == 'new')
                 header("location:/pages-driver.html?id=".$id."&on=new");
@@ -127,7 +131,7 @@ if(isset($_GET["type"])){
             R::trash( $driver_file ); //for one driver file
             echo json_encode(array('status'=>'success'));
             break;
-        case 'item':
+        case 'log-update-status':
             $item_id = $_GET["id"];
             $action = $_GET["action"];
             $item = R::findOne( 'log_items', ' id = ? ', [ $item_id ] );
@@ -135,6 +139,11 @@ if(isset($_GET["type"])){
             $item->status = $action == 'off' ? 0 : 1;
             $id = R::store( $item );
             echo json_encode(array('status'=>'success'));
+            break;
+        case 'log-item':
+            $log_item_id = $_GET["id"];
+            $item = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.id = :log_item_id ORDER BY li.created_date', [':log_item_id' => $log_item_id] );
+            echo json_encode(array('log_item'=>$item));
             break;
         default:
             # Regresar todos los drivers

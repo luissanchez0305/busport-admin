@@ -36,12 +36,24 @@ $(document).ready(  function(){
             $('#baseBonus').val(data.driver.base_bonus);
             $('#monthBonus').val(data.driver.month_bonus);
             $('#specialBonus').val(data.driver.special_bonus);
+            if(data.driver.induction == 1)
+                $('#induction').prop('checked', true);
+            if(data.driver.test_written == 1)
+                $('#test_written').prop('checked', true);
+            if(data.driver.test_drive == 1)
+                $('#test_drive').prop('checked', true);
 
-            if(data.driver.is_active == 1){
-                $('#active-driver .btn.activedriver[data-status="on"]').attr('data-current-value','on').addClass('active').find('input[type="radio"]').prop('checked', true);
+            if(data.driver.active_status == 1){
+                $('#active-driver .btn.activedriver[data-status="on"]').addClass('active').find('input[type="radio"]').prop('checked', true);
+                $('#active-driver .btn.activedriver').attr('data-current-value','on');
+            }
+            else if(data.driver.active_status == 2){
+                $('#active-driver .btn.activedriver[data-status="standby"]').addClass('active').find('input[type="radio"]').prop('checked', true);
+                $('#active-driver .btn.activedriver').attr('data-current-value','standby');
             }
             else{
-                $('#active-driver .btn.activedriver[data-status="off"]').attr('data-current-value','off').addClass('active').find('input[type="radio"]').prop('checked', true);
+                $('#active-driver .btn.activedriver[data-status="off"]').addClass('active').find('input[type="radio"]').prop('checked', true);
+                $('#active-driver .btn.activedriver').attr('data-current-value','off');
             }
 
             for(var j = 0; j < data.logTypes.length; j++){
@@ -92,7 +104,18 @@ $(document).ready(  function(){
         $('.page-title').html('Nuevo Conductor');
         $('#type').val('new');
         $('.log-section').addClass('hidden');
+        $('#active-driver .btn.activedriver[data-status="standby"]').attr('data-current-value','standby').addClass('active').find('input[type="radio"]').prop('checked', true);
+        $('.file-items').hide();
     }
+    $('body').on('click', '.custom-checkbox', function(e){
+        var $this = $(this);
+        e.preventDefault();
+        var $input = $this.find('input');
+        if($input.prop('checked'))
+            $input.prop('checked',false);
+        else
+            $input.prop('checked',true);
+    });
     $('body').on('click','.file',function(){
         var url = 'http://busport.esferasoluciones.com/api/files/' + $(this).html();
 
@@ -260,7 +283,7 @@ $(document).ready(  function(){
                 result[0].description,
                 (result[0].custom_points > 0 ? '$' : '-$') + (result[0].custom_points > 0 ? result[0].custom_points : result[0].log_type_points),
                 result[0].created_date,
-                loadSwitchStatusLabels(result[0], true, 'manual')
+                loadSwitchStatusLabels(result[0], true, 'manual') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td>'
             ] ).draw();
 
             $('.new-log-section').addClass('hidden');
@@ -279,14 +302,22 @@ $(document).ready(  function(){
     $('body').on('click', '.btn.activedriver', function(e){
         e.preventDefault();
         var $this = $(this);
-        var $label = $('.'+$this.find('input').attr('name'));
-        $($label[0]).toggleClass('active');
-        $($label[1]).toggleClass('active');
-
-        $.get('/api/drivers.php', {type:'status', id:$('#driverId').val(), action:$this.attr('data-status') }, function(){
-            $('#active-driver-message').removeClass('hidden').html('El conductor ha sido ' + ($this.attr('data-status') == 'on' ? 'activado' : 'desactivado'));
-            setTimeout(function(){ $('#active-driver-message').addClass('hidden') }, 5000);
-        });
+        if(!$this.hasClass('active') && $('#driverId').val() != 'id'){
+            var status_pressed = $this.attr('data-status');
+            $.get('/api/drivers.php', {type:'status', id:$('#driverId').val(), action:status_pressed }, function(){
+                toggleActiveStatus($this);
+                $('#active-driver-message').removeClass('hidden').html('El conductor ha sido ' + (status_pressed == 'on' ? 'activado' : status_pressed == 'standby' ? 'cambiado' : 'desactivado'));
+                setTimeout(function(){ $('#active-driver-message').addClass('hidden') }, 5000);
+            });
+        }
+        else if($('#driverId').val() == 'id'){
+            toggleActiveStatus($this);
+        }
+    });
+    $('body').on('click', '.print-ticket', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        window.open('/pages-tickets.html?ticket=' + $this.parents('tr').attr('data-id'), '_blank');
     });
     window.Parsley.addValidator('checkFileType', {
         validateString: function(value) {
@@ -299,6 +330,13 @@ $(document).ready(  function(){
 });
 
 var rowId;
+function toggleActiveStatus($this){
+    $('#active-driver .btn.activedriver').attr('data-current-value',$this.attr('data-status'));
+    $('#active-driver .btn.activedriver').removeClass('active');
+    $('#active-driver .btn.activedriver input').prop('checked',false);
+    $this.addClass('active').find('input').prop('checked',true);
+}
+
 function loadLogsTable(data,isAdmin,monthBonus){
     var currentMonthObj = new Date();
     var month = currentMonthObj.getUTCMonth() + 1; //months from 1-12
@@ -316,7 +354,7 @@ function loadLogsTable(data,isAdmin,monthBonus){
         if(isAdmin || item.status == '1')
             $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'"><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' + (item.custom_points > 0 ? '$' : '-$') + (item.custom_points > 0 ? item.custom_points : item.log_type_points) + '</td><td>' + item.created_date +
                 '</td>'+'<td data-toggle="buttons">' +
-                loadSwitchStatusLabels(item,isAdmin,'') + '</td>'+'</tr>');
+                loadSwitchStatusLabels(item,isAdmin,'') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td></tr>');
     }
     $('#infractionsAmount').html('$' + infractionsAmount);
     $('#specialPerformanceBonus').html('$' + customPoints);
@@ -343,7 +381,7 @@ function switchLogStatus(obj){
             $($label[0]).toggleClass('active');
             $($label[1]).toggleClass('active');
         }
-        $.get('/api/drivers.php', {type:'item', id:$this.parents('tr').attr('data-id'), action:$this.attr('data-status') }, function(){
+        $.get('/api/drivers.php', {type:'log-update-status', id:$this.parents('tr').attr('data-id'), action:$this.attr('data-status') }, function(){
             $label.attr('data-current-value', $this.attr('data-status') == 'on' ? '1' : '0');
             if($('#datatable-items').attr('isAdmin') == 'false')
                 $this.parents('tr').remove();

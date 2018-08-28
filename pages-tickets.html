@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CSS Portal - Layout</title>
+    <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <link rel="stylesheet" type="text/css" href="/assets/css/tickets.css" />
+</head>
+<body>
+    <div id="wrapper">
+        <div id="leftcolumn">
+            <p><img src="/assets/images/logo.png" alt="" height="65" class="logo-large"></p>
+        </div>
+        <div id="content">
+           <h2>Boleta de Infracción</h2>
+           <p>Creada por: <label id="created_by"></label> <br/><label id="date"></label></p>
+           <p>En concepto de: <b id="log_type_name"></b></p>
+           <p>Descripción: <label id="log_type_description"></label></p>
+           <p>Firma del conductor:___________________________ </p>
+           <p>Firma del supervisor:___________________________ </p>
+        </div>
+    </div>
+</body>
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if(getUrlVars()['ticket']){
+            $.get('/api/drivers.php', { type: 'log-item', id: getUrlVars()['ticket'] }, function(data){
+                data = data.log_item[0];
+                $('#created_by').html(data.name + ' ' + data.last_name);
+                $('#date').html(data.created_date);
+                $('#log_type_name').html(data.type_name);
+                $('#log_type_description').html(data.description);
+                window.print();
+            });
+        }
+    });
+
+    // Read a page's GET URL variables and return them as an associative array.
+    function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+</script>
+</html>
