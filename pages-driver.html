@@ -12,6 +12,9 @@
         <!-- App Icons -->
         <link rel="shortcut icon" href="assets/images/favicon.ico">
 
+        <!-- Dropzone css -->
+        <link href="assets/plugins/dropzone/dist/dropzone.css" rel="stylesheet" type="text/css">
+
         <!-- Plugins css -->
         <link href="assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
         <link href="assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
@@ -147,15 +150,15 @@
                                 <div class="card-body">
                                     <h4 class="mt-0 header-title">Pruebas de inducción</h4>
                                     <div class="form-group">
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-checkbox induction">
                                             <input type="checkbox" class="custom-control-input" id="induction" name="induction" value="1" />
                                             <label class="custom-control-label">Capacitación de inducción</label>
                                         </div>
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-checkbox induction">
                                             <input type="checkbox" class="custom-control-input" id="test_written" name="test_written" value="1" />
                                             <label class="custom-control-label">Prueba escrita</label>
                                         </div>
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-checkbox induction">
                                             <input type="checkbox" class="custom-control-input" id="test_drive" name="test_drive" value="1" />
                                             <label class="custom-control-label">Prueba de manejo</label>
                                         </div>
@@ -189,10 +192,14 @@
                                             <label>Cédula</label>
                                             <input type="text" class="form-control" id="personalId" name="personalId" required data-parsley-error-message="Valor invalido">
                                         </div>
-                                        <div style="float:left;width:60%; padding-bottom: 20px;">
+                                        <div style="float:left;width:35%;padding-right: 10px; padding-bottom: 20px;">
+                                            <label># de seguro social</label>
+                                            <input type="text" class="form-control" id="socialSecurity" name="socialSecurity" required data-parsley-error-message="Valor invalido">
+                                        </div>
+                                        <div style="float:left;width:25%; padding-bottom: 20px;">
                                             <label>Tipo de sangre</label>
                                             <div>
-                                                <select class="form-control" id="bloodType" name="bloodType" style="width:20%;" required data-parsley-error-message="Escoge una opcion">
+                                                <select class="form-control" id="bloodType" name="bloodType" style="width:70%;" required data-parsley-error-message="Escoge una opcion">
                                                     <option></option>
                                                     <option value="A+">A+</option>
                                                     <option value="B+">B+</option>
@@ -220,8 +227,8 @@
                                                 </div><!-- input-group -->
                                             </div>
                                         </div>
-                                        <label>Puntos de licencia</label>
                                         <div style="float:left;width:15%;">
+                                            <label>Puntos de licencia</label>
                                             <input type="text" class="form-control" id="licensePoints" name="licensePoints">
                                         </div>
                                     </div>
@@ -620,6 +627,8 @@
         <script src="assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
         <script src="assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script>
         <script src="assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+
+        <script src="assets/plugins/dropzone/dist/dropzone.js"></script>
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>

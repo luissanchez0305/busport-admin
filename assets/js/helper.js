@@ -57,7 +57,7 @@ $(document).ready(function(){
         });
     });
 
-    $( "#search-drivers" ).keypress(function(key){
+    $( "#search-drivers, #search-drivers-table" ).keypress(function(key){
       if(key.keyCode == 13){
         $('#showAllDrivers').removeClass('hidden');
         $this = $(this);
@@ -69,7 +69,7 @@ $(document).ready(function(){
       }
     });
 
-    $( "#myModal #search-drivers" ).autocomplete({
+    $( "#myModal #search-drivers, #search-drivers-table" ).autocomplete({
       source: function( request, response ) {
         $.ajax({
           url: "/api/drivers.php",

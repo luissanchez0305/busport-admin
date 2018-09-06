@@ -75,6 +75,7 @@ if(isset($_GET["type"])){
             $driver->lastname = $_GET['lastName'];
             $driver->nickname = $_GET['nickName'];
             $driver->personal_id = $_GET['personalId'];
+            $driver->social_security_number = $_GET['socialSecurity'];
             $driver->licencia = $_GET['licenceNumber'];
             $driver->blood_type = $_GET['bloodType'];
             $driver->contact_phone = $_GET['phone'];
@@ -115,7 +116,7 @@ if(isset($_GET["type"])){
             $log_item->driver_id = $driver_id;
             $log_item->description = $_GET["description"];
             $log_item->created_date = date("Y-m-d H:i:s");
-            $log_item->custom_points = $_GET["log-item-points"] ? $_GET["log-item-points"] : 0;
+            $log_item->custom_points = isset($_GET["log-item-points"]) ? $_GET["log-item-points"] : 0;
             $log_item->status = true;
 
             $log_id = R::store($log_item);

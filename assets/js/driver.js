@@ -14,6 +14,7 @@ $(document).ready(  function(){
             $('#lastName').val(data.driver.lastname);
             $('#nickName').val(data.driver.nickname);
             $('#personalId').val(data.driver.personal_id);
+            $('#socialSecurity').val(data.driver.social_security_number);
             $('#licenceNumber').val(data.driver.licencia);
             $('#expirationDate').val(data.driver.licencia_expiration);
             $('#licensePoints').val(data.driver.licencia_puntos);
@@ -207,8 +208,9 @@ $(document).ready(  function(){
                 else{
                     $('#certification-result').html('Ha ocurrido un error, intente nuevamente');
                 }
-            });
-});
+            }
+        );
+    });
 
     $('body').on('click', '#add-new-file-button', function(){
         var file_data = $('.new-file-section #file-name').prop('files')[0];
@@ -326,6 +328,24 @@ $(document).ready(  function(){
             $('#datatable-items').html('');
             logs_dt = loadLogsTable(data.items, data.isAdmin, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
         });
+    });
+    $('body').on('click', '.induction', function(){
+        var check = $(this).find('input[type="checkbox"]');
+        var check_name = check.attr('id');
+        if(check.is(':checked')){
+            check.prop('check', false);
+            $('#file-item-type').val(check_name == 'induction' ? '9' : (check_name == 'test_written' ? '10' : '11'));
+            $("#file-name").change(function (){
+                check.prop('check', true);
+                $('#add-new-file-button').click();
+                $("#file-name").unbind('change');
+                $("#file-name").val('');
+            });
+            $('#file-name').click();
+        }
+        else{
+            console.log('delete ' + check_name);
+        }
     });
     window.Parsley.addValidator('checkFileType', {
         validateString: function(value) {
