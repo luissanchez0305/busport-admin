@@ -37,12 +37,6 @@ $(document).ready(  function(){
             $('#baseBonus').val(data.driver.base_bonus);
             $('#monthBonus').val(data.driver.month_bonus);
             $('#specialBonus').val(data.driver.special_bonus);
-            if(data.driver.induction == 1)
-                $('#induction').prop('checked', true);
-            if(data.driver.test_written == 1)
-                $('#test_written').prop('checked', true);
-            if(data.driver.test_drive == 1)
-                $('#test_drive').prop('checked', true);
 
             if(data.driver.active_status == 1){
                 $('#active-driver .btn.activedriver[data-status="on"]').addClass('active').find('input[type="radio"]').prop('checked', true);
@@ -91,6 +85,12 @@ $(document).ready(  function(){
             for(var i = 0; i < data.files.length; i++){
                 var item = data.files[i];
                 $('#datatable-file-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td><a class="link '+(checkImageExtension(item.file_name) ? 'file' : '')+'" '+(checkImageExtension(item.file_name) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+item.file_name + '"')+'>'+item.file_name+'</a></td><td>'+item.description+'</td><td><i class="dripicons-cross text-muted delete-file"></td></tr>');
+                if(item.file_type_id == 9)
+                    $('#induction').prop('checked', true);
+                if(item.file_type_id == 10)
+                    $('#test_written').prop('checked', true);
+                if(item.file_type_id == 11)
+                    $('#test_drive').prop('checked', true);
             }
             files_dt = $('#datatable-files').DataTable({
                 lengthChange: false,
@@ -332,11 +332,12 @@ $(document).ready(  function(){
     $('body').on('click', '.induction', function(){
         var check = $(this).find('input[type="checkbox"]');
         var check_name = check.attr('id');
+        var _file_type_id =check_name == 'induction' ? '9' : (check_name == 'test_written' ? '10' : '11');
         if(check.is(':checked')){
-            check.prop('check', false);
-            $('#file-item-type').val(check_name == 'induction' ? '9' : (check_name == 'test_written' ? '10' : '11'));
+            check.prop('checked', false);
+            $('#file-item-type').val(_file_type_id);
             $("#file-name").change(function (){
-                check.prop('check', true);
+                check.prop('checked', true);
                 $('#add-new-file-button').click();
                 $("#file-name").unbind('change');
                 $("#file-name").val('');
@@ -344,7 +345,15 @@ $(document).ready(  function(){
             $('#file-name').click();
         }
         else{
-            console.log('delete ' + check_name);
+            var r = confirm("Al quitar esta opcion\nse borrará la imagen\nEstá seguro?");
+            if(r == true){
+                $.get('/api/drivers.php',{ type: 'induction', file_type_id: _file_type_id, id: $('#driverId').val() }, function(data){
+                    $('#datatable-file-items').find('tr[data-id="'+data.id+'"] .delete-file').click();
+                });
+            }
+            else{
+                check.prop('checked', true);
+            }
         }
     });
     window.Parsley.addValidator('checkFileType', {

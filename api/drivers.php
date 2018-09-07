@@ -16,7 +16,7 @@ if(isset($_GET["type"])){
                 [':driver' => $driver_id]
             );
             $certifications = R::getAll( 'SELECT dc.id, ct.name as type_name, dc.certification_date, dc.description FROM driver_certifications dc JOIN certification_types ct ON ct.id = dc.certification_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
-            $files = R::getAll( 'SELECT df.id, ft.name as type_name, df.file_name, df.description FROM driver_files df JOIN file_types ft ON ft.id = df.file_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
+            $files = R::getAll( 'SELECT df.id, ft.name as type_name, df.file_name, df.description, df.file_type_id FROM driver_files df JOIN file_types ft ON ft.id = df.file_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
 
             $logTypes = R::getAll( 'SELECT id, type_name, points, CASE WHEN substract_points THEN 1 ELSE 0 END as substract_points FROM log_item_types WHERE user_type_id = 3 ORDER BY type_name' );
             $fileTypes = R::getAll( 'SELECT id, name, show_description FROM file_types' );
@@ -99,9 +99,6 @@ if(isset($_GET["type"])){
             $driver->month_bonus = $_GET['monthBonus'];
             $driver->special_bonus = $_GET['specialBonus'];
             $driver->active_status = $_GET['activestatus_driver'];
-            $driver->induction = $_GET['induction'];
-            $driver->test_written = $_GET['test_written'];
-            $driver->test_drive = $_GET['test_drive'];
             $id = R::store( $driver );
             if($type == 'new')
                 header("location:/pages-driver.html?id=".$id."&on=new");
@@ -124,6 +121,11 @@ if(isset($_GET["type"])){
                 [':log' => $log_id]
             );
             echo json_encode($log);
+            break;
+        case 'induction':
+                $file = R::findOne( 'driver_files', ' driver_id = ? AND file_type_id = ? ', array($_GET['id'], $_GET['file_type_id'] ) );
+
+                echo json_encode(array('status'=>'success', 'id'=>$file->id));
             break;
         case 'add-certification':
             $certification = R::xdispense( 'driver_certifications' );
