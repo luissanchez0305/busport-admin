@@ -84,7 +84,8 @@ $(document).ready(  function(){
             $('#datatable-file-items').html('');
             for(var i = 0; i < data.files.length; i++){
                 var item = data.files[i];
-                $('#datatable-file-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td><a class="link '+(checkImageExtension(item.file_name) ? 'file' : '')+'" '+(checkImageExtension(item.file_name) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+item.file_name + '"')+'>'+item.file_name+'</a></td><td>'+item.description+'</td><td><i class="dripicons-cross text-muted delete-file"></td></tr>');
+                var induction_id =
+                $('#datatable-file-items').append('<tr data-id="'+item.id+'" data-file-type-id="'+item.file_type_id+'"><td>'+item.type_name+'</td><td><a class="link '+(checkImageExtension(item.file_name) ? 'file' : '')+'" '+(checkImageExtension(item.file_name) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+item.file_name + '"')+'>'+item.file_name+'</a></td><td>'+item.description+'</td><td><i class="dripicons-cross text-muted delete-file"></td></tr>');
                 if(item.file_type_id == 9)
                     $('#induction').prop('checked', true);
                 if(item.file_type_id == 10)
@@ -153,6 +154,18 @@ $(document).ready(  function(){
     $('body').on('click', '.delete-file', function(e){
         e.preventDefault();
         var $this_row = $(this).parents('tr');
+        var file_type_id = $this_row.attr('data-file-type-id');
+
+        if(file_type_id == 9){
+            $('#induction').prop('checked', false);
+        }
+        else if(file_type_id == 10){
+            $('#test_written').prop('checked', false);
+        }
+        else if(file_type_id == 11){
+            $('#test_drive').prop('checked', false);
+        }
+
         // delete file
         $.get('/api/drivers.php', { type: 'delete-file', fileId: $this_row.attr('data-id') }, function(){
             files_dt.row( $this_row )
@@ -345,7 +358,7 @@ $(document).ready(  function(){
             $('#file-name').click();
         }
         else{
-            var r = confirm("Al quitar esta opcion\nse borrará la imagen\nEstá seguro?");
+            var r = confirm("Al quitar esta opcion se borrará la imagen\nEstá seguro?");
             if(r == true){
                 $.get('/api/drivers.php',{ type: 'induction', file_type_id: _file_type_id, id: $('#driverId').val() }, function(data){
                     $('#datatable-file-items').find('tr[data-id="'+data.id+'"] .delete-file').click();

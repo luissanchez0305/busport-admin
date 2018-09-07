@@ -7,7 +7,7 @@
         $extension = end(explode(".", $_FILES['file']['name']));
         if($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'pdf'){
             $file_name = generateRandomString().'.'.$extension;
-            move_uploaded_file($_FILES['file']['tmp_name'], dirname(__FILE__).'\\files\\' . $file_name);
+            move_uploaded_file($_FILES['file']['tmp_name'], dirname(__FILE__).'/files/' . $file_name);
             echo $file_name;
         }
         else
