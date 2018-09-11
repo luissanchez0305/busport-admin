@@ -153,7 +153,11 @@
                     dataTable = $('#datatable-logs').DataTable({
                         lengthChange: false,
                         searching: false,
-                        order:[[ 3, "desc" ]]
+                        order:[[ 3, "desc" ]],
+                        dom: 'Bfrtip',
+                        buttons: [
+                          'csv', 'excel'
+                        ]
                     });
                 }
                 else {

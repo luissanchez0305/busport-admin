@@ -19,8 +19,8 @@ if(isset($_GET["type"])){
             $files = R::getAll( 'SELECT df.id, ft.name as type_name, df.file_name, df.description, df.file_type_id FROM driver_files df JOIN file_types ft ON ft.id = df.file_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
 
             $logTypes = R::getAll( 'SELECT id, type_name, points, CASE WHEN substract_points THEN 1 ELSE 0 END as substract_points FROM log_item_types WHERE user_type_id = 3 ORDER BY type_name' );
-            $fileTypes = R::getAll( 'SELECT id, name, show_description FROM file_types' );
-            $certTypes = R::getAll( 'SELECT id, name, show_description FROM certification_types WHERE entry_certification = 0' );
+            $fileTypes = R::getAll( 'SELECT id, name, CASE WHEN show_description THEN 1 ELSE 0 END AS show_description FROM file_types' );
+            $certTypes = R::getAll( 'SELECT id, name, CASE WHEN show_description THEN 1 ELSE 0 END AS show_description FROM certification_types WHERE entry_certification = 0' );
             echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'certifications' => $certifications, 'files'=>$files, 'fileTypes'=>$fileTypes, 'certificationTypes'=> $certTypes, 'isAdmin'=>($online->user_type_id == 1 ? true : false)));
             break;
         case 'driver-dates':

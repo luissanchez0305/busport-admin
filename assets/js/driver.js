@@ -2,7 +2,7 @@ var logs_dt;
 $(document).ready(  function(){
     var files_dt;
     var certifications_dt;
-    var files_url = 'http://busport.esferasoluciones.com/api/files/';
+    var files_url = 'http://54.184.116.119/api/files/';
     $('form').parsley();
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
@@ -119,7 +119,7 @@ $(document).ready(  function(){
             $input.prop('checked',true);
     });
     $('body').on('click','.file',function(){
-        var url = 'http://busport.esferasoluciones.com/api/files/' + $(this).html();
+        var url = 'http://54.184.116.119/api/files/' + $(this).html();
 
         $('#myModal img').attr('src',url);
         $('.files button').click();
@@ -252,7 +252,7 @@ $(document).ready(  function(){
                         function(response){
                                 var new_row = files_dt.row.add( [
                                     $('#file-item-type option:selected').text(),
-                                    '<a class="link file"'+(checkImageExtension(php_script_response) ? '' : 'target="_blank"')+'>' + php_script_response + '</a>',
+                                    '<a class="link '+(checkImageExtension(php_script_response) ? 'file' : '')+'" '+(checkImageExtension(php_script_response) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+php_script_response + '"')+'>' + php_script_response + '</a>',
                                     $('#file-item-description').val(),
                                     '<i class="dripicons-cross text-muted delete-file">'
                                 ] );
@@ -450,7 +450,7 @@ function switchLogStatus(obj){
 }
 
 function checkImageExtension(file){
-    return file.indexOf('pdf') == -1;
+    return file.indexOf('pdf') == -1 && file.indexOf('doc') == -1 && file.indexOf('docx') == -1 && file.indexOf('zip') == -1;
 }
 
 function loadSwitchStatusLabels(item, isAdmin, manual){

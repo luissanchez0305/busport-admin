@@ -5,7 +5,8 @@
     }
     else {
         $extension = end(explode(".", $_FILES['file']['name']));
-        if($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'pdf'){
+        echo $extension;
+        if($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'pdf' || $extension == 'zip' || $extension == 'doc' || $extension == 'docx'){
             $file_name = generateRandomString().'.'.$extension;
             move_uploaded_file($_FILES['file']['tmp_name'], dirname(__FILE__).'/files/' . $file_name);
             echo $file_name;

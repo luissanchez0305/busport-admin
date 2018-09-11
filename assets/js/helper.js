@@ -69,41 +69,44 @@ $(document).ready(function(){
       }
     });
 
-    $( "#myModal #search-drivers, #search-drivers-table" ).autocomplete({
-      source: function( request, response ) {
-        $.ajax({
-          url: "/api/drivers.php",
-          dataType: "json",
-          data: {
-            term: request.term,
-            type: 'drivers'
-          },
-          success: function( data ) {
+    var $search_modal = $( "#myModal #search-drivers, #search-drivers-table" );
+    if($search_modal){
+        $search_modal.autocomplete({
+          source: function( request, response ) {
+            $.ajax({
+              url: "/api/drivers.php",
+              dataType: "json",
+              data: {
+                term: request.term,
+                type: 'drivers'
+              },
+              success: function( data ) {
 
-            response($.map(data, function (item) {
-                            return {
-                                id: item.driver.id,
-                                value: item.driver.name
-                            }
-                        })
-            );
+                response($.map(data, function (item) {
+                                return {
+                                    id: item.driver.id,
+                                    value: item.driver.name
+                                }
+                            })
+                );
+              }
+            });
+          },
+          minLength: 2,
+          select: function( event, ui ) {
+            $('#showAllDrivers').removeClass('hidden');
+            $.get('/api/drivers.php', { type: 'driver', id: ui.item.id, online: localStorage.getItem('current_userid') }, function(data){
+                if(location.href.indexOf('pages-drivers') > -1 && !$('#myModal').hasClass('show')){
+                    $('#drivers').html('');
+                    displayTableResult(data);
+                }
+                else{
+                    $('#myModal #driverId').val(data.driver.id);
+                }
+            });
           }
         });
-      },
-      minLength: 2,
-      select: function( event, ui ) {
-        $('#showAllDrivers').removeClass('hidden');
-        $.get('/api/drivers.php', { type: 'driver', id: ui.item.id, online: localStorage.getItem('current_userid') }, function(data){
-            if(location.href.indexOf('pages-drivers') > -1 && !$('#myModal').hasClass('show')){
-                $('#drivers').html('');
-                displayTableResult(data);
-            }
-            else{
-                $('#myModal #driverId').val(data.driver.id);
-            }
-        });
-      }
-    });
+    }
 
 });
 $('body').on('click','#login',function(){

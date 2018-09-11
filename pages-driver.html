@@ -116,32 +116,32 @@
 
         <div class="wrapper">
             <div class="container-fluid">
-                <!-- Page-Title -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="page-title-box">
-                            <div style="float:left;">
-                                <h2 class="page-title">{{Nombre del conductor}}</h2>
-                            </div>
-                            <div style="float:left; padding: 0px 0px 0px 10px;" id="active-driver">
-                                <label data-current-value="" data-status="standby" class="btn activedriver btn-light activestatus_driver">
-                                    <input type="radio" name="activestatus_driver" id="option3" autocomplete="off">Posible
-                                </label>
-                                <label data-current-value="" data-status="on" class="btn activedriver btn-light activestatus_driver">
-                                    <input type="radio" name="activestatus_driver" id="option1" autocomplete="off">Activado
-                                </label>
-                                <label data-current-value="" data-status="off" class="btn activedriver btn-light activestatus_driver">
-                                    <input type="radio" name="activestatus_driver" id="option2" autocomplete="off">Desactivado
-                                </label>
-                            </div>
-                            <div style="float:left; padding: 0px 0px 0px 10px;" id="active-driver-message" class="hidden">
+                <form action="/api/drivers.php" method="get">
+                    <!-- Page-Title -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="page-title-box">
+                                <div style="float:left;">
+                                    <h2 class="page-title">{{Nombre del conductor}}</h2>
+                                </div>
+                                <div style="float:left; padding: 0px 0px 0px 10px;" id="active-driver">
+                                    <label data-current-value="" data-status="standby" class="btn activedriver btn-light activestatus_driver">
+                                        <input type="radio" name="activestatus_driver" id="option3" autocomplete="off">Posible
+                                    </label>
+                                    <label data-current-value="" data-status="on" class="btn activedriver btn-light activestatus_driver">
+                                        <input type="radio" name="activestatus_driver" id="option1" autocomplete="off">Activado
+                                    </label>
+                                    <label data-current-value="" data-status="off" class="btn activedriver btn-light activestatus_driver">
+                                        <input type="radio" name="activestatus_driver" id="option2" autocomplete="off">Desactivado
+                                    </label>
+                                </div>
+                                <div style="float:left; padding: 0px 0px 0px 10px;" id="active-driver-message" class="hidden">
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <form action="/api/drivers.php" method="get">
                     <input type="hidden" id="type" name="type" value="save">
                     <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id">
                     <div class="row">
@@ -437,13 +437,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <!--<div class="col-lg-6">
                             <div class="card m-b-30">
                                 <div class="card-body file-items">
                                     <h4 class="mt-0 header-title">Certificaciones y títulos</h4>
                                     <a id="addCertificationButton">Agregar</a>
 
-                                    <!-- New-Log-Section -->
+                                    <!-- New-Log-Section
                                     <div class="container-fluid new-certification-section hidden" style="padding: 0 0 10px 0;">
                                         <form id="add-new-certification-form">
                                             <div class="row">
@@ -492,7 +492,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </form>
                 <!-- Log-Section -->
