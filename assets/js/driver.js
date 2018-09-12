@@ -6,6 +6,9 @@ $(document).ready(  function(){
     $('form').parsley();
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
+    if(localStorage.getItem('current_user_type') != '1'){
+        $('.bonus-group').addClass('hidden');
+    }
     if(getUrlVars()['id'] != 'new'){
         $.get('/api/drivers.php', {type:'driver', id:getUrlVars()['id'], online:localStorage.getItem('current_userid')}, function(data){
             $('.page-title').html('Conductor - ' + data.driver.name + ' ' + data.driver.lastname);
