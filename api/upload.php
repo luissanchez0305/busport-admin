@@ -1,12 +1,11 @@
 <?php
-    if(isset($_POST["submit"])) {
+    /*if(isset($_POST["submit"])) {*/
         if ( 0 < $_FILES['file']['error'] ) {
             echo 'error: ' . $_FILES['file']['error'] . '<br>';
         }
         else {
             $extension = end(explode(".", $_FILES['file']['name']));
-            echo $extension;
-            
+
             $check = getimagesize($_FILES["file"]["tmp_name"]);
             if($check !== false) {
                 echo $check["mime"];
@@ -19,7 +18,7 @@
             else
                 echo 'error: file type';
         }
-    }
+    /*}*/
     function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);

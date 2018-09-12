@@ -227,6 +227,14 @@ $(document).ready(  function(){
             }
         );
     });
+    $('.new-file-section #file-name').bind('change', function() {
+        //this.files[0].size gets the size of your file.
+        if(this.files[0].size > 20000000){
+            $('#file-upload-result').html('La imagen debe ser menor a 20Mb');
+            $('#file-name').val('');
+            setTimeout(function(){ $('#file-upload-result').html(''); }, 5000);
+        }
+    });
 
     $('body').on('click', '#add-new-file-button', function(){
         var file_data = $('.new-file-section #file-name').prop('files')[0];
@@ -255,7 +263,7 @@ $(document).ready(  function(){
                         function(response){
                                 var new_row = files_dt.row.add( [
                                     $('#file-item-type option:selected').text(),
-                                    '<a class="link '+(checkImageExtension(php_script_response) ? 'file' : '')+'" '+(checkImageExtension(php_script_response) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+php_script_response + '"')+'>' + php_script_response + '</a>',
+                                    '<a class="link '+(checkImageExtension(php_script_response) ? 'file' : '')+'" '+(checkImageExtension(php_script_response) ? '' : 'target="_blank"')+' '+(checkImageExtension(php_script_response) ? '' : 'href="' + files_url+php_script_response + '"')+'>' + php_script_response + '</a>',
                                     $('#file-item-description').val(),
                                     '<i class="dripicons-cross text-muted delete-file">'
                                 ] );
