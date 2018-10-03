@@ -98,7 +98,7 @@ if(isset($_GET["type"])){
             $driver->base_bonus = $_GET['baseBonus'];
             $driver->month_bonus = $_GET['monthBonus'];
             $driver->special_bonus = $_GET['specialBonus'];
-            $driver->active_status = $_GET['activestatus_driver'];
+            $driver->active_status = $_GET['activestatus'];
             $id = R::store( $driver );
             if($type == 'new')
                 header("location:/pages-driver.html?id=".$id."&on=new");

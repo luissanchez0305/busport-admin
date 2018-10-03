@@ -40,6 +40,14 @@ $(document).ready(function(){
     else if(getUrlVars()['profile'] && getUrlVars()['profile'] == 'saved'){
         alert('Su perfil ha sido guardado con exito');
     }
+
+    if(localStorage.getItem('current_user_type') == "2"){
+        $('.users-option').addClass('hidden');
+    }
+    else{
+        $('.users-option').removeClass('hidden');
+    }
+
     $('#create-infraction').click(function(){
         $.get('/api/drivers.php', $('#add-new-log-form').serialize()+'&user='+localStorage.getItem('current_userid'),function(result){
             $('#infraction-result-text').html('Infraccion creada');
@@ -75,7 +83,7 @@ $(document).ready(function(){
     });
 
     var $search_modal = $( "#myModal #search-drivers, #search-drivers-table" );
-    if($search_modal){
+    if($search_modal.length > 0){
         $search_modal.autocomplete({
           source: function( request, response ) {
             $.ajax({

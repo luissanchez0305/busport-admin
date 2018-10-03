@@ -2,7 +2,7 @@ var logs_dt;
 $(document).ready(  function(){
     var files_dt;
     var certifications_dt;
-    var files_url = 'http://54.184.116.119/api/files/';
+    var files_url = 'http://admin.busportgroup.com/api/files/';
     $('form').parsley();
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
@@ -122,7 +122,7 @@ $(document).ready(  function(){
             $input.prop('checked',true);
     });
     $('body').on('click','.file',function(){
-        var url = 'http://54.184.116.119/api/files/' + $(this).html();
+        var url = 'http://admin.busportgroup.com/api/files/' + $(this).html();
 
         $('#myModal img').attr('src',url);
         $('.files button').click();

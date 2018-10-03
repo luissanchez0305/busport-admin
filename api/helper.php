@@ -4,10 +4,14 @@ require 'lib/rb-mysql.php';
 header('Content-type: application/json');
 header("access-control-allow-origin: *");
 
-$username = 'espheras_dbuser';
-$password = 'Goingupinlife123';
+/*$username = 'root';
+$password = 'goingup123';
 $database = 'espheras_busport';
-$dbhost = '162.210.98.37';
+$dbhost = '54.184.116.119';*/
+$username = 'admin_busport';
+$password = 'vaouLgGnbWAM';
+$database = 'busport';
+$dbhost = 'localhost';
 
 R::setup( 'mysql:host=' . $dbhost .';dbname=' . $database, $username, $password );
 R::ext('xdispense', function( $type ){

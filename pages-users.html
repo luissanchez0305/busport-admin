@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>Busport Admin</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesdesign" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+        <style>
+            .ui-autocomplete{
+                z-index: 100000000000000000;
+            }
+            .search-wrap {
+                width: 60%;
+                margin: 0px 0px 20px 0px;
+            }
+        </style>
+
+    </head>
+
+
+    <body>
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+
+        <!-- Navigation Bar-->
+        <header id="topnav">
+            <div class="topbar-main">
+                <div class="container-fluid">
+
+                    <!-- Logo container-->
+                    <div class="logo">
+                        <!-- Text Logo -->
+                        <!--<a href="index.html" class="logo">-->
+                        <!--Upcube-->
+                        <!--</a>-->
+                        <!-- Image Logo -->
+                        <a href="pages-dashboard.html" class="logo">
+                            <img src="assets/images/logo-sm.png" alt="" height="22" class="logo-small">
+                            <img src="assets/images/logo.png" alt="" height="65" class="logo-large">
+                        </a>
+
+                    </div>
+                    <!-- End Logo container-->
+
+
+                    <div class="menu-extras topbar-custom">
+
+                        <ul class="list-inline float-right mb-0">
+                            <!-- User-->
+                            <li class="list-inline-item dropdown notification-list">
+                                <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                    <img src="assets/images/users/avatar-1.jpg" alt="user" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                    <a class="dropdown-item" href="pages-dashboard.html"><i class="dripicons-user text-muted"></i> Home</a>
+                                    <a class="dropdown-item" href="pages-profile.html"><i class="dripicons-user text-muted"></i> Profile</a>
+                                    <!--<a class="dropdown-item" href="#"><i class="dripicons-wallet text-muted"></i> My Wallet</a>
+                                    <a class="dropdown-item" href="#"><span class="badge badge-success pull-right m-t-5">5</span><i class="dripicons-gear text-muted"></i> Settings</a>
+                                    <a class="dropdown-item" href="#"><i class="dripicons-lock text-muted"></i> Lock screen</a>-->
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout" class="dropdown-item" href="#"><i class="dripicons-exit text-muted"></i> Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- end menu-extras -->
+
+                    <div class="clearfix"></div>
+
+                </div> <!-- end container -->
+            </div>
+            <!-- end topbar-main -->
+
+            <!-- MENU Start -->
+            <div class="navbar-custom">
+                <div class="container-fluid">
+                    <div id="navigation">
+                        <!-- Navigation Menu-->
+                        <ul class="navigation-menu">
+
+                            <li class="has-submenu users-option">
+                                <a href="pages-users.html"><i class="ti-users"></i>Usuarios</a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                            <li><a href="/pages-user.html?id=new">Agregar nuevo</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="pages-drivers.html"><i class="ti-home"></i>Conductores</a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                            <li><a id="add-infraction" class="link" data-toggle="modal" data-target="#myModal">Agregar infracción</a></li>
+                                            <li><a href="/pages-driver.html?id=new">Agregar nuevo</a></li>
+                                            <li><a href="/pages-driver-reports.html?id=new">Reportes</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!-- End navigation menu -->
+                    </div> <!-- end #navigation -->
+                </div> <!-- end container -->
+            </div> <!-- end navbar-custom -->
+        </header>
+        <!-- End Navigation Bar-->
+        <!-- Begin page -->
+        <div class="wrapper">
+            <!-- Search input -->
+            <div class="search-wrap hidden" id="search-wrap">
+                <div class="search-bar">
+                    <input class="search-input" id="search-users-table" type="search" placeholder="Buscar" />
+                    <a class="nav-link waves-effect toggle-search" href="#" id="search-users-button" data-target="#search-wrap">
+                        <i class="mdi mdi-magnify noti-icon"></i>
+                    </a>
+                </div>
+                <div class="col-6 show-all">
+                    <a id="showAllDrivers" class="hidden">Mostrar todos</a>
+                </div>
+                <!--<div class="float-right">
+                    <a class="nav-link waves-effect toggle-search" href="/pages-driver.html?id=new">
+                        <i class="mdi mdi-plus-circle noti-icon"></i>
+                    </a>
+                </div>--> <!-- end col -->
+            </div>
+            <div class="col-6 save-success">
+                <a id="SavedSuccess" class="hidden"></a>
+            </div>
+            <div class="row">
+                <div class="col-10">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+                            <div class="table-rep-plugin">
+                                <div class="table-responsive b-0" data-pattern="priority-columns">
+                                    <table id="tech-companies-1" class="table  table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th data-priority="1">Nombre</th>
+                                            <th data-priority="3">email</th>
+                                            <th data-priority="1">Username</th>
+                                            <th data-priority="3">Password</th>
+                                            <th data-priority="3">Tipo</th>
+                                            <th data-priority="3">Telefono</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="users">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+            <!-- sample modal content -->
+            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title mt-0" id="myModalLabel">Agregar infracción</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body hidden">
+                            <form id="add-new-log-form">
+                                <input type="hidden" value="add-log" id="type" name="type"/>
+                                <input type="hidden" class="driver-id" id="driverId" name="driverId" value="id"/>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="search-wrap" id="search-wrap">
+                                            <div class="search-bar">
+                                                <input class="search-input" id="search-drivers" type="search" placeholder="Buscar" />
+                                                <a class="nav-link waves-effect toggle-search" href="#" id="search-drivers-button" data-target="#search-wrap">
+                                                    <i class="mdi mdi-magnify noti-icon"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="infraction-result-text"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" id="close-modal">Close</button>
+                            <button type="button" class="btn btn-primary waves-effect waves-light" id="create-infraction">Save changes</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div>
+
+        <!-- jQuery  -->
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="assets/js/popper.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/modernizr.min.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+        <script src="assets/js/helper.js"></script>
+        <script src="assets/js/users.js"></script>
+
+        <input type="hidden" id="busport" value="1" />
+    </body>
+</html>
