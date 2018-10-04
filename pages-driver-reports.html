@@ -34,10 +34,7 @@
         <style>
             .ui-autocomplete{
                 z-index: 100000000000000000;
-            }
-            .ui-datepicker-calendar{
-                display: none;
-            }
+            >
             .search-wrap {
                 width: 60%;
                 margin: 0px 0px 20px 0px;
@@ -188,19 +185,19 @@
                                                 </p>
                                             </li>
                                             <li>
-                                                <h4 class=""><b>Mes de inicio</b></h4>
+                                                <h4 class=""><b>Fecha de inicio</b></h4>
                                                 <p class="text-muted m-b-0">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" placeholder="yyyy-mm" id="initial-month">
+                                                        <input type="text" class="form-control" placeholder="yyyy-mm-dd" id="graph-initial-date">
                                                         <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
                                                     </div>
                                                 </p>
                                             </li>
                                             <li>
-                                                <h4 class=""><b>Mes final</b></h4>
+                                                <h4 class=""><b>Fecha final</b></h4>
                                                 <p class="text-muted m-b-0">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" placeholder="yyyy-mm" id="final-month">
+                                                        <input type="text" class="form-control" placeholder="yyyy-mm-dd" id="graph-final-date">
                                                         <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
                                                     </div>
                                                 </p>
@@ -225,17 +222,26 @@
                                                 </p>
                                             </li>
                                             <li class="form-group">
-                                                <div class="col-md-6" style="width: 80%; height: 70px; margin: auto;">
-                                                    <div style="float:left; width: 45%; margin: 0px 10px 0px 0px;">
-                                                        <label>Escoge un mes</label>
+                                                <div class="col-md-12" style="width: 90%; height: 70px; margin: auto;">
+                                                    <div style="float:left; width: 30%; margin: 0px 10px 0px 0px;">
+                                                        <label>Fecha de inicio</label>
                                                         <div>
                                                             <div class="input-group">
-                                                                <input type="text" class="form-control" placeholder="yyyy-mm" id="year-month">
+                                                                <input type="text" class="form-control" placeholder="yyyy-mm-dd" id="table-initial-date">
                                                                 <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
                                                             </div><!-- input-group -->
                                                         </div>
                                                     </div>
-                                                    <div style="float:left; width: 45%;">
+                                                    <div style="float:left; width: 30%; margin: 0px 10px 0px 0px;">
+                                                        <label>Fecha final</label>
+                                                        <div>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" placeholder="yyyy-mm-dd" id="table-final-date">
+                                                                <div class="input-group-append bg-custom b-0"><span class="input-group-text"><i class="mdi mdi-calendar"></i></span></div>
+                                                            </div><!-- input-group -->
+                                                        </div>
+                                                    </div>
+                                                    <div style="float:left; width: 30%;">
                                                         <label>Escoge un Conductor (opcional)</label>
                                                         <div>
                                                             <div class="input-group">

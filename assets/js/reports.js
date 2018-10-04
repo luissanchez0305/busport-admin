@@ -188,19 +188,13 @@
 
         });
         $('#year-month, #initial-month, #final-month').datepicker({
+            changeDay: true,
             changeMonth: true,
             changeYear: true,
-            dateFormat: "yy-mm",
+            dateFormat: "yy-mm-dd",
             showButtonPanel: true,
             defaultDate: new Date(),
-            onChangeMonthYear: function (year, month, inst) {
-                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month - 1, 1)));
-            },
-            onClose: function(dateText, inst) {
-                var month = $(".ui-datepicker-month :selected").val();
-                var year = $(".ui-datepicker-year :selected").val();
-                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
-            }
+            maxDate: new Date()
         });
 
         $( "#search-drivers-report" ).autocomplete({
