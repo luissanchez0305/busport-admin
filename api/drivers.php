@@ -63,6 +63,19 @@ if(isset($_GET["type"])){
             }
             echo json_encode($driversArray);
             break;
+        case 'drivers-status':
+            # Regresar los drivers segun autocomplete por nombre
+            $action = $_GET['action'];
+            $driversArray = array();
+            if($action != '-1')
+                $drivers = R::find( 'drivers', ' active_status = ? ORDER BY name ASC', [ $action ] );
+            else
+                $drivers = R::findAll( 'drivers' );
+            foreach (array_values($drivers) as $index => $driver) {
+                $driversArray[] = array('driver'=>$driver);
+            }
+            echo json_encode($driversArray);
+            break;
         case 'save':
         case 'new':
             if($type == 'new'){

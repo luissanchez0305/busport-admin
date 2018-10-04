@@ -215,7 +215,7 @@
                                     <div class="tab-pane p-3" id="table-container" role="tabpanel">
                                         <ul class="list-inline widget-chart m-t-30 text-center">
                                             <li>
-                                                <h4 class=""><b>Escoge los campos</b></h4>
+                                                <h4 class=""><b>Escoge los campos</b></h4><a href="#" id="choose_all_checkboxes" data-on="0">Escoger todos</a>
                                                 <p class="text-muted m-b-0">
                                                     <ul class="list-inline widget-chart m-t-30 table-reports text-center" id="infraction-checkboxes">
                                                     </ul>
@@ -246,7 +246,7 @@
                                                         <div>
                                                             <div class="input-group">
                                                                 <input type="hidden" class="driver-id" id="driverId-report" name="driverId-report" value="-1"/>
-                                                                <input class="search-input" id="search-drivers-report" type="search" placeholder="Buscar" />
+                                                                <input class="search-input" id="search-drivers-report" type="search" placeholder="Buscar" style="width: 65%; margin: auto;" />
                                                                 <a class="nav-link waves-effect toggle-search" href="#" id="search-drivers-button-report" data-target="#search-wrap">
                                                                     <i class="mdi mdi-magnify noti-icon"></i>
                                                                 </a>
@@ -263,14 +263,16 @@
                                                 </p>
                                             </li>
                                         </ul>
-                                        <table id="datatable-logs" class="table table-bordered" style="margin: auto; width: 75% !important;">
-                                            <thead>
-                                            <tr id="datatable-logs-header">
-                                            </tr>
-                                            </thead>
-                                            <tbody id="datatable-items">
-                                            </tbody>
-                                        </table>
+                                        <div style="overflow-x: scroll;">
+                                            <table id="datatable-logs" class="table table-bordered" style="margin: auto; width: 75% !important;">
+                                                <thead>
+                                                <tr id="datatable-logs-header">
+                                                </tr>
+                                                </thead>
+                                                <tbody id="datatable-items">
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

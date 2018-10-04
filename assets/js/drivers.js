@@ -32,6 +32,22 @@ $(document).ready(function(){
     $('#showAllDrivers').click(function(){
       showAllDrivers();
     });
+    $('body').on('click', '.btn.activedriver', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        if(!$this.hasClass('active')){
+            var status_pressed = $this.find('input').val();
+            $.get('/api/drivers.php', {type: 'drivers-status', action: status_pressed }, function(data){
+                toggleActiveStatus($this);
+                $('#drivers').html('');
+                displayTableResult(data);
+            });
+        }
+        else if($('#driverId').val() == 'id'){
+            toggleActiveStatus($this);
+        }
+    });
+    
 });
 
 function showAllDrivers(){

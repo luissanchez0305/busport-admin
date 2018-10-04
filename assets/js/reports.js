@@ -49,17 +49,43 @@
                 'id="customCheck'+i+'" data-parsley-multiple="groups" data-parsley-mincheck="2">'+
                 '<label class="custom-control-label" for="customCheck'+i+'">'+type.type_name+'</label></p></li>');
             }
-            $('#infraction-checkboxes').append('<li class="item"><p class="text-muted m-b-0"><input type="checkbox" value="0"" class="custom-control-input working-time"' +
-            'id="customCheck'+(i+1)+'" data-parsley-multiple="groups" data-parsley-mincheck="2" disabled="disabled">'+
-            '<label class="custom-control-label" for="customCheck'+(i+1)+'">Tiempo de trabajo</label></p></li>')
-            .append('<li class="item">&nbsp;</li>');
 
             $('#infraction-checkboxes').parsley();
-            /*for(var i = 0; i < data.months.length; i++){
-                var month = data.months[i];
-                $('#initial-month').append('<option value='+month.date+'>'+month.date+'</option>');
-                $('#final-month').append('<option value='+month.date+'>'+month.date+'</option>');
-            }*/
+        });
+        $('body').on('click', '#choose_all_checkboxes', function(){
+            var $this = $(this);
+            if($this.attr('data-on') == '0'){
+                $('.infraction').prop('checked', true);
+                $this.attr('data-on', '1');
+                $this.html('Quitar todos');
+            }
+            else{
+                $('.infraction').prop('checked', false);
+                $this.attr('data-on', '0');
+                $this.html('Escoger todos');
+            }
+        });
+        $('body').on('click','#generate-graph',function () {
+            var $initial = $('#graph-initial-date').val();
+            var $final = $('#graph-final-date').val();
+            var $type = $('#graph-type option:selected');
+            $.get('/api/reports.php', { type:'line', init_date: $initial, final_date: $final, log_type: $type.val() }, function(data){
+                //creating line chart
+                var $graphData = [];
+                var graphContainer = 'report-line';
+                $('#' + graphContainer).html('');
+                if(data.log_counts.length > 0){
+                    for(var i = 0; i < data.log_counts.length; i++){
+                        var item = data.log_counts[i];
+                        $graphData.push({y: item.date, a: item.number})
+                    };
+                    $dashboard.createLineChart(graphContainer, 0, 0, $graphData, 'y', ['a'], [$type.text()], ['#0097a7']);
+                }
+                else{
+                    $('#' + graphContainer).html('No hay informacion que mostrar');
+                }
+            });
+
         });
         $('body').on('click','#generate-table',function () {
             /* declare an checkbox array */
@@ -87,7 +113,9 @@
             var infractions_selected = chkArray.join(',');
             var working_time_selected = $(".custom-control-input.working-time:checked").val();
             var working_points = $(".custom-control-input.working-points:checked").val();
-            $.get('/api/reports.php', { type:'table', infractions: infractions_selected, working_time: working_time_selected, month:$('#year-month').val(), driver:$('#driverId-report').val() }, function(data){
+            var initial = $('#table-initial-date').val();
+            var final = $('#table-final-date').val();
+            $.get('/api/reports.php', { type:'table', infractions: infractions_selected, working_time: working_time_selected, init_date: initial, final_date: final, driver:$('#driverId-report').val() }, function(data){
                 /*if(dataTable){
                     $('#datatable-logs').DataTable().destroy();
                     $('#datatable-logs').DataTable().clear();
@@ -149,7 +177,8 @@
                     tr += '<td value>$' + specialBonus + '</td>';
                     tr += '<td value>$' + (monthBonus + specialBonus - infractionsTotal) + '</td>';
                     $items.append(tr+'</tr>');
-
+                    
+                    dataTable.destroy();
                     dataTable = $('#datatable-logs').DataTable({
                         lengthChange: false,
                         searching: false,
@@ -165,29 +194,7 @@
                 }
             });
         });
-        $('body').on('click','#generate-graph',function () {
-            var $initial = $('#initial-month').val();
-            var $final = $('#final-month').val();
-            var $type = $('#graph-type option:selected');
-            $.get('/api/reports.php', { type:'line', init_date: $initial, final_date: $final, log_type: $type.val() }, function(data){
-                //creating line chart
-                var $graphData = [];
-                var graphContainer = 'report-line';
-                $('#' + graphContainer).html('');
-                if(data.log_counts.length > 0){
-                    for(var i = 0; i < data.log_counts.length; i++){
-                        var item = data.log_counts[i];
-                        $graphData.push({y: item.date, a: item.number})
-                    };
-                    $dashboard.createLineChart(graphContainer, 0, 0, $graphData, 'y', ['a'], [$type.text()], ['#0097a7']);
-                }
-                else{
-                    $('#' + graphContainer).html('No hay informacion que mostrar');
-                }
-            });
-
-        });
-        $('#year-month, #initial-month, #final-month').datepicker({
+        $('#graph-initial-date, #graph-final-date, #table-initial-date, #table-final-date').datepicker({
             changeDay: true,
             changeMonth: true,
             changeYear: true,

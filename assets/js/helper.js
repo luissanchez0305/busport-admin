@@ -144,3 +144,9 @@ function getUrlVars()
     }
     return vars;
 }
+function toggleActiveStatus($this){
+    $('#active-driver .btn.activedriver').attr('data-current-value',$this.attr('data-status'));
+    $('#active-driver .btn.activedriver').removeClass('active');
+    $('#active-driver .btn.activedriver input').prop('checked',false);
+    $this.addClass('active').find('input').prop('checked',true);
+}

@@ -1,4 +1,5 @@
 var logs_dt;
+var isAdmin = localStorage.getItem('current_user_type') == '1';
 $(document).ready(  function(){
     var files_dt;
     var certifications_dt;
@@ -6,11 +7,12 @@ $(document).ready(  function(){
     $('form').parsley();
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
     $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
-    if(localStorage.getItem('current_user_type') != '1'){
+    if(!isAdmin){
         $('.bonus-group').addClass('hidden');
     }
     if(getUrlVars()['id'] != 'new'){
         $.get('/api/drivers.php', {type:'driver', id:getUrlVars()['id'], online:localStorage.getItem('current_userid')}, function(data){
+            $('title').html('Busport Admin - ' + data.driver.name + ' ' + data.driver.lastname);
             $('.page-title').html('Conductor - ' + data.driver.name + ' ' + data.driver.lastname);
             $('.driver-id').val(data.driver.id);
             $('#firstName').val(data.driver.name);
@@ -68,12 +70,12 @@ $(document).ready(  function(){
             }
 
             $('#datatable-items').html('');
-            logs_dt = loadLogsTable(data.items, data.isAdmin, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
+            logs_dt = loadLogsTable(data.items, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
 
             $('#datatable-certification-items').html('');
             for(var i = 0; i < data.certifications.length; i++){
                 var item = data.certifications[i];
-                $('#datatable-certification-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td>'+item.certification_date+'</td><td>'+item.description+'</td><td><i class="dripicons-cross text-muted delete-certification"></td></tr>');
+                $('#datatable-certification-items').append('<tr data-id="'+item.id+'"><td>'+item.type_name+'</td><td>'+item.certification_date+'</td><td>'+item.description+'</td><td>' + (isAdmin ? '<i class="dripicons-cross text-muted delete-certification">' : '') + '</td></tr>');
             }
 
             certifications_dt = $('#datatable-certifications').DataTable({
@@ -88,7 +90,7 @@ $(document).ready(  function(){
             for(var i = 0; i < data.files.length; i++){
                 var item = data.files[i];
                 var induction_id =
-                $('#datatable-file-items').append('<tr data-id="'+item.id+'" data-file-type-id="'+item.file_type_id+'"><td>'+item.type_name+'</td><td><a class="link '+(checkImageExtension(item.file_name) ? 'file' : '')+'" '+(checkImageExtension(item.file_name) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+item.file_name + '"')+'>'+item.file_name+'</a></td><td>'+item.description+'</td><td><i class="dripicons-cross text-muted delete-file"></td></tr>');
+                $('#datatable-file-items').append('<tr data-id="'+item.id+'" data-file-type-id="'+item.file_type_id+'"><td>'+item.type_name+'</td><td><a class="link '+(checkImageExtension(item.file_name) ? 'file' : '')+'" '+(checkImageExtension(item.file_name) ? '' : 'target="_blank"')+' '+(checkImageExtension(item.file_name) ? '' : 'href="' + files_url+item.file_name + '"')+'>'+item.file_name+'</a></td><td>'+item.description+'</td><td>' + (isAdmin ? '<i class="dripicons-cross text-muted delete-file">' : '') + '</td></tr>');
                 if(item.file_type_id == 9)
                     $('#induction').prop('checked', true);
                 if(item.file_type_id == 10)
@@ -215,7 +217,7 @@ $(document).ready(  function(){
                         $('#certification-type option:selected').html(),
                         $('#certification-date').val(),
                         $('#certification-description-text').val(),
-                        '<i class="dripicons-cross text-muted delete-certification">'
+                        isAdmin ? '<i class="dripicons-cross text-muted delete-certification">' : ''
                     ]);
 
                     $(new_row.node()).attr('data-id', response.id);
@@ -265,7 +267,7 @@ $(document).ready(  function(){
                                     $('#file-item-type option:selected').text(),
                                     '<a class="link '+(checkImageExtension(php_script_response) ? 'file' : '')+'" '+(checkImageExtension(php_script_response) ? '' : 'target="_blank"')+' '+(checkImageExtension(php_script_response) ? '' : 'href="' + files_url+php_script_response + '"')+'>' + php_script_response + '</a>',
                                     $('#file-item-description').val(),
-                                    '<i class="dripicons-cross text-muted delete-file">'
+                                    isAdmin ? '<i class="dripicons-cross text-muted delete-file">' : ''
                                 ] );
                                 $(new_row.node()).attr('data-id', response.id);
                                 new_row.draw();
@@ -309,7 +311,7 @@ $(document).ready(  function(){
                 result[0].description,
                 (result[0].custom_points > 0 ? '$' : '-$') + (result[0].custom_points > 0 ? result[0].custom_points : result[0].log_type_points),
                 result[0].created_date,
-                loadSwitchStatusLabels(result[0], true, 'manual') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td>'
+                loadSwitchStatusLabels(result[0], 'manual') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td>'
             ] ).draw();
 
             $('.new-log-section').addClass('hidden');
@@ -350,7 +352,7 @@ $(document).ready(  function(){
         $.get('/api/drivers.php', { type: 'driver-dates', id: $('#driverId').val(), online: localStorage.getItem('current_userid'), init_date: $('#initial-log-date').val(), final_date: $('#final-log-date').val() }, function(data){
             logs_dt.destroy();
             $('#datatable-items').html('');
-            logs_dt = loadLogsTable(data.items, data.isAdmin, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
+            logs_dt = loadLogsTable(data.items, parseInt(data.driver.month_bonus) + parseInt(data.driver.special_bonus));
         });
     });
     $('body').on('click', '.induction', function(){
@@ -369,6 +371,10 @@ $(document).ready(  function(){
             $('#file-name').click();
         }
         else{
+            if(!isAdmin){
+                check.prop('checked', true);
+                return;
+            }
             var r = confirm("Al quitar esta opcion se borrará la imagen\nEstá seguro?");
             if(r == true){
                 $.get('/api/drivers.php',{ type: 'induction', file_type_id: _file_type_id, id: $('#driverId').val() }, function(data){
@@ -391,14 +397,8 @@ $(document).ready(  function(){
 });
 
 var rowId;
-function toggleActiveStatus($this){
-    $('#active-driver .btn.activedriver').attr('data-current-value',$this.attr('data-status'));
-    $('#active-driver .btn.activedriver').removeClass('active');
-    $('#active-driver .btn.activedriver input').prop('checked',false);
-    $this.addClass('active').find('input').prop('checked',true);
-}
 
-function loadLogsTable(data,isAdmin,monthBonus){
+function loadLogsTable(data, monthBonus){
     var currentMonthObj = new Date();
     var month = currentMonthObj.getUTCMonth() + 1; //months from 1-12
     var year = currentMonthObj.getUTCFullYear();
@@ -415,7 +415,7 @@ function loadLogsTable(data,isAdmin,monthBonus){
         if(isAdmin || item.status == '1')
             $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'"><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' + (item.custom_points > 0 ? '$' : '-$') + (item.custom_points > 0 ? item.custom_points : item.log_type_points) + '</td><td>' + item.created_date +
                 '</td>'+'<td data-toggle="buttons">' +
-                loadSwitchStatusLabels(item,isAdmin,'') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td></tr>');
+                loadSwitchStatusLabels(item,'') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td></tr>');
     }
     $('#infractionsAmount').html('$' + infractionsAmount);
     $('#specialPerformanceBonus').html('$' + customPoints);
@@ -427,7 +427,11 @@ function loadLogsTable(data,isAdmin,monthBonus){
         },
         lengthChange: false,
         searching: false,
-        order:[[ 4, "desc" ]]
+        order:[[ 4, "desc" ]],
+        dom: 'Bfrtip',
+        buttons: [
+          'csv', 'excel'
+        ]
     });
 
     return dataTable;
@@ -464,7 +468,7 @@ function checkImageExtension(file){
     return file.indexOf('pdf') == -1 && file.indexOf('doc') == -1 && file.indexOf('docx') == -1 && file.indexOf('zip') == -1;
 }
 
-function loadSwitchStatusLabels(item, isAdmin, manual){
+function loadSwitchStatusLabels(item, manual){
     return '<label data-current-value="'+item.status+'" data-status="on" class="btn activestatus btn-light activestatus_'+item.id+' '+manual+' '+(item.status == '1' ? 'active' : '')+ (!isAdmin ? ' hidden ':'')+'" data-custom-points="'+item.custom_points+'" data-points="'+item.log_type_points+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'>Si</label>' +
         '<label data-current-value="'+item.status+'" data-status="off" class="btn activestatus btn-light activestatus_'+item.id + ' ' + manual + ' ' +(item.status == '1' ? '' : 'active')+'" data-custom-points="'+item.custom_points+'" data-points="'+item.log_type_points+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>' + (isAdmin ? 'No' : 'Borrar') + '</label>';
 }
