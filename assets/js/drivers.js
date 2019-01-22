@@ -1,3 +1,4 @@
+var drivers_dt;
 $(document).ready(function(){
 
     $.get('/api/common.php', {type:'log-item-types'}, function(data){
@@ -47,7 +48,7 @@ $(document).ready(function(){
             toggleActiveStatus($this);
         }
     });
-    
+
 });
 
 function showAllDrivers(){
@@ -55,6 +56,16 @@ function showAllDrivers(){
         $('#showAllDrivers').addClass('hidden');
         $('#drivers').html('');
         displayTableResult(data);
+        drivers_dt = $('#tech-companies-1').DataTable({
+          lengthChange: false,
+          searching: false,
+          //order:[[ 4, "desc" ]],
+          dom: 'Bfrtip',
+          buttons: [
+            'csv', 'excel'
+          ]
+        });
+
         $('#status').fadeOut();
         $('#preloader').delay(350).fadeOut('slow');
         $('body').delay(350).css({
@@ -65,11 +76,11 @@ function showAllDrivers(){
 
 function displayTableResult(array){
     if(array.driver){
-        $('#drivers').append('<tr class="driver" data-value="'+array.driver.id+'"><th><span class="co-name">' + array.driver.name + ' ' + array.driver.lastname + '</span></th><td>' + array.driver.personal_id + '</td><td>' + array.driver.blood_type + '</td><td>' + array.driver.contact_phone+ '</td><td>' + (array.driver.finish_date ? 'No' : 'Si') + '</td></tr>');
+        $('#drivers').append('<tr class="driver" data-value="'+array.driver.id+'"><th><span class="co-name">' + array.driver.name + ' ' + array.driver.lastname + '</span></th><td>' + array.driver.personal_id + '</td><td>' + array.driver.blood_type + '</td><td>' + array.driver.contact_phone+ '</td><td>'+(array.driver.start_date ? array.driver.start_date : '')+'</td><td>'+(array.driver.finish_date ? array.driver.finish_date : '')+'</td><td>' + (array.driver.finish_date ? 'No' : 'Si') + '</td></tr>');
     }
     else {
       $.each(array, function (i,item){
-          $('#drivers').append('<tr class="driver" data-value="'+item.driver.id+'"><th><span class="co-name">' + item.driver.name + ' ' + item.driver.lastname + '</span></th><td>' + item.driver.personal_id + '</td><td>' + item.driver.blood_type + '</td><td>' + item.driver.contact_phone+ '</td><td>' + (item.driver.finish_date ? 'No' : 'Si') + '</td></tr>');
+          $('#drivers').append('<tr class="driver" data-value="'+item.driver.id+'"><th><span class="co-name">' + item.driver.name + ' ' + item.driver.lastname + '</span></th><td>' + item.driver.personal_id + '</td><td>' + item.driver.blood_type + '</td><td>' + item.driver.contact_phone+ '</td><td>'+(item.driver.start_date ? item.driver.start_date : '')+'</td><td>'+(item.driver.finish_date ? item.driver.finish_date : '')+'</td><td>' + (item.driver.finish_date ? 'No' : 'Si') + '</td></tr>');
       });
     }
 }

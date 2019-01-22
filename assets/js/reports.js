@@ -177,8 +177,9 @@
                     tr += '<td value>$' + specialBonus + '</td>';
                     tr += '<td value>$' + (monthBonus + specialBonus - infractionsTotal) + '</td>';
                     $items.append(tr+'</tr>');
-                    
-                    dataTable.destroy();
+
+                    if(dataTable)
+                        dataTable.destroy();
                     dataTable = $('#datatable-logs').DataTable({
                         lengthChange: false,
                         searching: false,
