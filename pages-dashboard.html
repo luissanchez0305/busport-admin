@@ -287,10 +287,20 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
-                                            <label>Tipo</label>
-                                            <select class="form-control" id="log-item-type" name="log-item-type" required data-parsley-error-message="Escoge una opcion">
-                                                <option></option>
-                                            </select>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label>Tipo</label>
+                                                    <select class="form-control" id="log-item-type" name="log-item-type" required data-parsley-error-message="Escoge una opcion">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="padding: 10px 0px 0px 0px;">
+                                                <div class="col-sm-12">
+                                                    <label>Monto</label>
+                                                    <input type="text" id="log-item-points" name="log-item-points" value="" style="width: 62px;">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <label>Descripción</label>
@@ -340,11 +350,11 @@
         <script src="assets/plugins/morris/morris.min.js"></script>
         <script src="assets/plugins/raphael/raphael-min.js"></script>
 
-        <script src="assets/pages/dashborad.js"></script>
+        <script src="assets/pages/dashborad.js?v=3"></script>
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-        <script src="assets/js/helper.js"></script>
+        <script src="assets/js/helper.js?v=3"></script>
         <script type="text/javascript">
             $(window).load(function () {
                 $('#status').fadeOut();

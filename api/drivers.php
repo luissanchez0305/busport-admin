@@ -57,7 +57,7 @@ if(isset($_GET["type"])){
             # Regresar los drivers segun autocomplete por nombre
             $query = $_GET['term'];
             $driversArray = array();
-            $drivers = R::find( 'drivers', ' name LIKE ? OR lastname LIKE ? OR personal_id LIKE ? ORDER BY name ASC', [ $query . '%', $query . '%', $query . '%' ] );
+            $drivers = R::find( 'drivers', ' name LIKE ? OR lastname LIKE ? OR personal_id LIKE ? ORDER BY name ASC', [ '%' . $query . '%', '%' . $query . '%', '%' . $query . '%' ] );
             foreach (array_values($drivers) as $index => $driver) {
                 $driversArray[] = array('driver'=>$driver);
             }
@@ -125,6 +125,7 @@ if(isset($_GET["type"])){
             $log_item->creator_id = $_GET["user"];
             $log_item->driver_id = $driver_id;
             $log_item->description = $_GET["description"];
+            $log_item->points = $_GET["points"];
             $log_item->created_date = date("Y-m-d H:i:s");
             $log_item->custom_points = isset($_GET["log-item-points"]) ? $_GET["log-item-points"] : 0;
             $log_item->status = true;

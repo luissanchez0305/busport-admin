@@ -58,7 +58,7 @@ $(document).ready(  function(){
 
             for(var j = 0; j < data.logTypes.length; j++){
                 var logType = data.logTypes[j];
-                $('#log-item-type').append('<option value="'+logType.id+'" data-points="'+logType.points+'" data-substract="'+logType.substract_points+'">'+logType.type_name+'</option>');
+                $('#log-item-type').append('<option value="'+logType.id+'" item-points="'+logType.points+'" data-substract="'+logType.substract_points+'">'+logType.type_name+'</option>');
             }
             for(var k = 0; k < data.fileTypes.length; k++){
                 var fileType = data.fileTypes[k];
@@ -317,12 +317,12 @@ $(document).ready(  function(){
             $('.new-log-section').addClass('hidden');
         });
     });
-    $('body').on('change', '#log-item-type', function(e){
+    /*$('body').on('change', '#log-item-type', function(e){
         if($(this).find('option:selected').attr('data-substract') == '1')
             $('#custom-points').removeClass('hidden');
         else
             $('#custom-points').addClass('hidden');
-    });
+    });*/
     $('body').on('click', '.btn.activestatus', function(e){
         e.preventDefault();
         switchLogStatus(this);

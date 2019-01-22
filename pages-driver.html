@@ -537,7 +537,7 @@
                     </div>
                 </div>
                 <!-- New-Log-Section -->
-                <div class="row new-log-section hidden">
+                <div class="row new-log-section hidden justify-content-center" style="background-color: white; padding: 10px;">
                     <div class="container-fluid">
                         <form id="add-new-log-form">
                             <input type="hidden" value="add-log" id="type" name="type"/>
@@ -548,7 +548,7 @@
                                     <select class="form-control" id="log-item-type" name="log-item-type" required data-parsley-error-message="Escoge una opcion">
                                         <option></option>
                                     </select>
-                                    <div class="hidden" id="custom-points" style="padding: 10px 0px 0px 0px;">
+                                    <div id="custom-points" style="padding: 10px 0px 0px 0px;">
                                         <label>Puntos</label>
                                         <input class="form-control" type="text" value="" id="log-item-points" name="log-item-points" required />
                                     </div>
@@ -643,7 +643,7 @@
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-        <script src="assets/js/helper.js"></script>
+        <script src="assets/js/helper.js?v=2"></script>
         <script src="assets/js/driver.js"></script>
 
         <!-- Plugins Init js -->

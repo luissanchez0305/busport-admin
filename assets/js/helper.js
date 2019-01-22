@@ -48,6 +48,14 @@ $(document).ready(function(){
         $('.users-option').removeClass('hidden');
     }
 
+    $('#log-item-type').change(function(){
+        var value = $(this).children(':selected').attr('item-points');
+        if(typeof value !== 'undefined')
+            $('#log-item-points').val(value);
+        else
+            $('#log-item-points').val('');
+    });
+
     $('#create-infraction').click(function(){
         $.get('/api/drivers.php', $('#add-new-log-form').serialize()+'&user='+localStorage.getItem('current_userid'),function(result){
             $('#infraction-result-text').html('Infraccion creada');
@@ -98,7 +106,7 @@ $(document).ready(function(){
                 response($.map(data, function (item) {
                                 return {
                                     id: item.driver.id,
-                                    value: item.driver.name
+                                    value: item.driver.name + ' ' + item.driver.lastname
                                 }
                             })
                 );
