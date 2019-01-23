@@ -11,7 +11,7 @@ if(isset($_GET["type"])){
             # Regresar un solo driver
             $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
             $online =  R::findOne( 'users', ' id = ? ', [ $online_id ] );
-            $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, li.custom_points, lit.points AS log_type_points, CASE WHEN li.status THEN 1 ELSE 0 END as status
+            $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, li.custom_points, li.is_bonus, CASE WHEN li.status THEN 1 ELSE 0 END as status
                 FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
                 [':driver' => $driver_id]
             );
@@ -125,9 +125,8 @@ if(isset($_GET["type"])){
             $log_item->creator_id = $_GET["user"];
             $log_item->driver_id = $driver_id;
             $log_item->description = $_GET["description"];
-            $log_item->points = $_GET["points"];
             $log_item->created_date = date("Y-m-d H:i:s");
-            $log_item->custom_points = isset($_GET["log-item-points"]) ? $_GET["log-item-points"] : 0;
+            $log_item->custom_points = $_GET["log-item-points"];
             $log_item->status = true;
 
             $log_id = R::store($log_item);

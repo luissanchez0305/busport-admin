@@ -97,7 +97,7 @@
                 var $this = $(this);
                 chkArray.push($this.val());
                 infractionNames.push($this.next().html());
-                datatable_headers += '<th>'+$this.next().html() + ' ($' + $this.attr('data-points') + ')' + '</th>';
+                datatable_headers += '<th>' + $this.next().html() + '</th>';
             });
             datatable_headers += '<th>Total infracciones</th>';
             datatable_headers += '<th>Bono mensual</th>';

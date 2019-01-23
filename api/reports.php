@@ -7,14 +7,16 @@ if(isset($_GET["type"])){
         case 'table':
             $infractions = $_GET['infractions'];
             if($infractions){
-                $query = "SELECT d.name, lit.type_name, d.base_bonus, d.month_bonus, d.special_bonus, COUNT(*) as number, SUM(lit.points) AS total
+                $query = "SELECT CONCAT(d.name, ' ', d.lastname) AS name, lit.type_name, d.base_bonus, d.month_bonus, d.special_bonus, COUNT(*) as number, SUM(li.custom_points) AS total
                 FROM log_items li
                 JOIN log_item_types lit ON lit.id = li.log_item_type
                 JOIN drivers d ON d.id = li.driver_id
                 WHERE li.status = 1 AND li.log_item_type IN ($infractions) AND li.created_date >= ':start_date' AND li.created_date <= ':end_date' :where_driver
                 GROUP BY d.name, lit.type_name, d.base_bonus, d.month_bonus, d.special_bonus
                 ORDER BY d.name, lit.type_name";
-                $query = str_replace(':end_date', $_GET['final_date'], str_replace(':start_date', $_GET['init_date'], $query));
+                $end_date = new DateTime($_GET['final_date']);
+                $end_date->modify('+1 day');
+                $query = str_replace(':end_date', $end_date->format('Y-m-d'), str_replace(':start_date', $_GET['init_date'], $query));
                 if($_GET['driver'] != '-1')
                     $query = str_replace(':where_driver', 'AND li.driver_id = ' . $_GET['driver'], $query);
                 else
