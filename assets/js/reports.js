@@ -116,10 +116,6 @@
             var initial = $('#table-initial-date').val();
             var final = $('#table-final-date').val();
             $.get('/api/reports.php', { type:'table', infractions: infractions_selected, working_time: working_time_selected, init_date: initial, final_date: final, driver:$('#driverId-report').val() }, function(data){
-                /*if(dataTable){
-                    $('#datatable-logs').DataTable().destroy();
-                    $('#datatable-logs').DataTable().clear();
-                }*/
                 if(data.logs.length > 0){
                     $header.html('');
                     $items.html('');
@@ -130,9 +126,12 @@
                     var infractionsTotal = 0;
                     var monthBonus = 0;
                     var specialBonus = 0;
+                    var counter = 1;
                     for(var i = 0; i < data.logs.length; i++){
                         var log_item = data.logs[i];
                         if(current_driver != log_item.name){
+                            console.log(counter + ' ' + log_item.name);
+                            counter++;
                             if(tr.indexOf('td value') > -1){
                                 if(td.length < infractionNames.length){
                                     for(var k = 0; k < infractionNames.length - td.length; k++)
