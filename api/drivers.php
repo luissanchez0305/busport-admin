@@ -21,7 +21,20 @@ if(isset($_GET["type"])){
             $logTypes = R::getAll( 'SELECT id, type_name, points, CASE WHEN substract_points THEN 1 ELSE 0 END as substract_points FROM log_item_types WHERE user_type_id = 3 ORDER BY type_name' );
             $fileTypes = R::getAll( 'SELECT id, name, CASE WHEN show_description THEN 1 ELSE 0 END AS show_description FROM file_types' );
             $certTypes = R::getAll( 'SELECT id, name, CASE WHEN show_description THEN 1 ELSE 0 END AS show_description FROM certification_types WHERE entry_certification = 0' );
-            echo json_encode(array('driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'certifications' => $certifications, 'files'=>$files, 'fileTypes'=>$fileTypes, 'certificationTypes'=> $certTypes, 'isAdmin'=>($online->user_type_id == 1 ? true : false)));
+
+            $drivers = R::findAll( 'drivers', " ORDER BY CONCAT(name, ' ', lastname)" );
+            $driversArray = array_values($drivers);
+            foreach ($driversArray as $index => $driverItem) {
+                if($driverItem->id == $driver_id){
+                    if($index - 1 >= 0)
+                        $prevDriver = $driversArray[$index - 1];
+                    if($index + 1 < sizeof($driversArray))
+                        $nextDriver = $driversArray[$index + 1];
+                }
+            }
+
+
+            echo json_encode(array('prevDriver'=>$prevDriver, 'nextDriver'=>$nextDriver, 'driver'=>$driver, 'items'=>$logs, 'logTypes'=>$logTypes, 'certifications' => $certifications, 'files'=>$files, 'fileTypes'=>$fileTypes, 'certificationTypes'=> $certTypes, 'isAdmin'=>($online->user_type_id == 1 ? true : false)));
             break;
         case 'driver-dates':
             $driver_id = $_GET['id'];
@@ -64,7 +77,6 @@ if(isset($_GET["type"])){
             echo json_encode($driversArray);
             break;
         case 'drivers-status':
-            # Regresar los drivers segun autocomplete por nombre
             $action = $_GET['action'];
             $driversArray = array();
             if($action != '-1')

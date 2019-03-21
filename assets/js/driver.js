@@ -43,6 +43,16 @@ $(document).ready(  function(){
             $('#monthBonus').val(data.driver.month_bonus);
             $('#specialBonus').val(data.driver.special_bonus);
 
+            if(data.prevDriver)
+                $('#prev-driver').attr('href', '/pages-driver.html?id=' + data.prevDriver.id).html(data.prevDriver.name + ' ' + data.prevDriver.lastname);
+            else
+                $('#prev-driver').remove();
+
+            if(data.nextDriver)
+                $('#next-driver').attr('href', '/pages-driver.html?id=' + data.nextDriver.id).html(data.nextDriver.name + ' ' + data.nextDriver.lastname);
+            else
+                $('#next-driver').remove();
+
             if(data.driver.active_status == 1){
                 $('#active-driver .btn.activedriver[data-status="on"]').addClass('active').find('input[type="radio"]').prop('checked', true);
                 $('#active-driver .btn.activedriver').attr('data-current-value','on');
