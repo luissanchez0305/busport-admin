@@ -5,8 +5,8 @@ $(document).ready(  function(){
     var certifications_dt;
     var files_url = 'http://admin.busportgroup.com/api/files/';
     $('form').parsley();
-    $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
-    $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
+    $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date, #log-date').datepicker({ dateFormat: 'yyyy-mm-dd', maxDate: new Date()});
+    $('#expirationDate, #startDate, #finishDate, #certification-date, #initial-log-date, #final-log-date, #log-date').datepicker( "option", "dateFormat", 'yyyy-mm-dd' ).datepicker("option", "maxDate", new Date());
     if(!isAdmin){
         $('.bonus-group').addClass('hidden');
     }
@@ -313,6 +313,7 @@ $(document).ready(  function(){
             if($('#log-item-type option:selected').attr('data-substract') == '1'){
                 $('#specialPerformanceBonus').html('$' + (parseInt($('#specialPerformanceBonus').html().substring(1)) + parseInt($('#log-item-points').val())));
             }
+
             $('#bonusAmount').html('$' + (parseInt($('#bonusAmount').html().substring(1)) - parseInt($('#log-item-points').val()) + parseInt($('#log-item-points').val())));
             rowId = result[0].id;
             logs_dt.row.add( [
@@ -320,8 +321,9 @@ $(document).ready(  function(){
                 result[0].name + ' ' + result[0].last_name,
                 result[0].description,
                 (result[0].is_bonus == '1' ? '$' : '-$') + result[0].custom_points,
+                result[0].log_date,
                 result[0].created_date,
-                loadSwitchStatusLabels(result[0], 'manual') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td>'
+                loadSwitchStatusLabels(result[0], 'manual') + '<a title="Editar" class="btn btn-warning edit-ticket" href="#" role="button"><i class="dripicons-document-edit text-muted"></i></a><a title="Imprimir" class="btn btn-success print-ticket" href="#" role="button"><i class="dripicons-print text-muted"></i></a></td>'
             ] ).draw();
 
             $('.new-log-section').addClass('hidden');
@@ -356,6 +358,69 @@ $(document).ready(  function(){
         e.preventDefault();
         var $this = $(this);
         window.open('/pages-tickets.html?ticket=' + $this.parents('tr').attr('data-id'), '_blank');
+        $this.removeClass('active');
+    });
+    /*
+    '<td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' +
+        (item.is_bonus == '1' ? '$' : '-$') + item.custom_points + '</td><td>' + item.created_date + '</td>'+'<td data-toggle="buttons">' +
+        loadSwitchStatusLabels(item,'') + '<a title="Editar" class="btn btn-warning edit-ticket" href="#" role="button"><i class="dripicons-document-edit text-muted"></i></a><a title="Imprimir" class="btn btn-success print-ticket" href="#" role="button"><i class="dripicons-print text-muted"></i></a></td>'
+    */
+    $('body').on('click', '.edit-ticket', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var logId = $this.parents('tr').attr('data-id');
+        var $tr = $this.parents('tr');
+        var type_name = $tr.find('td').eq(0).html();
+        var name = $tr.find('td').eq(1).html();
+        var description = $tr.find('td').eq(2).html();
+        var custom_points = $tr.find('td').eq(3).html().replace('$','').replace('-','');
+        var log_date = $tr.find('td').eq(4).html();
+        var created_date = $tr.find('td').eq(5).html();
+        var log_types = $('#log-item-type').html().replace('>' + type_name, 'selected="selected">' + type_name);
+
+        $tr.html('<td><select class="form-control" id="log-item-type_' + logId + '" name="log-item-type_' + logId + '">' + log_types + '</select></td><td>' + name + '</td><td><textarea class="form-control" id="description_' + logId + '" name="description_' + logId + '" rows="3" required data-parsley-error-message="Valor invalido">' + description + '</textarea></td><td><input class="form-control" type="text" id="amount_' + logId + '" name="amount_' + logId + '" value="' + custom_points + '" /></td><td><input class="form-control" type="text" id="log_date_' + logId + '" name="log_date_' + logId + '" data-date-format="yyyy-mm-dd" value="' + log_date + '" /></td><td>' + created_date + '</td><td data-toggle="buttons">' + '<a title="Guardar" class="btn btn-success save-edit-ticket" href="#" role="button"><i class="dripicons-checkmark text-muted"></i></a><a title="Cancelar" class="btn btn-danger cancel-edit-ticket" href="#" role="button"><i class="dripicons-cross text-muted"></i></a></td>');
+
+
+        $('#log_date_' + logId).on('focus', function(){
+          var $this = $(this);
+          if(!$this.data('datepicker')) {
+           $this.datepicker("show");
+          }
+        });
+        /*$('#log_date_' + logId).datepicker({ dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        $('#log_date_' + logId).datepicker( "option", "dateFormat", 'yy-mm-dd' ).datepicker("option", "maxDate", new Date());
+        let log_date_obj = new Date(log_date);
+        $('#log_date_' + logId).datepicker('setDate', new Date());*/
+        $this.removeClass('active');
+    });
+    $('body').on('click', '.cancel-edit-ticket', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var logId = $this.parents('tr').attr('data-id');
+        var $tr = $this.parents('tr');
+
+        $.get('/api/drivers.php', { type: 'log-item', id: logId }, function(data){
+            $tr.html(loadLogRow(data.log_item[0]));
+        });
+        $this.removeClass('active');
+    });
+    $('body').on('click', '.save-edit-ticket', function(e){
+        var $this = $(this);
+        var logId = $this.parents('tr').attr('data-id');
+        var $tr = $this.parents('tr');
+
+        $.get('/api/drivers.php', {
+            type: 'save-log-item',
+            id: logId,
+            log_type: $('#log-item-type_' + logId + ' option:selected').val(),
+            amount: $('#amount_' + logId).val(),
+            description: $('#description_' + logId).val(),
+            log_date: $('#log_date_' + logId).val() },
+            function(data){
+                $tr.html(loadLogRow(data.log_item[0]));
+            }
+        );
+        $this.removeClass('active');
     });
     $('body').on('click', '.reload-logs-table', function(e){
         e.preventDefault();
@@ -406,6 +471,12 @@ $(document).ready(  function(){
     });
 });
 
+function loadLogRow(item){
+    return '<td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' +
+        (item.is_bonus == '1' ? '$' : '-$') + item.custom_points + '</td><td>' + item.log_date + '</td><td>' + item.created_date + '</td>'+'<td data-toggle="buttons">' +
+        loadSwitchStatusLabels(item,'') + (isAdmin ? '<a title="Editar" class="btn btn-warning edit-ticket" href="#" role="button"><i class="dripicons-document-edit text-muted"></i></a>' : '') + '<a title="Imprimir" class="btn btn-success print-ticket" href="#" role="button"><i class="dripicons-print text-muted"></i></a></td>';
+}
+
 var rowId;
 
 function loadLogsTable(data, monthBonus){
@@ -426,9 +497,7 @@ function loadLogsTable(data, monthBonus){
             monthBonus = parseInt(monthBonus) - infractionVal + bonusVal;
         }
         if(isAdmin || item.status == '1')
-            $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'"><td>' + item.type_name + '</td><td>' + item.name + ' ' + item.last_name + '</td><td>' + item.description + '</td><td>' +
-                (item.is_bonus == '1' ? '$' : '-$') + item.custom_points + '</td><td>' + item.created_date + '</td>'+'<td data-toggle="buttons">' +
-                loadSwitchStatusLabels(item,'') + '<a class="btn btn-success print-ticket" href="#" role="button">Imprimir</a></td></tr>');
+            $('#datatable-items').attr('data-admin',isAdmin?'true':'false').append('<tr data-id="'+item.id+'">' + loadLogRow(item) + '</tr>');
     }
     $('#infractionsAmount').html('$' + infractionsAmount);
     $('#specialPerformanceBonus').html('$' + customPoints);
@@ -482,6 +551,6 @@ function checkImageExtension(file){
 }
 
 function loadSwitchStatusLabels(item, manual){
-    return '<label data-current-value="'+item.status+'" data-status="on" class="btn activestatus btn-light activestatus_'+item.id+' '+manual+' '+(item.status == '1' ? 'active' : '')+ (!isAdmin ? ' hidden ':'')+'" data-custom-points="'+(item.is_bonus == '1' ? item.custom_points : '0')+'" data-points="'+(item.is_bonus == '1' ? '0' : item.custom_points)+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'>Si</label>' +
-        '<label data-current-value="'+item.status+'" data-status="off" class="btn activestatus btn-light activestatus_'+item.id + ' ' + manual + ' ' +(item.status == '1' ? '' : 'active')+'" data-custom-points="'+(item.is_bonus == '1' ? item.custom_points : '0')+'" data-points="'+(item.is_bonus == '1' ? '0' : item.custom_points)+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>' + (isAdmin ? 'No' : 'Borrar') + '</label>';
+    return '<a title="Activar" data-current-value="'+item.status+'" data-status="on" class="btn activestatus btn-light activestatus_'+item.id+' '+manual+' '+(item.status == '1' ? 'active' : '')+ (!isAdmin ? ' hidden ':'')+'" data-custom-points="'+(item.is_bonus == '1' ? item.custom_points : '0')+'" data-points="'+(item.is_bonus == '1' ? '0' : item.custom_points)+'"><input type="radio" name="activestatus_'+item.id+'" id="option1_'+item.id+'" autocomplete="off" '+(item.status == '1' ? 'checked' : '')+'><i class="dripicons-checkmark text-muted delete-file"></i></a>' +
+        '<a title="Desactivar" data-current-value="'+item.status+'" data-status="off" class="btn activestatus btn-light activestatus_'+item.id + ' ' + manual + ' ' +(item.status == '1' ? '' : 'active')+'" data-custom-points="'+(item.is_bonus == '1' ? item.custom_points : '0')+'" data-points="'+(item.is_bonus == '1' ? '0' : item.custom_points)+'"><input type="radio" name="activestatus_'+item.id+'" id="option2_'+item.id+'" autocomplete="off" '+(item.status == '1' ? '' : 'checked')+'>' + (isAdmin ? '<i class="dripicons-cross text-muted delete-file"></i>' : '<i class="dripicons-document-delete text-muted delete-file"></i>') + '</a>';
 }

@@ -165,6 +165,9 @@ code {
 #myModal .nav-link{
   display: none;
 }
+.btn.activestatus.active{
+  cursor: default;
+}
 
 /* Social */
 .social-links li a {
@@ -2983,7 +2986,7 @@ body {
 }
 
 .new-log-section{
-    width: 60%;
+    width: 50%;
     margin: 0 0 20px 0;
 }
 

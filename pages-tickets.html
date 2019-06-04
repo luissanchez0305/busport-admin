@@ -13,7 +13,10 @@
         </div>
         <div id="content">
            <h2>Boleta de Infracción</h2>
-           <p>Creada por: <label id="created_by"></label> <br/><label id="date"></label></p>
+           <p>Creada por: <label id="created_by"></label> <br/><label id="created_date"></label></p>
+           <p>Para: <label id="created_for"></label></p>
+           <p>Fecha de Infracción: <label id="date"></label></p>
+           <p>Monto: <label id="amount"></label></p>
            <p>En concepto de: <b id="log_type_name"></b></p>
            <p>Descripción: <label id="log_type_description"></label></p>
            <p>Firma del conductor:___________________________ </p>
@@ -28,7 +31,10 @@
             $.get('/api/drivers.php', { type: 'log-item', id: getUrlVars()['ticket'] }, function(data){
                 data = data.log_item[0];
                 $('#created_by').html(data.name + ' ' + data.last_name);
-                $('#date').html(data.created_date);
+                $('#created_for').html(data.driver_name + ' ' + data.driver_last_name);
+                $('#created_date').html(data.created_date);
+                $('#date').html(data.log_date);
+                $('#amount').html('$' + data.custom_points);
                 $('#log_type_name').html(data.type_name);
                 $('#log_type_description').html(data.description);
                 window.print();

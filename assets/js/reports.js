@@ -104,6 +104,9 @@
             datatable_headers += '<th>Bono Especial</th>';
             datatable_headers += '<th>Bono Total</th>';
 
+
+            if(dataTable)
+                dataTable.destroy();
             var $header = $('#datatable-logs-header')
             var $items = $('#datatable-items');
             $header.html('');
@@ -176,9 +179,7 @@
                     tr += '<td value>$' + specialBonus + '</td>';
                     tr += '<td value>$' + (monthBonus + specialBonus - infractionsTotal) + '</td>';
                     $items.append(tr+'</tr>');
-
-                    if(dataTable)
-                        dataTable.destroy();
+                    
                     dataTable = $('#datatable-logs').DataTable({
                         lengthChange: false,
                         searching: false,

@@ -1,6 +1,6 @@
 <?php
 include "helper.php";
-
+$log_items_select = 'SELECT li.id, u.name, u.last_name, driver.name as driver_name, driver.lastname as driver_last_name, li.description, li.created_date, DATE_FORMAT(li.log_date, "%Y-%m-%d") as log_date, lit.type_name, li.custom_points, li.is_bonus, CASE WHEN li.status THEN 1 ELSE 0 END as status, CASE WHEN lit.substract_points THEN 1 ELSE 0 END as substract_points FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id JOIN drivers driver ON driver.id = li.driver_id';
 if(isset($_GET["type"])){
     $type = $_GET["type"];
     switch ($type) {
@@ -11,8 +11,7 @@ if(isset($_GET["type"])){
             # Regresar un solo driver
             $driver  = R::findOne( 'drivers', ' id = ? ', [ $driver_id ] );
             $online =  R::findOne( 'users', ' id = ? ', [ $online_id ] );
-            $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, li.custom_points, li.is_bonus, CASE WHEN li.status THEN 1 ELSE 0 END as status
-                FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
+            $logs = R::getAll( $log_items_select . ' WHERE li.driver_id = :driver ORDER BY li.log_date',
                 [':driver' => $driver_id]
             );
             $certifications = R::getAll( 'SELECT dc.id, ct.name as type_name, dc.certification_date, dc.description FROM driver_certifications dc JOIN certification_types ct ON ct.id = dc.certification_type_id WHERE driver_id = :driver',[':driver' => $driver_id]);
@@ -44,14 +43,12 @@ if(isset($_GET["type"])){
             $date_final = $_GET['final_date'];
 
             if($date_initial && $date_final){
-                $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, li.custom_points, lit.points AS log_type_points, CASE WHEN li.status THEN 1 ELSE 0 END as status
-                    FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver AND li.created_date >= :date_initial AND li.created_date <= :date_final ORDER BY li.created_date',
+                $logs = R::getAll( $log_items_select . ' WHERE li.driver_id = :driver AND li.log_date >= :date_initial AND li.log_date <= :date_final ORDER BY li.log_date',
                     [':driver' => $driver_id, ':date_initial' => $date_initial, ':date_final' => $date_final]
                 );            }
             else
             {
-                $logs = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name, li.custom_points, lit.points AS log_type_points, CASE WHEN li.status THEN 1 ELSE 0 END as status
-                    FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.driver_id = :driver ORDER BY li.created_date',
+                $logs = R::getAll( $log_items_select . ' WHERE li.driver_id = :driver ORDER BY li.log_date',
                     [':driver' => $driver_id]
                 );
             }
@@ -138,11 +135,12 @@ if(isset($_GET["type"])){
             $log_item->driver_id = $driver_id;
             $log_item->description = $_GET["description"];
             $log_item->created_date = date("Y-m-d H:i:s");
+            $log_item->log_date = $_GET['log-date'];
             $log_item->custom_points = $_GET["log-item-points"];
             $log_item->status = true;
 
             $log_id = R::store($log_item);
-            $log = R::getAll( 'SELECT u.name, u.last_name, li.id, li.description, li.created_date, li.custom_points, CASE WHEN lit.substract_points THEN 1 ELSE 0 END as substract_points, lit.type_name, lit.points AS log_type_points, CASE WHEN li.status THEN 1 ELSE 0 END as status FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.id = :log ORDER BY li.created_date',
+            $log = R::getAll( $log_items_select . ' WHERE li.id = :log ORDER BY li.log_date',
                 [':log' => $log_id]
             );
             echo json_encode($log);
@@ -193,7 +191,24 @@ if(isset($_GET["type"])){
             break;
         case 'log-item':
             $log_item_id = $_GET["id"];
-            $item = R::getAll( 'SELECT li.id, u.name, u.last_name, li.description, li.created_date, lit.type_name FROM log_items li JOIN log_item_types lit ON lit.id = li.log_item_type JOIN users u ON u.id = li.creator_id WHERE li.id = :log_item_id ORDER BY li.created_date', [':log_item_id' => $log_item_id] );
+            $item = R::getAll( $log_items_select . ' WHERE li.id = :log_item_id', [':log_item_id' => $log_item_id] );
+            echo json_encode(array('log_item'=>$item, 'query'=>$log_items_select . ' WHERE li.id = ' . $log_item_id));
+            break;
+        case 'save-log-item':
+            $log_type = $_GET["log_type"];
+            $amount = $_GET["amount"];
+            $description = $_GET["description"];
+            $log_item_id = $_GET["id"];
+
+            $item = R::findOne( 'log_items', ' id = ? ', [ $log_item_id ] );
+            $item->description = $description;
+            $item->custom_points = $amount;
+            $item->log_item_type = $log_type;
+            $item->log_date = $_GET["log_date"];
+
+            R::store($item);
+
+            $item = R::getAll( $log_items_select . ' WHERE li.id = :log_item_id', [':log_item_id' => $log_item_id] );
             echo json_encode(array('log_item'=>$item));
             break;
         default:
