@@ -119,9 +119,10 @@ $(document).ready(function(){
             $.get('/api/drivers.php', { type: 'driver', id: ui.item.id, online: localStorage.getItem('current_userid') }, function(data){
                 if(location.href.indexOf('pages-drivers') > -1 && !$('#myModal').hasClass('show')){
                     $('#drivers').html('');
-                    displayTableResult(data);
+                    location.href = '/pages-driver.html?id=' + data.driver.id;
                 }
                 else{
+                    console.log('2');
                     $('#myModal #driverId').val(data.driver.id);
                 }
             });

@@ -23,6 +23,7 @@ if(isset($_GET["type"])){
 
             $drivers = R::findAll( 'drivers', " ORDER BY CONCAT(name, ' ', lastname)" );
             $driversArray = array_values($drivers);
+            $nextDriver = null;
             foreach ($driversArray as $index => $driverItem) {
                 if($driverItem->id == $driver_id){
                     if($index - 1 >= 0)

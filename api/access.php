@@ -3,7 +3,7 @@ include "helper.php";
 
 $post = retrieveJsonPostData($_POST);
 
-if(isset($_POST['u']) && isset($_POST['p']) && $_POST['u'].length && $_POST['p'].length) {
+if(isset($_POST['u']) && isset($_POST['p']) && strlen($_POST['u']) && strlen($_POST['p'])) {
     $username = $_POST['u'];
     $password = $_POST['p'];
 

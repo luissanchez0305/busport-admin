@@ -30,100 +30,124 @@
             behaveLikeLine: true
         });
     },
-        //creates Bar chart
-        Dashboard.prototype.createBarChart = function (element, data, xkey, ykeys, labels, lineColors) {
-            Morris.Bar({
-                element: element,
-                data: data,
-                xkey: xkey,
-                ykeys: ykeys,
-                labels: labels,
-                gridLineColor: '#eee',
-                barSizeRatio: 0.4,
-                resize: true,
-                hideHover: 'auto',
-                barColors: lineColors
-            });
-        },
+    //creates Bar chart
+    Dashboard.prototype.createBarChart = function (element, data, xkey, ykeys, labels, lineColors) {
+        Morris.Bar({
+            element: element,
+            data: data,
+            xkey: xkey,
+            ykeys: ykeys,
+            labels: labels,
+            gridLineColor: '#eee',
+            barSizeRatio: 0.4,
+            resize: true,
+            hideHover: 'auto',
+            barColors: lineColors
+        });
+    },
 
-        //creates Donut chart
-        Dashboard.prototype.createDonutChart = function (element, data, colors) {
-            Morris.Donut({
-                element: element,
-                data: data,
-                resize: true,
-                colors: colors,
-            });
-        },
+    //creates Donut chart
+    Dashboard.prototype.createDonutChart = function (element, data, colors) {
+        Morris.Donut({
+            element: element,
+            data: data,
+            resize: true,
+            colors: colors,
+        });
+    },
 
-        Dashboard.prototype.init = function () {
-            var $dashboard = this;
-            $.get('/api/common.php', { type: 'log-item-types' }, function(data){
-                for(var j = 0; j < data.length; j++){
-                    var logType = data[j];
-                    $('#log-item-type').append('<option value="' + logType.id + '" item-points="' + logType.points + '">'+logType.type_name+'</option>');
+    Dashboard.prototype.init = function () {
+        var $dashboard = this;
+        $.get('/api/common.php', { type: 'log-item-types' }, function(data){
+            for(var j = 0; j < data.length; j++){
+                var logType = data[j];
+                $('#log-item-type').append('<option value="' + logType.id + '" item-points="' + logType.points + '">'+logType.type_name+'</option>');
+            }
+        });
+        var today = new Date();
+        var one_month = new Date();
+        one_month = new Date(one_month.setMonth(today.getMonth() - 1));
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        var $initial_1_year = (yyyy-1)+'-'+mm+'-'+dd;
+        var $final = yyyy+'-'+mm+'-'+dd;
+        $.get('/api/reports.php', { type:'line', init_date: $initial_1_year, final_date: $final, log_type: 7 }, function(data){
+            //creating line chart
+            var $graphData = [];
+            var graphContainer = 'report-accidents';
+            $('#' + graphContainer).html('');
+            if(data.log_counts.length > 0){
+                for(var i = 0; i < data.log_counts.length; i++){
+                    var item = data.log_counts[i];
+                    $graphData.push({y: item.date, a: item.number})
+                };
+                $dashboard.createLineChart(graphContainer, 0, 0, $graphData, 'y', ['a'], ['Accidentes'], ['#0097a7']);
+            }
+            else{
+                $('#' + graphContainer).html('No hay informacion que mostrar');
+            }
+        });
+
+        //creating donut chart
+        var $initial_1_month = (one_month.getFullYear())+'-'+(one_month.getMonth() + 1)+'-'+(one_month.getDate());
+        $.get('/api/reports.php', { type: 'top-logs', init_date: $initial_1_month, final_date: $final }, function(data){
+            var $donutData = [];
+            var graphContainer = 'log-top-donut';
+            if(data.logs.length > 0){
+                $('.logs-data').removeClass('hidden');
+                $('#logs-no-data-').addClass('hidden');
+                for(var i = 0; i < data.logs.length; i++){
+                    var item = data.logs[i];
+                    $('#log_value_' + (i+1)).html(item.number);
+                    $('#log_title_' + (i+1)).html(item.name);
+                    $donutData.push({ label: item.name, value: item.number });
                 }
-            });
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth()+1; //January is 0!
-            var yyyy = today.getFullYear();
+                $dashboard.createDonutChart('log-top-donut', $donutData, ['#6fd088', '#4c84ff', '#f75285']);
+            }
+            else{
+                $('.logs-data').addClass('hidden');
+                $('#logs-no-data-').removeClass('hidden');
+            }
+        });
 
-            var $initial = (yyyy-1)+'-'+mm+'-'+dd;
-            var $final = yyyy+'-'+mm+'-'+dd;
-            $.get('/api/reports.php', { type:'line', init_date: $initial, final_date: $final, log_type: 1 }, function(data){
-                //creating line chart
-                var $graphData = [];
-                var graphContainer = 'report-accidents';
-                $('#' + graphContainer).html('');
-                if(data.log_counts.length > 0){
-                    for(var i = 0; i < data.log_counts.length; i++){
-                        var item = data.log_counts[i];
-                        $graphData.push({y: item.date, a: item.number})
-                    };
-                    $dashboard.createLineChart(graphContainer, 0, 0, $graphData, 'y', ['a'], ['Accidentes'], ['#0097a7']);
-                }
-                else{
-                    $('#' + graphContainer).html('No hay informacion que mostrar');
-                }
-            });
+        //creating area chart
+        /*var $areaData = [
+            {y: '2007', a: 0, b: 0, c:0},
+            {y: '2008', a: 150, b: 45, c:15},
+            {y: '2009', a: 60, b: 150, c:195},
+            {y: '2010', a: 180, b: 36, c:21},
+            {y: '2011', a: 90, b: 60, c:360},
+            {y: '2012', a: 75, b: 240, c:120},
+            {y: '2013', a: 30, b: 30, c:30}
+        ];
+        this.createAreaChart('morris-area-example', 0, 0, $areaData, 'y', ['a', 'b', 'c'], ['Series A', 'Series B', 'Series C'], ['#0097a7', '#ffbb44', '#f32f53']);
 
-            //creating area chart
-            /*var $areaData = [
-                {y: '2007', a: 0, b: 0, c:0},
-                {y: '2008', a: 150, b: 45, c:15},
-                {y: '2009', a: 60, b: 150, c:195},
-                {y: '2010', a: 180, b: 36, c:21},
-                {y: '2011', a: 90, b: 60, c:360},
-                {y: '2012', a: 75, b: 240, c:120},
-                {y: '2013', a: 30, b: 30, c:30}
-            ];
-            this.createAreaChart('morris-area-example', 0, 0, $areaData, 'y', ['a', 'b', 'c'], ['Series A', 'Series B', 'Series C'], ['#0097a7', '#ffbb44', '#f32f53']);
+        //creating bar chart
+        var $barData = [
+            { y: '2009', a: 100, b: 90 , c: 40 },
+            { y: '2010', a: 75,  b: 65 , c: 20 },
+            { y: '2011', a: 50,  b: 40 , c: 50 },
+            { y: '2012', a: 75,  b: 65 , c: 95 },
+            { y: '2013', a: 50,  b: 40 , c: 22 },
+            { y: '2014', a: 75,  b: 65 , c: 56 },
+            { y: '2015', a: 100, b: 90 , c: 60 }
+        ];
+        this.createBarChart('morris-bar-example', $barData, 'y', ['a', 'b', 'c'], ['Series A', 'Series B', 'Series C'], ['#4c84ff','#6fd088', '#f75285']);
 
-            //creating bar chart
-            var $barData = [
-                { y: '2009', a: 100, b: 90 , c: 40 },
-                { y: '2010', a: 75,  b: 65 , c: 20 },
-                { y: '2011', a: 50,  b: 40 , c: 50 },
-                { y: '2012', a: 75,  b: 65 , c: 95 },
-                { y: '2013', a: 50,  b: 40 , c: 22 },
-                { y: '2014', a: 75,  b: 65 , c: 56 },
-                { y: '2015', a: 100, b: 90 , c: 60 }
-            ];
-            this.createBarChart('morris-bar-example', $barData, 'y', ['a', 'b', 'c'], ['Series A', 'Series B', 'Series C'], ['#4c84ff','#6fd088', '#f75285']);
-
-            //creating donut chart
-            var $donutData = [
-                {label: "Bitcoin", value: 12},
-                {label: "Ethereum", value: 42},
-                {label: "Cardano", value: 20},
-                {label: "Ripple", value: 26}
-            ];
-            this.createDonutChart('morris-donut-example', $donutData, ['#4c84ff', "#ebeff2", '#6fd088', '#f75285']);
-            */
-        },
-        //init
-        $.Dashboard = new Dashboard, $.Dashboard.Constructor = Dashboard
+        //creating donut chart
+        var $donutData = [
+            {label: "Bitcoin", value: 12},
+            {label: "Ethereum", value: 42},
+            {label: "Cardano", value: 20},
+            {label: "Ripple", value: 26}
+        ];
+        this.createDonutChart('morris-donut-example', $donutData, ['#4c84ff', "#ebeff2", '#6fd088', '#f75285']);
+        */
+    },
+    //init
+    $.Dashboard = new Dashboard, $.Dashboard.Constructor = Dashboard
 }(window.jQuery),
 
 //initializing

@@ -5,9 +5,9 @@ header('Content-type: application/json');
 header("access-control-allow-origin: *");
 
 $username = 'root';
-$password = 'goingup123';
+$password = 'M80VeZb170tY50vd';
 $database = 'espheras_busport';
-$dbhost = '54.184.116.119';
+$dbhost = '34.210.255.79';
 /*$username = 'admin_busport';
 $password = 'vaouLgGnbWAM';
 $database = 'busport';

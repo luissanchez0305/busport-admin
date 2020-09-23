@@ -8,12 +8,12 @@ if(isset($_GET["type"])){
             $infractions = $_GET['infractions'];
             if($infractions){
                 $query = "SELECT CONCAT(d.name, ' ', d.lastname) AS name, lit.type_name, d.base_bonus, d.month_bonus, d.special_bonus, COUNT(*) as number, SUM(li.custom_points) AS total
-                FROM drivers d
-                JOIN log_items li ON d.id = li.driver_id
-                JOIN log_item_types lit ON lit.id = li.log_item_type
-                WHERE (li.status = 1 AND li.log_item_type IN ($infractions) AND li.log_date >= ':start_date' AND li.log_date <= ':end_date' :where_driver) /*:all_users*/
-                GROUP BY d.name, lit.type_name, d.base_bonus, d.month_bonus, d.special_bonus
-                ORDER BY d.name, lit.type_name";
+                    FROM drivers d
+                    JOIN log_items li ON d.id = li.driver_id
+                    JOIN log_item_types lit ON lit.id = li.log_item_type
+                    WHERE (li.status = 1 AND li.log_item_type IN ($infractions) AND li.log_date >= ':start_date' AND li.log_date <= ':end_date' :where_driver)
+                    GROUP BY d.id, lit.id, d.base_bonus, d.month_bonus, d.special_bonus
+                    ORDER BY d.name, lit.type_name";
                 $end_date = new DateTime($_GET['final_date']);
                 $end_date->modify('+1 day');
                 $query = str_replace(':end_date', $end_date->format('Y-m-d'), str_replace(':start_date', $_GET['init_date'], $query));
@@ -41,6 +41,24 @@ if(isset($_GET["type"])){
                 [':init_date' => $init_date, ':final_date' => $final_date, ':log_type' => $log_type]
             );
             echo json_encode(array('log_counts'=>$log_counts));
+            break;
+        case 'top-logs':
+            $init_date = $_GET['init_date'];
+            $final_date = $_GET['final_date'];
+            $query = "SELECT lit.type_name as name, COUNT(*) as number
+                from log_items li
+                JOIN log_item_types lit ON lit.id = li.log_item_type
+                WHERE (li.status = 1 AND li.log_item_type IN (7,4,33,13,10,9,14,6,11,2,12,8,3,5,1) AND ':start_date' AND li.log_date <= ':end_date')
+                GROUP BY lit.id
+                ORDER BY COUNT(*) DESC
+                LIMIT 3";
+
+            $end_date = new DateTime($_GET['final_date']);
+            $end_date->modify('+1 day');
+            $query = str_replace(':end_date', $end_date->format('Y-m-d'), str_replace(':start_date', $_GET['init_date'], $query));
+            $logs = R::getAll( $query );
+            echo json_encode(array('query' => $query, 'logs'=>$logs));
+
             break;
         default:
             $months = R::getAll( "SELECT DATE_FORMAT(log_date,'%Y-%m') AS date FROM log_items GROUP BY DATE_FORMAT(log_date,'%Y-%m') ORDER BY log_date");
